@@ -27,7 +27,7 @@ var dialCode = "+91",
   country = "IN";
 
 //curriculum functionality
-var isMweb = false;
+  var isMweb = window.screen.width < 500;
 $(".grade-card").click((e) => {
   e.preventDefault();
   const id = e.target.id;
@@ -438,3 +438,7 @@ const handleGetSlots = () => {
 
 
 
+
+
+
+<script src="https://cdn.jsdelivr.net/gh/Ashwin-toppr/bfs-marketing-scripts/scripts/Untitled-1.js"></script>;
