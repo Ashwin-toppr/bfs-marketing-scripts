@@ -90,45 +90,41 @@
   })()
   
   
-const customClassMethod = (toClass,isAddClass,whichClass) => {
-    if(isAddClass){
-        $(toClass).addClass(whichClass)
-    }else{
-        $(toClass).removeClass(whichClass);
-    }
-}
+const customClassMethod = (toClass, isAddClass, whichClass) => {
+  if (isAddClass) {
+    $(toClass).addClass(whichClass);
+  } else {
+    $(toClass).removeClass(whichClass);
+  }
+};
 
 const customCssMethod = (toclass, lhs, rhs) => {
   $(toclass).css(lhs, rhs);
 };
-  
-  //side pannel code
-  
-  $('.schedule-cta').click(()=>{
-      customCssMethod('.sidepanel-container','display','block')
-      customCssMethod('body','overflow','hidden')
-      window.scrollTo(0, 0);
-      $('.parent-mobile-num').val(parentMobileNum)
-	})
-  
-   $('.mweb-schedule-cta').click(()=>{
-      customCssMethod('.m-web-side-pannel','display','block')
-      customCssMethod('body','overflow','hidden')
-      customCssMethod('.mweb-banner-form','display','none')
-      window.scrollTo(0, 0);
-      $('.parent-mobile-num').val(parentMobileNum)
-	})
-  
-  $('.sidepannel-close').click(()=>{
-      customCssMethod('body','overflow','auto')
-      customCssMethod('.sidepanel-container','display','none')
-  })
-  
-  
-  
 
-  
-  //form functionality
+//side pannel code
+
+$(".schedule-cta").click(() => {
+  customCssMethod(".sidepanel-container", "display", "block");
+  customCssMethod("body", "overflow", "hidden");
+  window.scrollTo(0, 0);
+  $(".parent-mobile-num").val(parentMobileNum);
+});
+
+$(".mweb-schedule-cta").click(() => {
+  customCssMethod(".m-web-side-pannel", "display", "block");
+  customCssMethod("body", "overflow", "hidden");
+  customCssMethod(".mweb-banner-form", "display", "none");
+  window.scrollTo(0, 0);
+  $(".parent-mobile-num").val(parentMobileNum);
+});
+
+$(".sidepannel-close").click(() => {
+  customCssMethod("body", "overflow", "auto");
+  customCssMethod(".sidepanel-container", "display", "none");
+});
+
+//form functionality
 
 var parentMobileNum = "",
   selectedSubj = "math",
