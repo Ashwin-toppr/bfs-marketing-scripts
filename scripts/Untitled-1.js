@@ -90,300 +90,420 @@
   })()
   
   
-const customClassMethod = (toClass, isAddClass, whichClass) => {
-  if (isAddClass) {
-    $(toClass).addClass(whichClass);
-  } else {
-    $(toClass).removeClass(whichClass);
-  }
-};
-
-const customCssMethod = (toclass, lhs, rhs) => {
-  $(toclass).css(lhs, rhs);
-};
-
-//side pannel code
-
-$(".schedule-cta").click(() => {
-  customCssMethod(".sidepanel-container", "display", "block");
-  customCssMethod("body", "overflow", "hidden");
-  window.scrollTo(0, 0);
-  $(".parent-mobile-num").val(parentMobileNum);
-});
-
-$(".mweb-schedule-cta").click(() => {
-  customCssMethod(".m-web-side-pannel", "display", "block");
-  customCssMethod("body", "overflow", "hidden");
-  customCssMethod(".mweb-banner-form", "display", "none");
-  window.scrollTo(0, 0);
-  $(".parent-mobile-num").val(parentMobileNum);
-});
-
-$(".sidepannel-close").click(() => {
-  customCssMethod("body", "overflow", "auto");
-  customCssMethod(".sidepanel-container", "display", "none");
-});
-
-//form functionality
-
-var parentMobileNum = "",
-  selectedSubj = "math",
-  selectedGrade,
-  otpValue = "",
-  isUserExist,
-  token;
-
-$(`.${selectedSubj}-block`).addClass("active-state");
-
-const getGradeBlocks = () => {
-  const subjGrades = {
-    music: ["1", "2-3", "4-6", "7-9", "10-12"],
-    math: [1, 2, 3, 4, 5, 6, 7, 8],
-    coding: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-  };
-  $(".child-grade-blk-copy").empty();
-
-  subjGrades[selectedSubj].map((grade) => {
-    const element = `<div id="grade-${grade}" class="grade-block grade-card-sp  ${
-      isMweb ? "mweb-" : ""
-    }grade-${selectedSubj}  grade-${grade}"><p class="paragraph-41">Grade</p><p class="paragraph-42">${grade}</p></div>`;
-
-    $(".child-grade-blk-copy").append(element);
-  });
-};
-
-getGradeBlocks();
-
-$(".subject-card-sp").click((e) => {
-  $(".subject-card-sp").removeClass("active-state");
-  const id = e.target.id;
-  $(`.${id}-block`).addClass("active-state");
-  selectedSubj = id;
-  getGradeBlocks();
-});
-
-const isExist = () => {
-  $.ajax({
-    type: "POST",
-    url: "https://nexfive.whjr.one/api/V1/userDetail/existByEmailOrMobile?timezone=Asia%2FCalcutta&regionId=US&courseType=CODING&brandId=whitehatjr",
-    cache: false,
-    data: { mobile: parentMobileNum, dialCode },
-
-    success: function (res) {
-      isUserExist = res.data.isExist;
-    },
-  });
-};
-
-$(".parent-mobile-num").on("input", (e) => {
-  if (e.target.value.length > 9) {
-    const valid = $.isNumeric(e.target.value);
-    parentMobileNum = e.target.value;
-    valid && isExist();
-
-    customCssMethod(".err-msg-pm", "display", valid ? "none" : "block");
-    customClassMethod(".parent-num", !valid, "error-state");
-    customClassMethod(".parent-num-dropdown", !valid, "error-state");
-    customClassMethod(".parent-mobile-num", !valid, "error-state");
-  }
-});
-$(".grade-block").click((e) => {
-  selectedGrade = e.target.id.split("-").slice(-1)[0];
-  debugger
-  customClassMethod(".grade-block", false, "active-state");
-  customClassMethod(
-    `.${isMweb ? "mweb-" : ""}grade-${selectedGrade}`,
-    true,
-    "active-state"
-  );
-});
-
-$(".sp-initial-cta").click(() => {
-  getOtp(spInitialCtaSuccess);
-});
-
-$(".mweb-sp-initial-cta").click(() => {
-  getOtp(mwebSpinitilacta);
-});
-
-const mwebSpinitilacta = () => {
-  $(".mweb-otp-container").css("display", "block");
-};
-
-var challengeCodeForOtp;
-
-const spInitialCtaSuccess = (res) => {
-  $(".sp-initial-form").css("display", "none");
-  $(".otp-container").css("display", "block");
-  $(".selected-num-display").text("+91 " + parentMobileNum);
-  console.log(res.data)
-  challengeCodeForOtp = res.data.data.challenge
-};
-
-const getOtp = (callback) => {
-  const url = isUserExist
-    ? `https://nexfive.whjr.one/api/V1/users/sendStudentVerificationCode?timezone=Asia%2FCalcutta&regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=1632321880482`
-    : `https://nexfive.whjr.one/api/V1/otp/generate?regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr`;
-
-  $.ajax({
-    type: "POST",
-    url,
-    cache: false,
-    data: {
-      dialCode,
-      ...(!isUserExist && { mobile: parentMobileNum }),
-      ...(isUserExist && { emailOrMobile: parentMobileNum })
-    },
-
-    success: callback,
-  });
-};
-
-$(".mweb-otp-close").click(() => {
-  $(".mweb-otp-container").css("display", "none");
-});
-
-$(".otp-input").on("input", (e) => {
-  otpValue = "";
-
-  $(".otp-input").removeClass("error-state");
-  $(".otp-err").css("display", "none");
-  if (!e.target.nextElementSibling) {
-    for (var i = 1; i < 5; i++) {
-      otpValue += $(`.${isMweb ? "mweb-" : ""}otp-${i}`).val();
+  var dialCode = "+91",
+    country = "IN",
+    isMweb = window.screen.width < 500;
+  const customClassMethod = (toClass, isAddClass, whichClass) => {
+    if (isAddClass) {
+      $(toClass).addClass(whichClass);
+    } else {
+      $(toClass).removeClass(whichClass);
     }
-    const url = isUserExist
-      ? `https://nexfive.whjr.one/api/V1/users/authenticateVerificationCode?timezone=Asia%2FCalcutta&_vercel_no_cache=1&regionId=IN&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=1632322088178`
-      : `https://nexfive.whjr.one/api/V1/otp/verify`;
-    $.ajax({
-      type: "POST",
-      url: url,
-      cache: false,
-      data: {
-        dialCode,
-        ...(!isUserExist && { mobile: parentMobileNum }),
-        ...(isUserExist && { emailOrMobile: parentMobileNum }),
-        ...(!isUserExist && { otp: otpValue }),
-        ...(isUserExist && { token: otpValue }),
-        ...(isUserExist && { challenge: challengeCodeForOtp }),
-      },
+  };
 
-      success: function (res) {
-        $(".otp-container").css("display", "none");
-        $(".side-panel-slot").css("display", "block");
-        if (!isUserExist) {
-          handleRegisterUser();
-        } else {
-          token = res.data.token;
+  const customCssMethod = (toclass, lhs, rhs) => {
+    $(toclass).css(lhs, rhs);
+  };
+
+   var parentMobileNum = "",
+   selectedSubj = "math",
+   selectedGrade,
+   otpValue = "",
+   isUserExist,
+   token,
+   slotsData,
+   selectedTimeSlot
+
+  //side pannel code
+
+  $(".schedule-cta").click(() => {
+
+    customCssMethod("body", "overflow", "hidden");
+    window.scrollTo(0, 0);
+    if (parentMobileNum && selectedGrade){
+      $(".sp-initial-cta").click()
+    }else{
+      customCssMethod(".sidepanel-container", "display", "block");
+      $(".parent-mobile-num").val(parentMobileNum);
+    }
+  });
+
+  $(".mweb-schedule-cta").click(() => {
+    customCssMethod(".m-web-side-pannel", "display", "block");
+    customCssMethod("body", "overflow", "hidden");
+    customCssMethod(".mweb-banner-form", "display", "none");
+    window.scrollTo(0, 0);
+    $(".parent-mobile-num").val(parentMobileNum);
+
+        if (parentMobileNum && selectedGrade) {
+          ('.mweb-sp-initial-cta').click()
         }
-      },
-      error: function () {
-        $(".otp-input").addClass("error-state");
-        $(".otp-err").css("display", "block");
-      },
-    });
-  }
-  if (e.target.value) {
-    e.target.nextElementSibling.focus();
-  }
-});
+  });
 
-const handleRegisterUser = () => {
+  $(".sidepannel-close").click(() => {
+    customCssMethod("body", "overflow", "auto");
+    customCssMethod(".sidepanel-container", "display", "none");
+  });
+
+  //form functionality
+
+
+
+ $(`.${selectedSubj}-block`).addClass("active-state");
+
+ const getGradeBlocks = () => {
+   const subjGrades = {
+     music: ["1", "2-3", "4-6", "7-9", "10-12"],
+     math: [1, 2, 3, 4, 5, 6, 7, 8],
+     coding: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+   };
+   $(".child-grade-blk-copy").empty();
+
+   subjGrades[selectedSubj].map((grade) => {
+     const element = `<div id="grade-${grade}" class="grade-block grade-card-sp  ${
+       isMweb ? "mweb-" : ""
+     }grade-${selectedSubj}  ${
+       isMweb ? "mweb-" : ""
+     }grade-${grade}"><p class="paragraph-41">Grade</p><p class="paragraph-42">${grade}</p></div>`;
+
+     $(".child-grade-blk-copy").append(element);
+   });
+
+   $(".grade-block").click((e) => {
+     selectedGrade = e.target.id.split("-").slice(-1)[0];
+     debugger;
+     customClassMethod(".grade-block", false, "active-state");
+     if(selectedSubj == 'music'){
+       const musicGrade = e.target.id.split('-')
+       customClassMethod(
+         `.${isMweb ? "mweb-" : ""}grade-${musicGrade[1]}-${musicGrade[2]}`,
+         true,
+         "active-state"
+       );
+     }
+     customClassMethod(
+       `.${isMweb ? "mweb-" : ""}grade-${selectedGrade}`,
+       true,
+       "active-state"
+     );
+   });
+ };
+
+ getGradeBlocks();
+
+ $(".subject-card-sp").click((e) => {
+   $(".subject-card-sp").removeClass("active-state");
+   const id = e.target.id;
+   $(`.${id}-block`).addClass("active-state");
+   selectedSubj = id;
+   customCssMethod(".music-state", "display", id == "music" ? 'block':'none');
+   getGradeBlocks();
+ });
+
+ const isExist = () => {
+   $.ajax({
+     type: "POST",
+     url: `https://nexfive.whjr.one/api/V1/userDetail/existByEmailOrMobile?timezone=Asia%2FCalcutta&regionId=US&courseType=${selectedSubj}&brandId=whitehatjr`,
+     cache: false,
+     data: { mobile: parentMobileNum, dialCode },
+
+     success: function (res) {
+       isUserExist = res.data.isExist;
+     },
+   });
+ };
+
+ const checkValidNum = (val) => {
+     const valid = $.isNumeric(val);
+
+     customCssMethod(".err-msg-pm", "display", valid ? "none" : "block");
+     customClassMethod(".parent-num", !valid, "error-state");
+     customClassMethod(".parent-num-dropdown", !valid, "error-state");
+     customClassMethod(".parent-mobile-num", !valid, "error-state");
+     return valid;
+ }
+
+ $(".parent-mobile-num").on("input", (e) => {
+   if (e.target.value.length > 9) {
+     checkValidNum(e.target.value)
+     parentMobileNum = e.target.value;
+     isExist();
+
+   }
+ });
+
+ $(".sp-initial-cta").click(() => {
+   if (!checkValidNum(parentMobileNum)) return;
+   getOtp(spInitialCtaSuccess);
+ });
+
+ $(".mweb-sp-initial-cta").click(() => {
+   if (!checkValidNum(parentMobileNum)) return;
+   getOtp(mwebSpinitilacta);
+ });
+
+ const mwebSpinitilacta = (res) => {
+   $(".mweb-otp-container").css("display", "block");
+   $(".selected-num-display").text("+91 " + parentMobileNum);
+   challengeCodeForOtp = res.data.challenge;
+ };
+
+ var challengeCodeForOtp;
+
+ const spInitialCtaSuccess = (res) => {
+   $(".sp-initial-form").css("display", "none");
+   $(".otp-container").css("display", "block");
+   $(".selected-num-display").text("+91 " + parentMobileNum);
+   if (parentMobileNum && selectedGrade) {
+      customCssMethod(".sidepanel-container", "display", "block");
+   }
+   challengeCodeForOtp = res.data.challenge;
+ };
+
+ const getOtp = (callback,isResend) => {
+   const url = isUserExist
+     ? `https://nexfive.whjr.one/api/V1/users/sendStudentVerificationCode?timezone=Asia%2FCalcutta&regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=1632321880482`
+     : `https://nexfive.whjr.one/api/V1/otp/generate?regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr`;
+
+   $.ajax({
+     type: "POST",
+     url,
+     cache: false,
+     data: {
+       dialCode,
+       ...(!isUserExist && { mobile: parentMobileNum }),
+       ...(isUserExist && { emailOrMobile: parentMobileNum }),
+       ...isResend && {type:"voice"}
+     },
+
+     success: callback,
+   });
+ };
+
+ $('.resend-otp').click(()=>{
+  getOtp(isMweb ? mwebSpinitilacta : spInitialCtaSuccess, true);
+ })
+
+ $(".mweb-otp-close").click(() => {
+   $(".mweb-otp-container").css("display", "none");
+ });
+
+ $(".otp-input").on("input", (e) => {
+   otpValue = "";
+
+   $(".otp-input").removeClass("error-state");
+   $(".otp-err").css("display", "none");
+   if (!e.target.nextElementSibling) {
+     for (var i = 1; i < 5; i++) {
+       otpValue += $(`.${isMweb ? "mweb-" : ""}otp-${i}`).val();
+     }
+
+     $(".otp-loader").css('display','block')
+
+     const url = isUserExist
+       ? `https://nexfive.whjr.one/api/V1/users/authenticateVerificationCode?timezone=Asia%2FCalcutta&_vercel_no_cache=1&regionId=US&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=1632322088178`
+       : `https://nexfive.whjr.one/api/V1/otp/verify`;
+     $.ajax({
+       type: "POST",
+       url: url,
+       cache: false,
+       data: {
+         dialCode,
+         ...(!isUserExist && { mobile: parentMobileNum }),
+         ...(isUserExist && { emailOrMobile: parentMobileNum }),
+         ...(!isUserExist && { otp: otpValue }),
+         ...(isUserExist && { token: otpValue }),
+         ...(isUserExist && { challenge: challengeCodeForOtp }),
+       },
+
+       success: function (res) {
+         if (!isUserExist) {
+           handleRegisterUser();
+         } else {
+           token = res.data.token;
+           handleGetSlots();
+         }
+        $(".otp-loader").css("display", "none");
+
+       },
+       error: function () {
+         $(".otp-input").addClass("error-state");
+         $(".otp-err").css("display", "block");
+        $(".otp-loader").css("display", "none");
+       },
+     });
+   }
+   if (e.target.value) {
+     e.target.nextElementSibling.focus();
+   }
+ });
+
+ const handleRegisterUser = () => {
+   $.ajax({
+     type: "POST",
+     url: `https://nexfive.whjr.one/api/V1/trial/users/minimalFieldRegister?timezone=Asia%2FCalcutta&timestamp=1608107097248&isMobilePlatform=false`,
+     cache: false,
+     data: {
+       mobile: parentMobileNum,
+       grade: selectedGrade,
+       isLaptop: "1",
+       dialCode: dialCode,
+       countryCode: country,
+       timezone: "Asia/Calcutta",
+     },
+
+     success: function (res) {
+       token = res.data.token;
+       handleGetSlots();
+     },
+   });
+ };
+
+ $(".back-arrow").click(() => {
+   if ($(".mweb-slot-container").css("display") === "block") {
+     $(".mweb-slot-container").css("display", "none");
+     $(".mweb-initial-form").css("display", "block");
+   } else if ($(".mweb-initial-form").css("display") === "block") {
+     $(".m-web-side-pannel").css("display", "none");
+     $("body").css("overflow", "auto");
+     $(".mweb-banner-form").css("display", "block");
+   }
+   if ($(".side-panel-slot").css("display") === "block") {
+     $(".sp-initial-form").css("display", "block");
+     $(".side-panel-slot").css("display", "none");
+   }
+ });
+
+ console.log(isMweb);
+
+ // slot section functinality
+
+ const handleGetSlots = () => {
+   $.ajax({
+     type: "GET",
+     url: `https://nexfive.whjr.one/api/V1/trial/slots/get?countryCode=US&grade=${selectedGrade}&timezone=Asia/Calcutta&courseType=${selectedSubj}`,
+     cache: false,
+     headers: {
+       authorization: `Bearer ${token}`,
+     },
+
+     success: function (res) {
+       slotsData = res.data.slots;
+       handleDateBlockStructure();
+       if(isMweb){
+         $('.mweb-otp-container').css('display','none')
+         $(".mweb-initial-form").css("display", "none");
+         $(".mweb-slot-container").css("display", "block");
+         $(".mweb-sp-slot-cta").addClass("disabled");
+
+       }else{
+         $(".otp-container").css("display", "none");
+         $(".side-panel-slot").css("display", "block");
+         $(".confirm-slot-cta").addClass("disabled");
+       }
+     },
+   });
+ };
+
+ const handleDateBlockStructure = () => {
+   $(".date-block-container").empty();
+   const allDataBlocks = slotsData.map((date, index) => {
+     let dateBlock =
+       '<div class="date-block date-'+index+' " id="date-' +
+       index +
+       '" ><p class="day-label">' +
+       moment(date.date).format("ddd") +
+       '</p><p class="date-label">' +
+       moment(date.date).format("DD") +
+       '</p><p class="month-label">' +
+       moment(date.date).format("MMM") +
+       "</p></div>";
+
+     $(".date-block-container").append(dateBlock);
+   });
+   handleAddEventTODateBlock();
+ };
+
+ var selectedDateIndex;
+
+ const handleAddEventTODateBlock = () => {
+   $(".date-block").click((e) => {
+     const id = e.target.id.split("-").slice(-1)[0];
+     onDateBlockClick(id);
+   });
+   onDateBlockClick(0);
+ };
+
+ const onDateBlockClick = (id) => {
+   $(".date-block").removeClass("active-state");
+   $(".day-label").removeClass("active-state");
+   $(".month-label").removeClass("active-state");
+   $(".date-" + id).addClass("active-state");
+   $(".date-" + id + " div .day-label").addClass("active-state");
+   $(".date-" + id + " div .month-label").addClass("active-state");
+   selectedDateIndex = id;
+   getSlotsOnSelectedate();
+ };
+
+ const getSlotsOnSelectedate = () => {
+   $(".slots-container").empty();
+   slotsData[selectedDateIndex].slots.map((slot, index) => {
+     const isSlotAvail = slot.teacherCount > 0 ? "" : "disable";
+     const slotEle =
+       '<div id="slot-' +
+       index +
+       '" class="slot-block-card slot-'+ index +' '+
+       isSlotAvail +
+       '"><p class="slot-time">' +
+       moment(slot.startTime).format("LT") +
+       "</p></div>";
+
+     $(".slots-container").append(slotEle);
+   });
+   $(".slot-block-card").click((e) => {
+     $(".slot-block-card").removeClass("active-state");
+     id = e.target.id.split('-').slice(-1)[0];
+     $(".slot-" + id).addClass("active-state");
+     selectedTimeSlot = id
+         $(".mweb-sp-slot-cta").removeClass("disabled");
+         $(".confirm-slot-cta").removeClass("disabled");
+   });
+ };
+
+$(".mweb-sp-slot-cta").click(()=>{
+  handleBookSlot()
+})
+
+ $(".confirm-slot-cta").click(()=>{
+  handleBookSlot()
+ })
+
+ const handleBookSlot = () => {
+  const startTime =
+  slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime;
   $.ajax({
     type: "POST",
-    url: `https://nexfive.whjr.one/api/V1/trial/users/minimalFieldRegister?timezone=Asia%2FCalcutta&timestamp=1608107097248&isMobilePlatform=true&mobilePlatform=web`,
+    url: `https://nexfive.whjr.one/api/V1/trial/slots/book?timezone=Asia%2FCalcutta&regionId=US&courseType=${selectedSubj}`,
     cache: false,
     data: {
-      mobile: parentMobileNum,
-      grade: selectedGrade,
-      isLaptop: "1",
-      dialCode: dialCode,
-      countryCode: country,
-      timezone: "Asia/Calcutta",
+      countryCode: "IN",
+      slot: {
+        startTime: startTime,
+        endTime: moment(startTime).add(1, "hours").toISOString(),
+      },
+      courseType: selectedSubj,
+    },
+    headers: {
+      authorization: `Bearer ${token}`,
     },
 
     success: function (res) {
-      token = res.data.token;
+      console.log(res);
     },
   });
-};
+ }
 
-$(".back-arrow").click(() => {
-  if ($(".mweb-slot-container").css("display") === "block") {
-    $(".mweb-slot-container").css("display", "none");
-    $(".mweb-initial-form").css("display", "block");
-  } else if ($(".mweb-initial-form").css("display") === "block") {
-    $(".m-web-side-pannel").css("display", "none");
-    $("body").css("overflow", "auto");
-    $(".mweb-banner-form").css("display", "block");
-  }
-  if ($(".side-panel-slot").css("display") === "block") {
-    $(".sp-initial-form").css("display", "block");
-    $(".side-panel-slot").css("display", "none");
-  }
-});
 
-console.log(isMweb);
-
-// slot section functinality
-
-$(".date-block-container").empty();
-const allDataBlocks = slotsData.map((date, index) => {
-  let dateBlock =
-    '<div class="date-block" id="date-' +
-    index +
-    '" ><p class="day-label">' +
-    moment(date.date).format("ddd") +
-    '</p><p class="date-label">' +
-    moment(date.date).format("DD") +
-    '</p><p class="month-label">' +
-    moment(date.date).format("MMM") +
-    "</p></div>";
-
-  $(".date-block-container").append(dateBlock);
-});
-
-var selectedDateIndex;
-
-$(".date-block").click((e) => {
-  const id = e.target.id.split("-").slice(-1)[0];
-  onDateBlockClick(id);
-});
-
-const onDateBlockClick = (id) => {
-  $(".date-block").removeClass("active-state");
-  $(".day-label").removeClass("active-state");
-  $(".month-label").removeClass("active-state");
-  $("#date-" + id).addClass("active-state");
-  $("#date-" + id + " div .day-label").addClass("active-state");
-  $("#date-" + id + " div .month-label").addClass("active-state");
-  selectedDateIndex = id;
-  getSlotsOnSelectedate();
-};
-
-const getSlotsOnSelectedate = () => {
-  $(".slots-container").empty();
-  slotsData[selectedDateIndex].slots.map((slot, index) => {
-    const isSlotAvail = slot.teacherCount > 0 ? "" : "disable";
-    const slotEle =
-      '<div id="slot-' +
-      index +
-      '" class="slot-block-card ' +
-      isSlotAvail +
-      '"><p class="slot-time">' +
-      moment(slot.startTime).format("LT") +
-      "</p></div>";
-
-    $(".slots-container").append(slotEle);
-  });
-  $(".slot-block").click((e) => {
-    $(".slot-block").removeClass("active-state");
-    id = e.target.id;
-    $("#" + id).addClass("active-state");
-  });
-};
-
-onDateBlockClick(0);
 
 
   
