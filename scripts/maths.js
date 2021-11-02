@@ -441,4 +441,6 @@ const handleGetSlots = () => {
 
 
 
-<script src="https://cdn.jsdelivr.net/gh/Ashwin-toppr/bfs-marketing-scripts/scripts/Untitled-1.js"></script>;
+<script src="https://cdn.jsdelivr.net/gh/Ashwin-toppr/bfs-marketing-scripts/scripts/Untitled-1.js"></script>
+
+

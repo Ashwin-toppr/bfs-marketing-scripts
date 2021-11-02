@@ -120,7 +120,10 @@ var parentMobileNum = "",
   isUserExist,
   token,
   slotsData,
-  selectedTimeSlot;
+  selectedTimeSlot,
+  studentDetails,
+  dashboardLink,
+  challengeCodeForOtp;
 
 //side pannel code
 
@@ -252,12 +255,31 @@ const mwebSpinitilacta = (res) => {
   challengeCodeForOtp = res.data.challenge;
 };
 
-var challengeCodeForOtp;
+
+const otpTimer = () => {
+  var timer = 50
+  $(".resend-otp").css("display", "none");
+
+  const timeInterval = setInterval(() => {
+    $(".resend-otp-msg").text(`Didn’t recieve the code? Retry after ${timer}`);
+    timer -= 1
+    if(timer <= 0){
+      clearInterval(timeInterval);
+      $(".resend-otp-msg").text(`Didn’t recieve the code?`);
+      $(".resend-otp").css('display','block')
+    }
+  }, 1000);
+}
 
 const spInitialCtaSuccess = (res) => {
   $(".sp-initial-form").css("display", "none");
+  $(".otp-user-exist-msg").css('display', isUserExist ? 'block' : 'none' )
+  $('.otp-heading').text(isUserExist ? 'You are already registered' : 'Enter the 4-digit code')
+  $(".otp-message").text(isUserExist ? 'Login using OTP sent to' : 'OTP sent to ')
+  otpTimer()
   $(".otp-container").css("display", "block");
   $(".selected-num-display").text("+91 " + parentMobileNum);
+
   if (parentMobileNum && selectedGrade) {
     customCssMethod(".sidepanel-container", "display", "block");
   }
@@ -323,11 +345,10 @@ $(".otp-input").on("input", (e) => {
       success: function (res) {
         if (!isUserExist) {
           handleRegisterUser();
-        } else {
+        }else{
           token = res.data.token;
-          handleGetSlots();
+          handleMecall()
         }
-        $(".otp-loader").css("display", "none");
       },
       error: function () {
         $(".otp-input").addClass("error-state");
@@ -377,7 +398,6 @@ $(".back-arrow").click(() => {
   }
 });
 
-console.log(isMweb);
 
 // slot section functinality
 
@@ -484,6 +504,46 @@ $(".confirm-slot-cta").click(() => {
   handleBookSlot();
 });
 
+const handleMecall = () => {
+    $.ajax({
+      type: "GET",
+      url: `https://nexfive.whjr.one/api/V1/userDetail/me?timezone=Asia%2FCalcutta&timestamp=1612940173960&clientVersion=main-ui-24d1afka4.whjr.dev`,
+      cache: false,
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+
+      success: function (res) {
+        studentDetails = res.data
+
+        const errStatements = {
+          not_scheduled: "",
+          pre_trial: "User already booked the slot",
+          post_trial: "User already booked and attended trail",
+          paid: "User is a paid user, can't rebook trial class",
+        };
+
+        const trailStatus = studentDetails.students[0].student_courses.filter(
+          (course) => course.courseType === selectedSubj.toUpperCase()
+        );
+
+        if (trailStatus[0].trialStatus !== "not_scheduled") {
+          $(".otp-container").css("display", "none");
+          $(".sp-initial-form").css("display", "block");
+          $(".sp-registered-user-msg").css('display','flex')
+          $(".registered-user-msg").text(errStatements[trailStatus[0].trialStatus])
+          studentDetails.students[0].student_courses.map((course)=>{
+            $(`.${course.courseType.toLowerCase()}-block`).addClass('disabled')
+          })
+          $(".otp-loader").css("display", "none");
+          handleGetDashboardLink();
+        }else{
+          handleGetSlots()
+        }
+      },
+    });
+}
+
 const handleBookSlot = () => {
   const startTime =
     slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime;
@@ -498,6 +558,7 @@ const handleBookSlot = () => {
         endTime: moment(startTime).add(1, "hours").toISOString(),
       },
       courseType: selectedSubj,
+      studentId: studentDetails.students[0].student_courses[0].studentId
     },
     headers: {
       authorization: `Bearer ${token}`,
@@ -505,6 +566,31 @@ const handleBookSlot = () => {
 
     success: function (res) {
       console.log(res);
+      handleGetDashboardLink(true); // true - after booking slot 
     },
   });
 };
+
+
+const handleGetDashboardLink = (bookedSlot) => {
+    $.ajax({
+      type: "GET",
+      url: `https://nexfive.whjr.one/api/V1/students/${studentDetails.students[0].student_courses[0].studentId}/getDashbordLink?timezone=Asia%2FCalcutta&brandId=whitehatjr&clientVersion=%25clientBuildVersion%25&langCode=en_US&courseType=${selectedSubj}`,
+      cache: false,
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+
+      success: function (res) {
+        dashboardLink = res.data.url
+        if(bookedSlot){
+          window.open(dashboardLink,'_blank');
+          window.location("https://code-stage.whjr.one/s/trial/success");
+        }
+      },
+    });
+}
+
+$(".dashboard-redirection").click(()=>{
+  window.open(dashboardLink,'_blank');
+})
