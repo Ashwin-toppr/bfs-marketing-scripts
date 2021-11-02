@@ -242,11 +242,15 @@ $(".parent-mobile-num").on("input", (e) => {
 $(".sp-initial-cta").click(() => {
   if (!checkValidNum(parentMobileNum)) return;
   getOtp(spInitialCtaSuccess);
+  $(`${isMweb ? '.mweb-sp-registered-user-msg' : '.sp-registered-user-msg'}`).css('display','none')
+
 });
 
 $(".mweb-sp-initial-cta").click(() => {
   if (!checkValidNum(parentMobileNum)) return;
   getOtp(mwebSpinitilacta);
+  $(`${isMweb ? '.mweb-sp-registered-user-msg' : '.sp-registered-user-msg'}`).css('display','none')
+
 });
 
 const mwebSpinitilacta = (res) => {
@@ -420,6 +424,7 @@ const handleGetSlots = () => {
         $(".mweb-sp-slot-cta").addClass("disabled");
       } else {
         $(".otp-container").css("display", "none");
+        $(".otp-user-exist-msg").css('display','none')
         $(".side-panel-slot").css("display", "block");
         $(".confirm-slot-cta").addClass("disabled");
       }
@@ -514,11 +519,11 @@ const handleMecall = () => {
       },
 
       success: function (res) {
-        studentDetails = res.data
+        studentDetails = res.data 
 
         const errStatements = {
           not_scheduled: "",
-          pre_trial: "User already booked the slot",
+          pre_trial: `You have already booked a trial class for ${selectedSubj}. Go to dashboard to manage your prior bookings.`,
           post_trial: "User already booked and attended trail",
           paid: "User is a paid user, can't rebook trial class",
         };
@@ -528,10 +533,11 @@ const handleMecall = () => {
         );
 
         if (trailStatus[0].trialStatus !== "not_scheduled") {
-          $(".otp-container").css("display", "none");
-          $(".sp-initial-form").css("display", "block");
-          $(".sp-registered-user-msg").css('display','flex')
-          $(".registered-user-msg").text(errStatements[trailStatus[0].trialStatus])
+          $(`${isMweb ? '.mweb-otp-container' : '.otp-container' }`).css("display", "none");
+          $(".otp-user-exist-msg").css("display", "none");
+          $(`${isMweb ? '.mweb-initial-form':'.sp-initial-form'}`).css("display", "block");
+          $(`${isMweb ? '.mweb-sp-registered-user-msg' : '.sp-registered-user-msg'}`).css('display','flex')
+          $(`${isMweb ? '.mweb-registered-user-msg' : '.registered-user-msg'}`).text(errStatements[trailStatus[0].trialStatus])
           studentDetails.students[0].student_courses.map((course)=>{
             $(`.${course.courseType.toLowerCase()}-block`).addClass('disabled')
           })
@@ -585,7 +591,7 @@ const handleGetDashboardLink = (bookedSlot) => {
         dashboardLink = res.data.url
         if(bookedSlot){
           window.open(dashboardLink,'_blank');
-          window.location("https://code-stage.whjr.one/s/trial/success");
+          window.location = "https://code-stage.whjr.one/s/trial/success";
         }
       },
     });
