@@ -257,6 +257,8 @@ const mwebSpinitilacta = (res) => {
   $(".otp-user-exist-msg").css("display", isUserExist ? "block" : "none");
   $(".mweb-otp-container").css("display", "block");
   $(".selected-num-display").text("+91 " + parentMobileNum);
+  $('.otp-heading').text(isUserExist ? 'You are already registered' : 'Enter the 4-digit code')
+  $(".otp-message").text(isUserExist ? 'Login using OTP sent to' : 'OTP sent to ')
   otpTimer();
   challengeCodeForOtp = res.data.challenge;
 };
@@ -384,6 +386,7 @@ const handleRegisterUser = () => {
 
     success: function (res) {
       token = res.data.token;
+      handleMecall();
       handleGetSlots();
     },
   });
@@ -534,13 +537,14 @@ const handleMecall = () => {
           (course) => course.courseType === selectedSubj.toUpperCase()
         );
 
-        if (trailStatus[0].trialStatus !== "not_scheduled") {
+        if (trailStatus[0]?.trialStatus !== "not_scheduled") {
           $(`${isMweb ? '.mweb-otp-container' : '.otp-container' }`).css("display", "none");
           $(".otp-user-exist-msg").css("display", "none");
           $(`${isMweb ? '.mweb-initial-form':'.sp-initial-form'}`).css("display", "block");
           $(`${isMweb ? '.mweb-sp-registered-user-msg' : '.sp-registered-user-msg'}`).css('display','flex')
           $(`${isMweb ? '.mweb-registered-user-msg' : '.registered-user-msg'}`).text(errStatements[trailStatus[0].trialStatus])
           studentDetails.students[0].student_courses.map((course)=>{
+            $(`.${course.courseType.toLowerCase()}-block`).removeClass("disabled");
             $(`.${course.courseType.toLowerCase()}-block`).addClass('disabled')
           })
           $(".otp-loader").css("display", "none");
@@ -566,7 +570,7 @@ const handleBookSlot = () => {
         endTime: moment(startTime).add(1, "hours").toISOString(),
       },
       courseType: selectedSubj,
-      studentId: studentDetails.students[0].student_courses[0].studentId
+      studentId: studentDetails.students[0]?.student_courses[0]?.studentId
     },
     headers: {
       authorization: `Bearer ${token}`,
