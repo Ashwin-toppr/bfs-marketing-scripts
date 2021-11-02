@@ -254,8 +254,10 @@ $(".mweb-sp-initial-cta").click(() => {
 });
 
 const mwebSpinitilacta = (res) => {
+  $(".otp-user-exist-msg").css("display", isUserExist ? "block" : "none");
   $(".mweb-otp-container").css("display", "block");
   $(".selected-num-display").text("+91 " + parentMobileNum);
+  otpTimer();
   challengeCodeForOtp = res.data.challenge;
 };
 

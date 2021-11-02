@@ -373,6 +373,7 @@ $(".mweb-sp-initial-cta").click(() => {
 
 const mwebSpinitilacta = () => {
   $(".mweb-otp-container").css("display", "block");
+  $(".otp-user-exist-msg").css("display", isUserExist ? "block" : "none");
 };
 
 const spInitialCtaSuccess = () => {
