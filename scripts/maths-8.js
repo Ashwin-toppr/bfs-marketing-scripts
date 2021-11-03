@@ -612,6 +612,8 @@ const handleMecall = () => {
         $(".otp-loader").css("display", "none");
         $('.otp-input').val('')
         $(".grade-block").removeClass("active-state");
+        $(".music-state").css("display", "none");
+
         handleGetDashboardLink();
       } else {
         handleGetSlots();
@@ -672,7 +674,9 @@ const handleGetDashboardLink = (bookedSlot) => {
       dashboardLink = res.data.url;
       if (bookedSlot) {
         window.open(dashboardLink, "_blank");
-        window.location = "https://code-stage.whjr.one/s/trial/success";
+        setTimeout(()=>{
+          window.location = "https://code-stage.whjr.one/s/trial/success";
+        },5000)
       }
     },
     error: function (err) {
@@ -699,5 +703,8 @@ const handleReset = () => {
   $(".subject-card-sp").removeClass("disabled");
   $('.otp-container').css('display','none')
   $(".side-panel-slot").css('display','none')
+  $(".otp-user-exist-msg").css("display", "none");
   $('.sp-initial-form').css('display','block')
+  clearInterval(timeInterval)
+  $('.music-state').css('display','none')
 };
