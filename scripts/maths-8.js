@@ -154,7 +154,10 @@ $(".mweb-schedule-cta").click(() => {
 $(".sidepannel-close").click(() => {
   customCssMethod("body", "overflow", "auto");
   customCssMethod(".sidepanel-container", "display", "none");
+  handleReset()
+  customCssMethod("otp-user-exist-msg", "display", "none");
 });
+
 
 //form functionality
 
@@ -337,6 +340,7 @@ const getOtp = (callback, isResend) => {
 
 $(".resend-otp").click(() => {
   getOtp(isMweb ? mwebSpinitilacta : spInitialCtaSuccess, true);
+  $('.otp-input').val('')
 });
 
 $(".mweb-otp-close").click(() => {
@@ -378,11 +382,14 @@ $(".otp-input").on("input", (e) => {
           token = res.data.token;
           handleMecall();
         }
+        $(".otp-loader").css("display", "none");
       },
       error: function (err) {
         $(".otp-input").addClass("error-state");
         $(".otp-err").css("display", "block");
         $(".otp-loader").css("display", "none");
+        $(".otp-input").val("");
+
         console.log(err);
         Toastify({
           text: err.responseJSON.error.message,
@@ -598,9 +605,13 @@ const handleMecall = () => {
           $(`.${course.courseType.toLowerCase()}-block`).removeClass(
             "disabled"
           );
-          $(`.${course.courseType.toLowerCase()}-block`).addClass("disabled");
+          if (course.trialStatus != "not_scheduled"){
+            $(`.${course.courseType.toLowerCase()}-block`).addClass("disabled");
+          }
         });
         $(".otp-loader").css("display", "none");
+        $('.otp-input').val('')
+        $(".grade-block").removeClass("active-state");
         handleGetDashboardLink();
       } else {
         handleGetSlots();
@@ -677,3 +688,16 @@ const handleGetDashboardLink = (bookedSlot) => {
 $(".dashboard-redirection").click(() => {
   window.open(dashboardLink, "_blank");
 });
+
+
+const handleReset = () => {
+  selectedGrade = "";
+  otpValue = "";
+  selectedSubj = "";
+  $(".subject-card-sp").removeClass("active-state");
+  $(".grade-block").removeClass("active-state");
+  $(".subject-card-sp").removeClass("disabled");
+  $('.otp-container').css('display','none')
+  $(".side-panel-slot").css('display','none')
+  $('.sp-initial-form').css('display','block')
+};
