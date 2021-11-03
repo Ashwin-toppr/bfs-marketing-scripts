@@ -237,6 +237,13 @@ $(".parent-mobile-num").on("input", (e) => {
     parentMobileNum = e.target.value;
     isExist();
   }
+  if(studentDetails){
+   selectedGrade = '',
+   otpValue = ''
+  $(".subject-card-sp").removeClass("active-state");
+  $(".subject-card-sp").removeClass("disabled");
+  
+  }
 });
 
 $(".sp-initial-cta").click(() => {
@@ -358,10 +365,16 @@ $(".otp-input").on("input", (e) => {
           handleMecall()
         }
       },
-      error: function () {
+      error: function (err) {
         $(".otp-input").addClass("error-state");
         $(".otp-err").css("display", "block");
         $(".otp-loader").css("display", "none");
+        console.log(err.data)
+        myToast = Toastify({
+          text: err.data.message,
+          duration: 5000,
+        });
+        myToast.showToast()
       },
     });
   }
@@ -537,7 +550,7 @@ const handleMecall = () => {
           (course) => course.courseType === selectedSubj.toUpperCase()
         );
 
-        if (trailStatus[0]?.trialStatus !== "not_scheduled") {
+        if (trailStatus[0] && trailStatus[0].trialStatus !== "not_scheduled") {
           $(`${isMweb ? '.mweb-otp-container' : '.otp-container' }`).css("display", "none");
           $(".otp-user-exist-msg").css("display", "none");
           $(`${isMweb ? '.mweb-initial-form':'.sp-initial-form'}`).css("display", "block");
@@ -600,6 +613,7 @@ const handleGetDashboardLink = (bookedSlot) => {
           window.location = "https://code-stage.whjr.one/s/trial/success";
         }
       },
+      async: false
     });
 }
 
