@@ -123,7 +123,8 @@ var parentMobileNum = "",
   selectedTimeSlot,
   studentDetails,
   dashboardLink,
-  challengeCodeForOtp;
+  challengeCodeForOtp,
+  myToast;
 
 //side pannel code
 
@@ -238,9 +239,11 @@ $(".parent-mobile-num").on("input", (e) => {
     isExist();
   }
   if(studentDetails){
-   selectedGrade = '',
+   selectedGrade = ''
    otpValue = ''
+   selectedSubj = ''
   $(".subject-card-sp").removeClass("active-state");
+  $(".grade-block").removeClass("active-state");
   $(".subject-card-sp").removeClass("disabled");
   
   }
@@ -250,6 +253,7 @@ $(".sp-initial-cta").click(() => {
   if (!checkValidNum(parentMobileNum)) return;
   getOtp(spInitialCtaSuccess);
   $(`${isMweb ? '.mweb-sp-registered-user-msg' : '.sp-registered-user-msg'}`).css('display','none')
+  $('.otp-input').val('')
 
 });
 
@@ -270,12 +274,13 @@ const mwebSpinitilacta = (res) => {
   challengeCodeForOtp = res.data.challenge;
 };
 
+var timeInterval;
 
 const otpTimer = () => {
   var timer = 50
   $(".resend-otp").css("display", "none");
 
-  const timeInterval = setInterval(() => {
+  timeInterval = setInterval(() => {
     $(".resend-otp-msg").text(`Didn’t recieve the code? Retry after ${timer}`);
     timer -= 1
     if(timer <= 0){
@@ -435,6 +440,7 @@ const handleGetSlots = () => {
     success: function (res) {
       slotsData = res.data.slots;
       handleDateBlockStructure();
+      clearInterval(timeInterval);
       if (isMweb) {
         $(".mweb-otp-container").css("display", "none");
         $(".mweb-initial-form").css("display", "none");
@@ -552,6 +558,7 @@ const handleMecall = () => {
 
         if (trailStatus[0] && trailStatus[0].trialStatus !== "not_scheduled") {
           $(`${isMweb ? '.mweb-otp-container' : '.otp-container' }`).css("display", "none");
+          clearInterval(timeInterval);
           $(".otp-user-exist-msg").css("display", "none");
           $(`${isMweb ? '.mweb-initial-form':'.sp-initial-form'}`).css("display", "block");
           $(`${isMweb ? '.mweb-sp-registered-user-msg' : '.sp-registered-user-msg'}`).css('display','flex')
