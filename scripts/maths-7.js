@@ -238,38 +238,43 @@ $(".parent-mobile-num").on("input", (e) => {
     parentMobileNum = e.target.value;
     isExist();
   }
-  if(studentDetails){
-   selectedGrade = ''
-   otpValue = ''
-   selectedSubj = ''
-  $(".subject-card-sp").removeClass("active-state");
-  $(".grade-block").removeClass("active-state");
-  $(".subject-card-sp").removeClass("disabled");
-  
+  if (studentDetails) {
+    selectedGrade = "";
+    otpValue = "";
+    selectedSubj = "";
+    $(".subject-card-sp").removeClass("active-state");
+    $(".grade-block").removeClass("active-state");
+    $(".subject-card-sp").removeClass("disabled");
   }
 });
 
 $(".sp-initial-cta").click(() => {
   if (!checkValidNum(parentMobileNum)) return;
   getOtp(spInitialCtaSuccess);
-  $(`${isMweb ? '.mweb-sp-registered-user-msg' : '.sp-registered-user-msg'}`).css('display','none')
-  $('.otp-input').val('')
-
+  $(
+    `${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`
+  ).css("display", "none");
+  $(".otp-input").val("");
 });
 
 $(".mweb-sp-initial-cta").click(() => {
   if (!checkValidNum(parentMobileNum)) return;
   getOtp(mwebSpinitilacta);
-  $(`${isMweb ? '.mweb-sp-registered-user-msg' : '.sp-registered-user-msg'}`).css('display','none')
-
+  $(
+    `${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`
+  ).css("display", "none");
 });
 
 const mwebSpinitilacta = (res) => {
   $(".otp-user-exist-msg").css("display", isUserExist ? "block" : "none");
   $(".mweb-otp-container").css("display", "block");
   $(".selected-num-display").text("+91 " + parentMobileNum);
-  $('.otp-heading').text(isUserExist ? 'You are already registered' : 'Enter the 4-digit code')
-  $(".otp-message").text(isUserExist ? 'Login using OTP sent to' : 'OTP sent to ')
+  $(".otp-heading").text(
+    isUserExist ? "You are already registered" : "Enter the 4-digit code"
+  );
+  $(".otp-message").text(
+    isUserExist ? "Login using OTP sent to" : "OTP sent to "
+  );
   otpTimer();
   challengeCodeForOtp = res.data.challenge;
 };
@@ -277,26 +282,30 @@ const mwebSpinitilacta = (res) => {
 var timeInterval;
 
 const otpTimer = () => {
-  var timer = 50
+  var timer = 50;
   $(".resend-otp").css("display", "none");
 
   timeInterval = setInterval(() => {
     $(".resend-otp-msg").text(`Didn’t recieve the code? Retry after ${timer}`);
-    timer -= 1
-    if(timer <= 0){
+    timer -= 1;
+    if (timer <= 0) {
       clearInterval(timeInterval);
       $(".resend-otp-msg").text(`Didn’t recieve the code?`);
-      $(".resend-otp").css('display','block')
+      $(".resend-otp").css("display", "block");
     }
   }, 1000);
-}
+};
 
 const spInitialCtaSuccess = (res) => {
   $(".sp-initial-form").css("display", "none");
-  $(".otp-user-exist-msg").css('display', isUserExist ? 'block' : 'none' )
-  $('.otp-heading').text(isUserExist ? 'You are already registered' : 'Enter the 4-digit code')
-  $(".otp-message").text(isUserExist ? 'Login using OTP sent to' : 'OTP sent to ')
-  otpTimer()
+  $(".otp-user-exist-msg").css("display", isUserExist ? "block" : "none");
+  $(".otp-heading").text(
+    isUserExist ? "You are already registered" : "Enter the 4-digit code"
+  );
+  $(".otp-message").text(
+    isUserExist ? "Login using OTP sent to" : "OTP sent to "
+  );
+  otpTimer();
   $(".otp-container").css("display", "block");
   $(".selected-num-display").text("+91 " + parentMobileNum);
 
@@ -365,21 +374,20 @@ $(".otp-input").on("input", (e) => {
       success: function (res) {
         if (!isUserExist) {
           handleRegisterUser();
-        }else{
+        } else {
           token = res.data.token;
-          handleMecall()
+          handleMecall();
         }
       },
       error: function (err) {
         $(".otp-input").addClass("error-state");
         $(".otp-err").css("display", "block");
         $(".otp-loader").css("display", "none");
-        console.log(err.data)
-        myToast = Toastify({
-          text: err.data.message,
+        console.log(err);
+        Toastify({
+          text: err.responseJSON.error.message,
           duration: 5000,
-        });
-        myToast.showToast()
+        }).showToast();
       },
     });
   }
@@ -407,6 +415,12 @@ const handleRegisterUser = () => {
       handleMecall();
       handleGetSlots();
     },
+    error: function (err) {
+      Toastify({
+        text: err.responseJSON.error.message,
+        duration: 5000,
+      }).showToast();
+    },
   });
 };
 
@@ -424,7 +438,6 @@ $(".back-arrow").click(() => {
     $(".side-panel-slot").css("display", "none");
   }
 });
-
 
 // slot section functinality
 
@@ -448,10 +461,16 @@ const handleGetSlots = () => {
         $(".mweb-sp-slot-cta").addClass("disabled");
       } else {
         $(".otp-container").css("display", "none");
-        $(".otp-user-exist-msg").css('display','none')
+        $(".otp-user-exist-msg").css("display", "none");
         $(".side-panel-slot").css("display", "block");
         $(".confirm-slot-cta").addClass("disabled");
       }
+    },
+    error: function (err) {
+      Toastify({
+        text: err.responseJSON.error.message,
+        duration: 5000,
+      }).showToast();
     },
   });
 };
@@ -534,47 +553,67 @@ $(".confirm-slot-cta").click(() => {
 });
 
 const handleMecall = () => {
-    $.ajax({
-      type: "GET",
-      url: `https://nexfive.whjr.one/api/V1/userDetail/me?timezone=Asia%2FCalcutta&timestamp=1612940173960&clientVersion=main-ui-24d1afka4.whjr.dev`,
-      cache: false,
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
+  $.ajax({
+    type: "GET",
+    url: `https://nexfive.whjr.one/api/V1/userDetail/me?timezone=Asia%2FCalcutta&timestamp=1612940173960&clientVersion=main-ui-24d1afka4.whjr.dev`,
+    cache: false,
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
 
-      success: function (res) {
-        studentDetails = res.data 
+    success: function (res) {
+      studentDetails = res.data;
 
-        const errStatements = {
-          not_scheduled: "",
-          pre_trial: `You have already booked a trial class for ${selectedSubj}. Go to dashboard to manage your prior bookings.`,
-          post_trial: "User already booked and attended trail",
-          paid: "User is a paid user, can't rebook trial class",
-        };
+      const errStatements = {
+        not_scheduled: "",
+        pre_trial: `You have already booked a trial class for ${selectedSubj}. Go to dashboard to manage your prior bookings.`,
+        post_trial: "User already booked and attended trail",
+        paid: "User is a paid user, can't rebook trial class",
+      };
 
-        const trailStatus = studentDetails.students[0].student_courses.filter(
-          (course) => course.courseType === selectedSubj.toUpperCase()
+      const trailStatus = studentDetails.students[0].student_courses.filter(
+        (course) => course.courseType === selectedSubj.toUpperCase()
+      );
+
+      if (trailStatus[0] && trailStatus[0].trialStatus !== "not_scheduled") {
+        $(`${isMweb ? ".mweb-otp-container" : ".otp-container"}`).css(
+          "display",
+          "none"
         );
-
-        if (trailStatus[0] && trailStatus[0].trialStatus !== "not_scheduled") {
-          $(`${isMweb ? '.mweb-otp-container' : '.otp-container' }`).css("display", "none");
-          clearInterval(timeInterval);
-          $(".otp-user-exist-msg").css("display", "none");
-          $(`${isMweb ? '.mweb-initial-form':'.sp-initial-form'}`).css("display", "block");
-          $(`${isMweb ? '.mweb-sp-registered-user-msg' : '.sp-registered-user-msg'}`).css('display','flex')
-          $(`${isMweb ? '.mweb-registered-user-msg' : '.registered-user-msg'}`).text(errStatements[trailStatus[0].trialStatus])
-          studentDetails.students[0].student_courses.map((course)=>{
-            $(`.${course.courseType.toLowerCase()}-block`).removeClass("disabled");
-            $(`.${course.courseType.toLowerCase()}-block`).addClass('disabled')
-          })
-          $(".otp-loader").css("display", "none");
-          handleGetDashboardLink();
-        }else{
-          handleGetSlots()
-        }
-      },
-    });
-}
+        clearInterval(timeInterval);
+        $(".otp-user-exist-msg").css("display", "none");
+        $(`${isMweb ? ".mweb-initial-form" : ".sp-initial-form"}`).css(
+          "display",
+          "block"
+        );
+        $(
+          `${
+            isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"
+          }`
+        ).css("display", "flex");
+        $(
+          `${isMweb ? ".mweb-registered-user-msg" : ".registered-user-msg"}`
+        ).text(errStatements[trailStatus[0].trialStatus]);
+        studentDetails.students[0].student_courses.map((course) => {
+          $(`.${course.courseType.toLowerCase()}-block`).removeClass(
+            "disabled"
+          );
+          $(`.${course.courseType.toLowerCase()}-block`).addClass("disabled");
+        });
+        $(".otp-loader").css("display", "none");
+        handleGetDashboardLink();
+      } else {
+        handleGetSlots();
+      }
+    },
+    error: function (err) {
+      Toastify({
+        text: err.responseJSON.error.message,
+        duration: 5000,
+      }).showToast();
+    },
+  });
+};
 
 const handleBookSlot = () => {
   const startTime =
@@ -590,7 +629,7 @@ const handleBookSlot = () => {
         endTime: moment(startTime).add(1, "hours").toISOString(),
       },
       courseType: selectedSubj,
-      studentId: studentDetails.students[0]?.student_courses[0]?.studentId
+      studentId: studentDetails.students[0]?.student_courses[0]?.studentId,
     },
     headers: {
       authorization: `Bearer ${token}`,
@@ -598,32 +637,43 @@ const handleBookSlot = () => {
 
     success: function (res) {
       console.log(res);
-      handleGetDashboardLink(true); // true - after booking slot 
+      handleGetDashboardLink(true); // true - after booking slot
+    },
+    error: function (err) {
+      Toastify({
+        text: err.responseJSON.error.message,
+        duration: 5000,
+      }).showToast();
     },
   });
 };
 
-
 const handleGetDashboardLink = (bookedSlot) => {
-    $.ajax({
-      type: "GET",
-      url: `https://nexfive.whjr.one/api/V1/students/${studentDetails.students[0].student_courses[0].studentId}/getDashbordLink?timezone=Asia%2FCalcutta&brandId=whitehatjr&clientVersion=%25clientBuildVersion%25&langCode=en_US&courseType=${selectedSubj}`,
-      cache: false,
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
+  $.ajax({
+    type: "GET",
+    url: `https://nexfive.whjr.one/api/V1/students/${studentDetails.students[0].student_courses[0].studentId}/getDashbordLink?timezone=Asia%2FCalcutta&brandId=whitehatjr&clientVersion=%25clientBuildVersion%25&langCode=en_US&courseType=${selectedSubj}`,
+    cache: false,
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
 
-      success: function (res) {
-        dashboardLink = res.data.url
-        if(bookedSlot){
-          window.open(dashboardLink,'_blank');
-          window.location = "https://code-stage.whjr.one/s/trial/success";
-        }
-      },
-      async: false
-    });
-}
+    success: function (res) {
+      dashboardLink = res.data.url;
+      if (bookedSlot) {
+        window.open(dashboardLink, "_blank");
+        window.location = "https://code-stage.whjr.one/s/trial/success";
+      }
+    },
+    error: function (err) {
+      Toastify({
+        text: err.responseJSON.error.message,
+        duration: 5000,
+      }).showToast();
+    },
+    async: false,
+  });
+};
 
-$(".dashboard-redirection").click(()=>{
-  window.open(dashboardLink,'_blank');
-})
+$(".dashboard-redirection").click(() => {
+  window.open(dashboardLink, "_blank");
+});
