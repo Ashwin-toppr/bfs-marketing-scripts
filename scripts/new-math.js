@@ -1,106 +1,98 @@
-AOS.init();
-
-//realted to counter on stats
-$(".counter").counterUp({
-  delay: 10,
-  time: 1500,
-});
-$(".counter").addClass("animated fadeInDownBig");
-$("h3").addClass("animated fadeIn");
-
-var dialCode = "+91",
-  country = "IN",
-  isMweb = window.screen.width < 500;
-
-//curriculum functionality
-$(".grade-card").click((e) => {
-  e.preventDefault();
-  const id = e.target.id;
-  selectingCourseTab(id);
-});
-
-$("#grade-select").change((e) => {
-  console.log(e);
-  selectingCourseTab(e.target.value);
-});
-
-function selectingCourseTab(id) {
-  Selectedgrade = id.split("").slice(-1)[0];
-  const gradeCards = document.getElementsByClassName("grade-card");
-  $(".grade-card").removeClass("active-grade");
-  $("#" + id).addClass("active-grade");
-
-  getCoursePackgesList();
-}
-
-function getCoursePackgesList() {
-  $.ajax({
-    type: "GET",
-    url:
-      "https://api.byjusfutureschool.com/api/V1/public/packages/getV2?brandId=whitehatjr&courseType=MATH&country=US&grade=" +
-      Selectedgrade +
-      "&source=website",
-    cache: false,
-
-    success: handleAppendcourseCardChild,
+{/* <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.counterup/1.0/jquery.counterup.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script> */}
+ // scroll animation
+ AOS.init();
+ 
+ //realted to counter on stats
+  $('.counter').counterUp({
+      delay: 10,
+      time: 1500
   });
-}
+  $('.counter').addClass('animated fadeInDownBig');
+  $('h3').addClass('animated fadeIn');
+  
+  var dialCode='+91',country='IN',isMweb = window.screen.width < 500
+  
+ //curriculum functionality
+  $('.grade-card').click((e)=>{
+  	e.preventDefault()
+    const id = e.target.id
+  	selectingCourseTab(id)
+  })
+  
+  $('#grade-select').change((e)=>{
+  console.log(e)
+  selectingCourseTab(e.target.value)
+  })
+  
+  function selectingCourseTab(id){
+  	Selectedgrade = id.split('').slice(-1)[0]
+    const gradeCards =  document.getElementsByClassName('grade-card')
+    $('.grade-card').removeClass('active-grade')
+    $('#'+id).addClass('active-grade')
+    
+    
+    getCoursePackgesList();
+  }
+  
+  function getCoursePackgesList() {
+    $.ajax({
+      type: "GET",
+      url: "https://api.byjusfutureschool.com/api/V1/public/packages/getV2?brandId=whitehatjr&courseType=MATH&country=US&grade="+Selectedgrade+"&source=website",
+      cache: false,
 
-handleAppendcourseCardChild = (data) => {
-  const mainData = data.data;
-  var dataRestructure = [];
-  mainData.ONE_TO_ONE.ONE_TIME.map((pack) => {
-    dataRestructure = [...Object.values(pack), ...dataRestructure];
-  });
-
-  dataRestructure.map((pack) => {
-    $(".pc" + pack.name.slice(0, 1) + "-heading").text(pack.name);
-    $(".pc" + pack.name.slice(0, 1) + "-save").text(
-      "SAVE " + pack.discount + "%"
-    );
-    $(".pc" + pack.name.slice(0, 1) + "-display-price").text(
-      "$" + pack.sellingPrice
-    );
-    $(".pc" + pack.name.slice(0, 1) + "-cut-price").text("$" + pack.mrp);
-    $(".ppc-" + pack.name).text("Price per class $" + pack.perClassPrice);
-    $(".vdc-" + pack.name).attr("href", pack.courseItem.course.curriculumLink);
-    $(".badge-block-" + pack.name).empty();
-
-    const currIncludes = pack.packageAdditionalInfo?.curriculumIncludes.reduce(
-      (text, value, i, array) =>
-        text + (i < array.length - 1 ? ", " : " and ") + value
-    );
-
-    $(".curri-includes-" + pack.name.slice(0, 1)).text(currIncludes);
-
-    const classes = pack.credits ? `${pack.credits} classes` : "";
-    const projects = pack.packageAdditionalInfo.numberOfProjects
-      ? `| ${pack.packageAdditionalInfo.numberOfProjects} Project${
-          pack.packageAdditionalInfo.numberOfProjects > 1 ? "s" : ""
-        } `
-      : "";
-
-    $(".class-prj-" + pack.name.slice(0, 1)).text(`${classes} ${projects}`);
-
-    pack.packageAdditionalInfo.Achievement.map((achievement) => {
-      const data =
-        '<div class="badge"><img src="' +
-        achievement.imageLink +
-        '" loading="lazy" alt="" class="bdg-img"><div class="bdg-txt">' +
-        achievement.title +
-        "</div></div>";
-      $(".badge-block-" + pack.name).append(data);
+      success: handleAppendcourseCardChild
     });
-  });
-};
+	}
+  
+  
+  
+  handleAppendcourseCardChild = (data) => {
+      const mainData = data.data
+      var dataRestructure = []
+      mainData.ONE_TO_ONE.ONE_TIME.map((pack)=>{
+      	dataRestructure = [...Object.values(pack),...dataRestructure]
+      })
+      
+      
+      dataRestructure.map((pack)=>{
+      	$('.pc'+pack.name.slice(0,1)+'-heading').text(pack.name)
+      	$('.pc'+pack.name.slice(0,1)+'-save').text('SAVE ' +pack.discount+'%')
+      	$('.pc'+pack.name.slice(0,1)+'-display-price').text('$'+pack.sellingPrice)
+      	$('.pc'+pack.name.slice(0,1)+'-cut-price').text('$'+pack.mrp)
+        $('.ppc-'+pack.name).text('Price per class $'+pack.perClassPrice)
+        $('.vdc-'+pack.name).attr('href',pack.courseItem.course.curriculumLink)
+        $('.badge-block-'+pack.name).empty()
+        
+        const currIncludes = pack.packageAdditionalInfo?.curriculumIncludes.reduce((text, value, i, array) => text + (i < array.length - 1 ? ', ' : ' and ') + value);
 
-(function () {
-  selectingCourseTab("g-1");
-})();
-
+        $('.curri-includes-'+pack.name.slice(0,1)).text(currIncludes)
+        
+        const classes = pack.credits ? `${pack.credits} classes`:''
+        const projects = pack.packageAdditionalInfo.numberOfProjects ? `| ${pack.packageAdditionalInfo.numberOfProjects} Project${pack.packageAdditionalInfo.numberOfProjects > 1 ? 's':''} `: ''
+        
+        $('.class-prj-'+pack.name.slice(0,1)).text(`${classes} ${projects}`)
+        
+        pack.packageAdditionalInfo.Achievement.map((achievement)=>{
+        	const data = '<div class="badge"><img src="'+achievement.imageLink+'" loading="lazy" alt="" class="bdg-img"><div class="bdg-txt">'+achievement.title+'</div></div>'
+        	$('.badge-block-'+pack.name).append(data)
+        })
+        
+      })
+    }
+    
+  (function(){
+  	selectingCourseTab('g-1')
+  })()
+  
+  
 var dialCode = "+91",
   country = "IN",
-  isMweb = window.screen.width < 500;
+  isMweb = window.screen.width < 470;
 const customClassMethod = (toClass, isAddClass, whichClass) => {
   if (isAddClass) {
     $(toClass).addClass(whichClass);
@@ -124,44 +116,36 @@ var parentMobileNum = "",
   studentDetails,
   dashboardLink,
   challengeCodeForOtp,
-  myToast;
+  myToast,
+  timeZone
 
-//side pannel code
+  //side pannel code
 
-$(".schedule-cta").click(() => {
+
+
+$(`${isMweb ? '.mweb-schedule-cta' : '.schedule-cta' }`).click(()=>{
   customCssMethod("body", "overflow", "hidden");
   window.scrollTo(0, 0);
-  if (parentMobileNum && selectedGrade) {
-    $(".sp-initial-cta").click();
-  } else {
-    customCssMethod(".sidepanel-container", "display", "block");
-    $(".parent-mobile-num").val(parentMobileNum);
+
+  
+  if(parentMobileNum && selectedGrade){
+      if (!isMweb) {
+        $(".sp-initial-cta").click();
+      }else{
+        $(".mweb-sp-initial-cta").click();
+      }
+  }else{
+      $(".parent-mobile-num").val(parentMobileNum);
+      if(!isMweb){
+          customCssMethod(".sidepanel-container", "display", "block");
+      }else{
+          customCssMethod(".m-web-side-pannel", "display", "block");
+          customCssMethod("body", "overflow", "hidden");
+          customCssMethod(".mweb-banner-form", "display", "none");
+      }
   }
-});
+})
 
-$(".mweb-schedule-cta").click(() => {
-  customCssMethod(".m-web-side-pannel", "display", "block");
-  customCssMethod("body", "overflow", "hidden");
-  customCssMethod(".mweb-banner-form", "display", "none");
-  window.scrollTo(0, 0);
-  $(".parent-mobile-num").val(parentMobileNum);
-
-  if (parentMobileNum && selectedGrade) {
-    ".mweb-sp-initial-cta".click();
-  }
-});
-
-$(".sidepannel-close").click(() => {
-  customCssMethod("body", "overflow", "auto");
-  customCssMethod(".sidepanel-container", "display", "none");
-  handleReset()
-  customCssMethod("otp-user-exist-msg", "display", "none");
-});
-
-
-//form functionality
-
-$(`.${selectedSubj}-block`).addClass("active-state");
 
 const getGradeBlocks = () => {
   const subjGrades = {
@@ -212,6 +196,7 @@ $(".subject-card-sp").click((e) => {
   getGradeBlocks();
 });
 
+
 const isExist = () => {
   $.ajax({
     type: "POST",
@@ -251,27 +236,24 @@ $(".parent-mobile-num").on("input", (e) => {
   }
 });
 
-$(".sp-initial-cta").click(() => {
+
+$(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => {
   if (!checkValidNum(parentMobileNum)) return;
-  getOtp(spInitialCtaSuccess);
+  getOtp(spInitialCtaSuccess );
   $(
     `${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`
   ).css("display", "none");
-  $(".otp-input").val("");
+  $(".otp-input-box").val("");
 });
 
-$(".mweb-sp-initial-cta").click(() => {
-  if (!checkValidNum(parentMobileNum)) return;
-  getOtp(mwebSpinitilacta);
-  $(
-    `${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`
-  ).css("display", "none");
-});
 
-const mwebSpinitilacta = (res) => {
+
+const spInitialCtaSuccess = (res) => {
+  if(!isMweb){
+    $(".sp-initial-form").css("display", "none");
+  }
+  $(`${isMweb ? '.mweb-otp-container' : '.otp-container'}`).css("display", "block");
   $(".otp-user-exist-msg").css("display", isUserExist ? "block" : "none");
-  $(".mweb-otp-container").css("display", "block");
-  $(".selected-num-display").text("+91 " + parentMobileNum);
   $(".otp-heading").text(
     isUserExist ? "You are already registered" : "Enter the 4-digit code"
   );
@@ -279,10 +261,14 @@ const mwebSpinitilacta = (res) => {
     isUserExist ? "Login using OTP sent to" : "OTP sent to "
   );
   otpTimer();
+  $(".selected-num-display").text("+91 " + parentMobileNum);
+
+  if (parentMobileNum && selectedGrade) {
+    customCssMethod(".sidepanel-container", "display", "block");
+  }
   challengeCodeForOtp = res.data.challenge;
 };
 
-var timeInterval;
 
 const otpTimer = () => {
   var timer = 50;
@@ -299,24 +285,6 @@ const otpTimer = () => {
   }, 1000);
 };
 
-const spInitialCtaSuccess = (res) => {
-  $(".sp-initial-form").css("display", "none");
-  $(".otp-user-exist-msg").css("display", isUserExist ? "block" : "none");
-  $(".otp-heading").text(
-    isUserExist ? "You are already registered" : "Enter the 4-digit code"
-  );
-  $(".otp-message").text(
-    isUserExist ? "Login using OTP sent to" : "OTP sent to "
-  );
-  otpTimer();
-  $(".otp-container").css("display", "block");
-  $(".selected-num-display").text("+91 " + parentMobileNum);
-
-  if (parentMobileNum && selectedGrade) {
-    customCssMethod(".sidepanel-container", "display", "block");
-  }
-  challengeCodeForOtp = res.data.challenge;
-};
 
 const getOtp = (callback, isResend) => {
   const url = isUserExist
@@ -338,24 +306,30 @@ const getOtp = (callback, isResend) => {
   });
 };
 
+
 $(".resend-otp").click(() => {
-  getOtp(isMweb ? mwebSpinitilacta : spInitialCtaSuccess, true);
-  $('.otp-input').val('')
+  getOtp(spInitialCtaSuccess, true);
+  $(".otp-input-box").val("");
 });
+
+
 
 $(".mweb-otp-close").click(() => {
   $(".mweb-otp-container").css("display", "none");
 });
 
-$(".otp-input").on("input", (e) => {
-  otpValue = "";
 
-  $(".otp-input").removeClass("error-state");
-  $(".otp-err").css("display", "none");
-  if (!e.target.nextElementSibling) {
-    for (var i = 1; i < 5; i++) {
-      otpValue += $(`.${isMweb ? "mweb-" : ""}otp-${i}`).val();
-    }
+$('.otp-input-box').on('input',(e)=>{
+
+  $(`div.jss125`).removeClass("orange isError focus blink");
+  for(let i=2; i<e.target.value.length+2; i++){
+    $(`div.jss125:nth-child(${i})`).addClass(
+      "orange focus blink"
+    );
+  }
+
+  if(e.target.value.length >= 4){
+    otpValue = e.target.value;
 
     $(".otp-loader").css("display", "block");
 
@@ -376,19 +350,20 @@ $(".otp-input").on("input", (e) => {
       },
 
       success: function (res) {
+        clearInterval(timeInterval);
+        $(".otp-loader").css("display", "none");
         if (!isUserExist) {
           handleRegisterUser();
         } else {
           token = res.data.token;
           handleMecall();
         }
-        $(".otp-loader").css("display", "none");
       },
       error: function (err) {
-        $(".otp-input").addClass("error-state");
+        $(".div.jss125").addClass("isError");
         $(".otp-err").css("display", "block");
         $(".otp-loader").css("display", "none");
-        $(".otp-input").val("");
+        $(".otp-input-box").val("");
 
         console.log(err);
         Toastify({
@@ -397,11 +372,11 @@ $(".otp-input").on("input", (e) => {
         }).showToast();
       },
     });
+
   }
-  if (e.target.value) {
-    e.target.nextElementSibling.focus();
-  }
-});
+
+})
+
 
 const handleRegisterUser = () => {
   $.ajax({
@@ -430,134 +405,6 @@ const handleRegisterUser = () => {
     },
   });
 };
-
-$(".back-arrow").click(() => {
-  if ($(".mweb-slot-container").css("display") === "block") {
-    $(".mweb-slot-container").css("display", "none");
-    $(".mweb-initial-form").css("display", "block");
-  } else if ($(".mweb-initial-form").css("display") === "block") {
-    $(".m-web-side-pannel").css("display", "none");
-    $("body").css("overflow", "auto");
-    $(".mweb-banner-form").css("display", "block");
-  }
-  if ($(".side-panel-slot").css("display") === "block") {
-    $(".sp-initial-form").css("display", "block");
-    $(".side-panel-slot").css("display", "none");
-  }
-});
-
-// slot section functinality
-
-const handleGetSlots = () => {
-  $.ajax({
-    type: "GET",
-    url: `https://nexfive.whjr.one/api/V1/trial/slots/get?countryCode=US&grade=${selectedGrade}&timezone=Asia/Calcutta&courseType=${selectedSubj}`,
-    cache: false,
-    headers: {
-      authorization: `Bearer ${token}`,
-    },
-
-    success: function (res) {
-      slotsData = res.data.slots;
-      handleDateBlockStructure();
-      clearInterval(timeInterval);
-      if (isMweb) {
-        $(".mweb-otp-container").css("display", "none");
-        $(".mweb-initial-form").css("display", "none");
-        $(".mweb-slot-container").css("display", "block");
-        $(".mweb-sp-slot-cta").addClass("disabled");
-      } else {
-        $(".otp-container").css("display", "none");
-        $(".otp-user-exist-msg").css("display", "none");
-        $(".side-panel-slot").css("display", "block");
-        $(".confirm-slot-cta").addClass("disabled");
-      }
-    },
-    error: function (err) {
-      Toastify({
-        text: err.responseJSON.error.message,
-        duration: 5000,
-      }).showToast();
-    },
-  });
-};
-
-const handleDateBlockStructure = () => {
-  $(".date-block-container").empty();
-  const allDataBlocks = slotsData.map((date, index) => {
-    let dateBlock =
-      '<div class="date-block date-' +
-      index +
-      ' " id="date-' +
-      index +
-      '" ><p class="day-label">' +
-      moment(date.date).format("ddd") +
-      '</p><p class="date-label">' +
-      moment(date.date).format("DD") +
-      '</p><p class="month-label">' +
-      moment(date.date).format("MMM") +
-      "</p></div>";
-
-    $(".date-block-container").append(dateBlock);
-  });
-  handleAddEventTODateBlock();
-};
-
-var selectedDateIndex;
-
-const handleAddEventTODateBlock = () => {
-  $(".date-block").click((e) => {
-    const id = e.target.id.split("-").slice(-1)[0];
-    onDateBlockClick(id);
-  });
-  onDateBlockClick(0);
-};
-
-const onDateBlockClick = (id) => {
-  $(".date-block").removeClass("active-state");
-  $(".day-label").removeClass("active-state");
-  $(".month-label").removeClass("active-state");
-  $(".date-" + id).addClass("active-state");
-  $(".date-" + id + " div .day-label").addClass("active-state");
-  $(".date-" + id + " div .month-label").addClass("active-state");
-  selectedDateIndex = id;
-  getSlotsOnSelectedate();
-};
-
-const getSlotsOnSelectedate = () => {
-  $(".slots-container").empty();
-  slotsData[selectedDateIndex].slots.map((slot, index) => {
-    const isSlotAvail = slot.teacherCount > 0 ? "" : "disable";
-    const slotEle =
-      '<div id="slot-' +
-      index +
-      '" class="slot-block-card slot-' +
-      index +
-      " " +
-      isSlotAvail +
-      '"><p class="slot-time">' +
-      moment(slot.startTime).format("LT") +
-      "</p></div>";
-
-    $(".slots-container").append(slotEle);
-  });
-  $(".slot-block-card").click((e) => {
-    $(".slot-block-card").removeClass("active-state");
-    id = e.target.id.split("-").slice(-1)[0];
-    $(".slot-" + id).addClass("active-state");
-    selectedTimeSlot = id;
-    $(".mweb-sp-slot-cta").removeClass("disabled");
-    $(".confirm-slot-cta").removeClass("disabled");
-  });
-};
-
-$(".mweb-sp-slot-cta").click(() => {
-  handleBookSlot();
-});
-
-$(".confirm-slot-cta").click(() => {
-  handleBookSlot();
-});
 
 const handleMecall = () => {
   $.ajax({
@@ -604,12 +451,12 @@ const handleMecall = () => {
           $(`.${course.courseType.toLowerCase()}-block`).removeClass(
             "disabled"
           );
-          if (course.trialStatus != "not_scheduled"){
+          if (course.trialStatus != "not_scheduled") {
             $(`.${course.courseType.toLowerCase()}-block`).addClass("disabled");
           }
         });
         $(".otp-loader").css("display", "none");
-        $('.otp-input').val('')
+        $(".otp-input").val("");
         $(".grade-block").removeClass("active-state");
         $(".music-state").css("display", "none");
 
@@ -673,9 +520,9 @@ const handleGetDashboardLink = (bookedSlot) => {
       dashboardLink = res.data.url;
       if (bookedSlot) {
         window.open(dashboardLink, "_blank");
-        setTimeout(()=>{
+        setTimeout(() => {
           window.location = "https://code-stage.whjr.one/s/trial/success";
-        },5000)
+        }, 5000);
       }
     },
     error: function (err) {
@@ -692,7 +539,6 @@ $(".dashboard-redirection").click(() => {
   window.open(dashboardLink, "_blank");
 });
 
-
 const handleReset = () => {
   selectedGrade = "";
   otpValue = "";
@@ -700,10 +546,77 @@ const handleReset = () => {
   $(".subject-card-sp").removeClass("active-state");
   $(".grade-block").removeClass("active-state");
   $(".subject-card-sp").removeClass("disabled");
-  $('.otp-container').css('display','none')
-  $(".side-panel-slot").css('display','none')
+  $(".otp-container").css("display", "none");
+  $(".side-panel-slot").css("display", "none");
   $(".otp-user-exist-msg").css("display", "none");
-  $('.sp-initial-form').css('display','block')
-  clearInterval(timeInterval)
-  $('.music-state').css('display','none')
+  $(".sp-initial-form").css("display", "block");
+  clearInterval(timeInterval);
+  $(".music-state").css("display", "none");
 };
+
+$(".sidepannel-close").click(() => {
+  customCssMethod("body", "overflow", "auto");
+  customCssMethod(".sidepanel-container", "display", "none");
+  handleReset();
+  customCssMethod("otp-user-exist-msg", "display", "none");
+});
+
+$(".back-arrow").click(() => {
+  if ($(".mweb-slot-container").css("display") === "block") {
+    $(".mweb-slot-container").css("display", "none");
+    $(".mweb-initial-form").css("display", "block");
+  } else if ($(".mweb-initial-form").css("display") === "block") {
+    $(".m-web-side-pannel").css("display", "none");
+    $("body").css("overflow", "auto");
+    $(".mweb-banner-form").css("display", "block");
+  }
+  if ($(".side-panel-slot").css("display") === "block") {
+    $(".sp-initial-form").css("display", "block");
+    $(".side-panel-slot").css("display", "none");
+  }
+});
+
+
+$(".otp-input-box").focus(function () {
+  var that = this;
+  setTimeout(function () {
+    that.selectionStart = that.selectionEnd = 3;
+  }, 0);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+//  </script>
+
+
+
+
+
+ 
+
+
+
+

@@ -162,22 +162,21 @@
   }
 }
 .jss122 {
-  width: 288px;
-  margin: 40px auto 40px;
+  width: 340px;
   position: relative;
   font-size: 14px;
   line-height: 18px;
 }
 .jss123 {
-  width: 330px;
+  width: 340px;
   border: 0;
   height: 56px;
   font-size: 22px;
   background: #fff;
   caret-color: transparent;
   font-family: monospace;
-  padding-left: 30px;
-  letter-spacing: 58px;
+  padding-left: 38px;
+  letter-spacing: 71px;
 }
 .jss123:focus {
   border: 0;
@@ -195,9 +194,9 @@
 }
 .jss125 {
   top: 0;
-  width: 56px;
+  width: 73px;
   height: 56px;
-  margin: 0px 8px;
+  margin: 0px 6px;
   position: absolute;
   font-size: 0px;
   text-align: center;
