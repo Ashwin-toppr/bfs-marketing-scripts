@@ -146,6 +146,7 @@ $(`${isMweb ? '.mweb-schedule-cta' : '.schedule-cta' }`).click(()=>{
   }
 })
 
+$(`.${selectedSubj}-block`).addClass('active-state')
 
 const getGradeBlocks = () => {
   const subjGrades = {
@@ -154,6 +155,7 @@ const getGradeBlocks = () => {
     coding: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
   };
   $(".child-grade-blk-copy").empty();
+
 
   subjGrades[selectedSubj].map((grade) => {
     const element = `<div id="grade-${grade}" class="grade-block grade-card-sp  ${
@@ -167,7 +169,6 @@ const getGradeBlocks = () => {
 
   $(".grade-block").click((e) => {
     selectedGrade = e.target.id.split("-").slice(-1)[0];
-    debugger;
     customClassMethod(".grade-block", false, "active-state");
     if (selectedSubj == "music") {
       const musicGrade = e.target.id.split("-");
@@ -321,9 +322,9 @@ $(".mweb-otp-close").click(() => {
 
 $('.otp-input-box').on('input',(e)=>{
 
-  $(`div.jss125`).removeClass("orange isError focus blink");
+  $(`div.otp-box`).removeClass("orange isError focus blink");
   for(let i=2; i<e.target.value.length+2; i++){
-    $(`div.jss125:nth-child(${i})`).addClass(
+    $(`div.otp-box:nth-child(${i})`).addClass(
       "orange focus blink"
     );
   }
@@ -360,7 +361,7 @@ $('.otp-input-box').on('input',(e)=>{
         }
       },
       error: function (err) {
-        $(".div.jss125").addClass("isError");
+        $(".otp-box").addClass("isError");
         $(".otp-err").css("display", "block");
         $(".otp-loader").css("display", "none");
         $(".otp-input-box").val("");
@@ -463,6 +464,40 @@ const handleMecall = () => {
         handleGetDashboardLink();
       } else {
         handleGetSlots();
+      }
+    },
+    error: function (err) {
+      Toastify({
+        text: err.responseJSON.error.message,
+        duration: 5000,
+      }).showToast();
+    },
+  });
+};
+
+const handleGetSlots = () => {
+  $.ajax({
+    type: "GET",
+    url: `https://nexfive.whjr.one/api/V1/trial/slots/get?countryCode=US&grade=${selectedGrade}&timezone=Asia/Calcutta&courseType=${selectedSubj}`,
+    cache: false,
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+
+    success: function (res) {
+      slotsData = res.data.slots;
+      handleDateBlockStructure();
+      clearInterval(timeInterval);
+      if (isMweb) {
+        $(".mweb-otp-container").css("display", "none");
+        $(".mweb-initial-form").css("display", "none");
+        $(".mweb-slot-container").css("display", "block");
+        $(".mweb-sp-slot-cta").addClass("disabled");
+      } else {
+        $(".otp-container").css("display", "none");
+        $(".otp-user-exist-msg").css("display", "none");
+        $(".side-panel-slot").css("display", "block");
+        $(".confirm-slot-cta").addClass("disabled");
       }
     },
     error: function (err) {

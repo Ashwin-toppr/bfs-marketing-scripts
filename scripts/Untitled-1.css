@@ -137,7 +137,6 @@
   padding: 8px;
   z-index: 1301;
   position: absolute;
-  background: ;
 }
 @media (max-width:959.95px) {
   .jss119 {
@@ -192,7 +191,7 @@
     color: transparent;
   }
 }
-.jss125 {
+.otp-box {
   top: 0;
   width: 73px;
   height: 56px;
@@ -204,50 +203,51 @@
   border-radius: 8px;
   pointer-events: none;
 }
-.jss125.blink.focus {
+.otp-box.blink.focus {
   animation: jss124 0.8s infinite;
   font-size: 18px;
   padding-top: 3px;
 }
-.jss125.valid.blink.focus {
+.otp-box.valid.blink.focus {
   padding-left: 20px;
 }
-.jss125:nth-of-type(1) {
+.otp-box:nth-of-type(1) {
   left: 0;
 }
-.jss125:nth-of-type(2) {
-  left: 72px;
+.otp-box:nth-of-type(2) {
+  left: 85px;
 }
-.jss125:nth-of-type(3) {
-  right: 72px;
+.otp-box:nth-of-type(3) {
+  right: 85px;
 }
-.jss125:nth-of-type(4) {
+.otp-box:nth-of-type(4) {
   right: 0;
 }
-.jss125.focus.orange {
+.otp-box.focus.orange {
   border: 1px solid #FF8D1A;
 }
-.jss125.focus.grey {
+.otp-box.focus.grey {
   border: 1px solid #ddd;
 }
-.jss125.blink.focus.orange {
+.otp-box.blink.focus.orange {
   border: 1px solid #FF8D1A;
 }
-.jss125.orange {
+.otp-box.orange {
   border: 1px solid #FF8D1A;
 }
-.jss125.grey {
+.otp-box.grey {
   border: 1px solid #ddd;
 }
-.jss125.isError {
+.otp-box.isError {
   border: 1px solid #FC5A5A;
 }
-.jss125.isError.focus.orange {
+.otp-box.isError.focus.orange {
   border: 1px solid #FC5A5A;
 }
-.jss125.isError.blink.focus.orange {
+.otp-box.isError.blink.focus.orange {
   border: 1px solid #FC5A5A;
 }
+
 .jss126 {
   opacity: 0;
   pointer-events: none;
@@ -255,7 +255,6 @@
 .jss127 {
   color: #00B5CE;
   width: 100%;
-  > span: [object Object];
   display: flex;
   font-size: 14px;
   font-weight: bold;
