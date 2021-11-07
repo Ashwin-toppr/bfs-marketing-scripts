@@ -117,7 +117,8 @@ var parentMobileNum = "",
   dashboardLink,
   challengeCodeForOtp,
   myToast,
-  timeZone
+  timeZone,
+  isUserAuthenticated = false;
 
   //side pannel code
 
@@ -240,6 +241,11 @@ $(".parent-mobile-num").on("input", (e) => {
 
 $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => {
   if (!checkValidNum(parentMobileNum)) return;
+
+  if(isUserAuthenticated){
+    handleMecall()
+  }
+
   getOtp(spInitialCtaSuccess );
   $(
     `${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`
@@ -323,9 +329,11 @@ $(".mweb-otp-close").click(() => {
 $('.otp-input-box').on('input',(e)=>{
 
   $(`div.otp-box`).removeClass("orange isError focus blink");
+  $(`div.otp-box:nth-child(${e.target.value.length+3})`).addClass('blink')
+  $('.otp-box:nth-child(1)').focus()
   for(let i=2; i<e.target.value.length+2; i++){
     $(`div.otp-box:nth-child(${i})`).addClass(
-      "orange focus blink"
+      "orange focus"
     );
   }
 
@@ -352,6 +360,7 @@ $('.otp-input-box').on('input',(e)=>{
 
       success: function (res) {
         clearInterval(timeInterval);
+        isUserAuthenticated = true
         $(".otp-loader").css("display", "none");
         if (!isUserExist) {
           handleRegisterUser();
@@ -508,6 +517,82 @@ const handleGetSlots = () => {
     },
   });
 };
+
+const handleDateBlockStructure = () => {
+  $(".date-block-container").empty();
+  const allDataBlocks = slotsData.map((date, index) => {
+    let dateBlock =
+      '<div class="date-block date-' +
+      index +
+      ' " id="date-' +
+      index +
+      '" ><p class="day-label">' +
+      moment(date.date).format("ddd") +
+      '</p><p class="date-label">' +
+      moment(date.date).format("DD") +
+      '</p><p class="month-label">' +
+      moment(date.date).format("MMM") +
+      "</p></div>";
+
+    $(".date-block-container").append(dateBlock);
+  });
+  handleAddEventTODateBlock();
+};
+
+const handleAddEventTODateBlock = () => {
+  $(".date-block").click((e) => {
+    const id = e.target.id.split("-").slice(-1)[0];
+    onDateBlockClick(id);
+  });
+  onDateBlockClick(0);
+};
+
+const onDateBlockClick = (id) => {
+  $(".date-block").removeClass("active-state");
+  $(".day-label").removeClass("active-state");
+  $(".month-label").removeClass("active-state");
+  $(".date-" + id).addClass("active-state");
+  $(".date-" + id + " div .day-label").addClass("active-state");
+  $(".date-" + id + " div .month-label").addClass("active-state");
+  selectedDateIndex = id;
+  getSlotsOnSelectedate();
+};
+
+const getSlotsOnSelectedate = () => {
+  $(".slots-container").empty();
+  slotsData[selectedDateIndex].slots.map((slot, index) => {
+    const isSlotAvail = slot.teacherCount > 0 ? "" : "disable";
+    const slotEle =
+      '<div id="slot-' +
+      index +
+      '" class="slot-block-card slot-' +
+      index +
+      " " +
+      isSlotAvail +
+      '"><p class="slot-time">' +
+      moment(slot.startTime).format("LT") +
+      "</p></div>";
+
+    $(".slots-container").append(slotEle);
+  });
+  $(".slot-block-card").click((e) => {
+    $(".slot-block-card").removeClass("active-state");
+    id = e.target.id.split("-").slice(-1)[0];
+    $(".slot-" + id).addClass("active-state");
+    selectedTimeSlot = id;
+    $(".mweb-sp-slot-cta").removeClass("disabled");
+    $(".confirm-slot-cta").removeClass("disabled");
+  });
+};
+
+$(".mweb-sp-slot-cta").click(() => {
+  handleBookSlot();
+});
+
+$(".confirm-slot-cta").click(() => {
+  handleBookSlot();
+});
+
 
 const handleBookSlot = () => {
   const startTime =
