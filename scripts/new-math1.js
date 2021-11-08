@@ -121,7 +121,18 @@ var parentMobileNum = "",
   isUserAuthenticated = false;
 
   //side pannel code
-
+(function(){
+  $.ajax({
+    type: "GET",
+    url: `https://nexfive.whjr.one/api/V1/geo/getInfo?_vercel_no_cache=1&courseType=${selectedSubj}&brandId=whitehatjr`,
+    cache: false,
+    success: function (res) {
+      timeZone = res.data.timezone;
+      country = res.data.countryIsoCode;
+      console.log(res.data)
+    },
+  });
+})()
 
 
 $(`${isMweb ? '.mweb-schedule-cta' : '.schedule-cta' }`).click(()=>{
@@ -244,13 +255,14 @@ $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => {
 
   if(isUserAuthenticated){
     handleMecall()
+  }else{
+    getOtp(spInitialCtaSuccess );
+    $(
+      `${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`
+    ).css("display", "none");
+    $(".otp-input-box").val("");
   }
 
-  getOtp(spInitialCtaSuccess );
-  $(
-    `${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`
-  ).css("display", "none");
-  $(".otp-input-box").val("");
 });
 
 
@@ -497,6 +509,7 @@ const handleGetSlots = () => {
       slotsData = res.data.slots;
       handleDateBlockStructure();
       clearInterval(timeInterval);
+      handleGetTimezonesList();
       if (isMweb) {
         $(".mweb-otp-container").css("display", "none");
         $(".mweb-initial-form").css("display", "none");
@@ -537,6 +550,9 @@ const handleDateBlockStructure = () => {
     $(".date-block-container").append(dateBlock);
   });
   handleAddEventTODateBlock();
+  if(selectedSubj == 'music'){
+    $('.music-sub-cat').css('display','none')
+  }
 };
 
 const handleAddEventTODateBlock = () => {
@@ -703,6 +719,53 @@ $(".otp-input-box").focus(function () {
     that.selectionStart = that.selectionEnd = 3;
   }, 0);
 });
+
+
+
+
+$(".timezone-value").click(() => {
+  $(".timezones-list").css("display", "block");
+  getTimeZonesEmbedded();
+});
+
+const handleGetTimezonesList = () => {
+  $.ajax({
+    type: "GET",
+    url: `https://api.timezonedb.com/v2.1/list-time-zone?key=VOWU23FPD15G&format=json`,
+    cache: false,
+    success: function (res) {
+      timezonesList = res.zones;
+      getTimeZonesEmbedded();
+    },
+  });
+};
+
+
+const getTimeZonesEmbedded = () => {
+  $(".timezones-list").empty();
+  timezonesList.map((zone) => {
+    const item = `<div class="timezone-item">
+        <p class="paragraph-50 events-none ">${zone.zoneName}</p>
+        <p class="paragraph-51 events-none ">(${GMTOffset(zone.gmtOffset)})</p>
+        <div class="checked-image events-none ${
+          timeZone == zone.zoneName ? "" : "d-none"
+        } "><img src="https://uploads-ssl.webflow.com/616e5b481c168d84b208db74/61889840cc7f1927bc91374a_Clickable.png" loading="lazy" alt=""></div></div>`;
+    $(".timezones-list").append(item);
+  });
+
+  $(".timezone-item").click((e) => {
+    timezone = e.target.children[0].innerText;
+    $(".timezones-list").css("display", "none");
+    $(".timezone-value").text(e.target.children[0].innerText);
+  });
+};
+
+const GMTOffset = (val) => {
+  const hours = Math.floor(val / 3600);
+  const mins = Math.abs(val / 60) % 60;
+  const sign = `${val}`.charAt() == "-" ? "" : "+";
+  return `GMT ${sign}${hours}:${mins}`;
+};
 
 
 
