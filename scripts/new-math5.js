@@ -657,10 +657,10 @@ const handleGetDashboardLink = (bookedSlot) => {
     success: function (res) {
       dashboardLink = res.data.url;
       if (bookedSlot) {
-        window.open(dashboardLink, "_blank");
-        setTimeout(() => {
-          window.location = "https://code-stage.whjr.one/s/trial/success";
-        }, 5000);
+         window.location = dashboardLink;
+         setTimeout(() => {
+           window.open("https://code-stage.whjr.one/s/trial/success", "_blank");
+         }, 2000);
       }
     },
     error: function (err) {
