@@ -254,7 +254,6 @@ $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => {
   if (!checkValidNum(parentMobileNum)) return;
 
   if(isUserAuthenticated){
-    $('.sp-initial-form').css('display','none')
     handleMecall()
   }else{
     getOtp(spInitialCtaSuccess );
@@ -518,7 +517,8 @@ const handleGetSlots = () => {
         $(".mweb-sp-slot-cta").addClass("disabled");
       } else {
         $(".otp-container").css("display", "none");
-        $(".otp-user-exist-msg").css("display", "none");
+        $(".otp-user-exist-msg").css("display", "none");$(`${isMweb ? ".mweb-initial-form" : ".sp-initial-form"}`).css("display","none");
+        $(`${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`).css("display", "none");
         $(".side-panel-slot").css("display", "block");
         $('.music-sub-cat').css('display',selectedSubj == 'music' ? 'block' : 'none')
         $(".confirm-slot-cta").addClass("disabled");
