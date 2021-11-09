@@ -68,13 +68,10 @@
         $('.vdc-'+pack.name).attr('href',pack.courseItem.course.curriculumLink)
         $('.badge-block-'+pack.name).empty()
         
-        const currIncludes = pack.packageAdditionalInfo?.curriculumIncludes.reduce((text, value, i, array) => text + (i < array.length - 1 ? ', ' : ' and ') + value);
-
-        $('.curri-includes-'+pack.name.slice(0,1)).text(currIncludes)
+	$('.pc'+pack.name.slice(0,1)+'-curr').text(pack.packageAdditionalInfo.curriculumIncludes)
         
         const classes = pack.credits ? `${pack.credits} classes`:''
-        const projects = pack.packageAdditionalInfo.numberOfProjects ? `| ${pack.packageAdditionalInfo.numberOfProjects} Project${pack.packageAdditionalInfo.numberOfProjects > 1 ? 's':''} `: ''
-        
+	const projects = `${pack.packageAdditionalInfo.numberOfProjects} projects`        
         $('.class-prj-'+pack.name.slice(0,1)).text(`${classes} ${projects}`)
         
         pack.packageAdditionalInfo.Achievement.map((achievement)=>{
