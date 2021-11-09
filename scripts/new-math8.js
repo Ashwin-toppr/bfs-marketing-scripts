@@ -72,7 +72,7 @@
         
         const classes = pack.credits ? `${pack.credits} classes`:''
 	const projects = `${pack.packageAdditionalInfo.numberOfProjects} projects`        
-        $('.class-prj-'+pack.name.slice(0,1)).text(`${classes} ${projects}`)
+        $('.class-prj-'+pack.name.slice(0,1)).text(`${classes} | ${projects}`)
         
         pack.packageAdditionalInfo.Achievement.map((achievement)=>{
         	const data = '<div class="badge"><img src="'+achievement.imageLink+'" loading="lazy" alt="" class="bdg-img"><div class="bdg-txt">'+achievement.title+'</div></div>'
