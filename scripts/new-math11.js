@@ -130,7 +130,7 @@ var parentMobileNum = "",
       console.log(res.data);
     },
   });
-})()
+})();
 
 
 // for dial codes
