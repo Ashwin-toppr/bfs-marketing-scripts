@@ -6,6 +6,10 @@
 <script> */}
  // scroll animation
  AOS.init();
+
+
+
+
  
  //realted to counter on stats
   $('.counter').counterUp({
@@ -15,7 +19,7 @@
   $('.counter').addClass('animated fadeInDownBig');
   $('h3').addClass('animated fadeIn');
   
-  var dialCode='+91',country='IN',isMweb = window.screen.width < 500
+var dialCodesList, dialCode='+91',country='IN',isMweb = window.screen.width < 500
   
  //curriculum functionality
   $('.grade-card').click((e)=>{
@@ -82,14 +86,11 @@
       })
     }
     
-  (function(){
-  	selectingCourseTab('g-1')
-  })()
+  	
+selectingCourseTab('g-1')
+
   
-  
-var dialCode = "+91",
-  country = "IN",
-  isMweb = window.screen.width < 470;
+
 const customClassMethod = (toClass, isAddClass, whichClass) => {
   if (isAddClass) {
     $(toClass).addClass(whichClass);
@@ -118,23 +119,50 @@ var parentMobileNum = "",
   isUserAuthenticated = false;
 
   //side pannel code
-(function(){
+(function () {
   $.ajax({
     type: "GET",
-    url: `https://nexfive.whjr.one/api/V1/geo/getInfo?_vercel_no_cache=1&courseType=${selectedSubj}&brandId=whitehatjr`,
+    url: `https://stage-api.whjr.one/api/V1/geo/getInfo?_vercel_no_cache=1&courseType=${selectedSubj}&brandId=whitehatjr`,
     cache: false,
     success: function (res) {
       timeZone = res.data.timezone;
       country = res.data.countryIsoCode;
-      console.log(res.data)
+      console.log(res.data);
     },
   });
 })()
 
 
+// for dial codes
+(function () {
+  $.ajax({
+    type: "GET",
+    url: "https://mocki.io/v1/c1e47e61-1e8d-4ef8-ad01-835e245e148f", // custom mock api with dailcodes
+    cache: false,
+
+    success: (res) => {
+      dialCodesList = res;
+
+      $(".dial-codes-list").empty();
+
+      dialCodesList.map((item) => {
+        const ele = `<a href="#" class="dropdown-link dial-code w-dropdown-link" data-code='${item.dial_code}' tabindex="0">${item.flag} ${item.name} ${item.dial_code}</a>`;
+        $(".dial-codes-list").append(ele);
+      });
+
+      $(".dial-code").click((e) => {
+        dialCode = e.target.dataset.code;
+        $(".dial-codes-list").removeClass("w--open");
+      });
+    },
+  });
+})();
+
+
 $(`${isMweb ? '.mweb-schedule-cta' : '.schedule-cta' }`).click(()=>{
   customCssMethod("body", "overflow", "hidden");
   window.scrollTo(0, 0);
+  selectedSubj = 'math'
 
   
   if(parentMobileNum && selectedGrade){
@@ -210,7 +238,7 @@ $(".subject-card-sp").click((e) => {
 const isExist = () => {
   $.ajax({
     type: "POST",
-    url: `https://nexfive.whjr.one/api/V1/userDetail/existByEmailOrMobile?timezone=Asia%2FCalcutta&regionId=US&courseType=${selectedSubj}&brandId=whitehatjr`,
+    url: `https://stage-api.whjr.one/api/V1/userDetail/existByEmailOrMobile?timezone=Asia%2FCalcutta&regionId=US&courseType=${selectedSubj}&brandId=whitehatjr`,
     cache: false,
     data: { mobile: parentMobileNum, dialCode },
 
@@ -221,12 +249,14 @@ const isExist = () => {
 };
 
 const checkValidNum = (val) => {
-  const valid = $.isNumeric(val);
+  const valid = $.isNumeric(val) && val.length === 10 && selectedGrade;
 
   customCssMethod(".err-msg-pm", "display", valid ? "none" : "block");
   customClassMethod(".parent-num", !valid, "error-state");
   customClassMethod(".parent-num-dropdown", !valid, "error-state");
   customClassMethod(".parent-mobile-num", !valid, "error-state");
+  $(".valid-icon").css("display", valid ? "block" : 'none');
+
   return valid;
 };
 
@@ -234,6 +264,7 @@ $(".parent-mobile-num").on("input", (e) => {
   if (e.target.value.length > 9) {
     checkValidNum(e.target.value);
     parentMobileNum = e.target.value;
+    $('.valid-icon').css('display','block')
     isExist();
   }
   if (studentDetails) {
@@ -304,8 +335,8 @@ const otpTimer = () => {
 
 const getOtp = (callback, isResend) => {
   const url = isUserExist
-    ? `https://nexfive.whjr.one/api/V1/users/sendStudentVerificationCode?timezone=Asia%2FCalcutta&regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=1632321880482`
-    : `https://nexfive.whjr.one/api/V1/otp/generate?regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr`;
+    ? `https://stage-api.whjr.one/api/V1/users/sendStudentVerificationCode?timezone=Asia%2FCalcutta&regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=1632321880482`
+    : `https://stage-api.whjr.one/api/V1/otp/generate?regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr`;
 
   $.ajax({
     type: "POST",
@@ -352,8 +383,8 @@ $('.otp-input-box').on('input',(e)=>{
     $(".otp-loader").css("display", "block");
 
     const url = isUserExist
-      ? `https://nexfive.whjr.one/api/V1/users/authenticateVerificationCode?timezone=Asia%2FCalcutta&_vercel_no_cache=1&regionId=US&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=1632322088178`
-      : `https://nexfive.whjr.one/api/V1/otp/verify`;
+      ? `https://stage-api.whjr.one/api/V1/users/authenticateVerificationCode?timezone=Asia%2FCalcutta&_vercel_no_cache=1&regionId=US&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=1632322088178`
+      : `https://stage-api.whjr.one/api/V1/otp/verify`;
     $.ajax({
       type: "POST",
       url: url,
@@ -386,7 +417,7 @@ $('.otp-input-box').on('input',(e)=>{
 
         console.log(err);
         Toastify({
-          text: err.responseJSON.error.message,
+          text: 'Invalid OTP. Please try again',
           duration: 5000,
         }).showToast();
       },
@@ -400,7 +431,7 @@ $('.otp-input-box').on('input',(e)=>{
 const handleRegisterUser = () => {
   $.ajax({
     type: "POST",
-    url: `https://nexfive.whjr.one/api/V1/trial/users/minimalFieldRegister?timezone=Asia%2FCalcutta&timestamp=1608107097248&isMobilePlatform=false`,
+    url: `https://stage-api.whjr.one/api/V1/trial/users/minimalFieldRegister?timezone=Asia%2FCalcutta&timestamp=1608107097248&isMobilePlatform=false`,
     cache: false,
     data: {
       mobile: parentMobileNum,
@@ -428,7 +459,7 @@ const handleRegisterUser = () => {
 const handleMecall = () => {
   $.ajax({
     type: "GET",
-    url: `https://nexfive.whjr.one/api/V1/userDetail/me?timezone=Asia%2FCalcutta&timestamp=1612940173960&clientVersion=main-ui-24d1afka4.whjr.dev`,
+    url: `https://stage-api.whjr.one/api/V1/userDetail/me?timezone=Asia%2FCalcutta&timestamp=1612940173960&clientVersion=main-ui-24d1afka4.whjr.dev`,
     cache: false,
     headers: {
       authorization: `Bearer ${token}`,
@@ -496,7 +527,7 @@ const handleMecall = () => {
 const handleGetSlots = () => {
   $.ajax({
     type: "GET",
-    url: `https://nexfive.whjr.one/api/V1/trial/slots/get?countryCode=US&grade=${selectedGrade}&timezone=Asia/Calcutta&courseType=${selectedSubj}`,
+    url: `https://stage-api.whjr.one/api/V1/trial/slots/get?countryCode=US&grade=${selectedGrade}&timezone=Asia/Calcutta&courseType=${selectedSubj}`,
     cache: false,
     headers: {
       authorization: `Bearer ${token}`,
@@ -590,6 +621,10 @@ const getSlotsOnSelectedate = () => {
 
     $(".slots-container").append(slotEle);
   });
+
+  // for preselect of 1st slot
+  $('.slot-0').addClass('active-state')
+  selectedTimeSlot = 0
   $(".slot-block-card").click((e) => {
     $(".slot-block-card").removeClass("active-state");
     id = e.target.id.split("-").slice(-1)[0];
@@ -597,6 +632,11 @@ const getSlotsOnSelectedate = () => {
     selectedTimeSlot = id;
     $(".mweb-sp-slot-cta").removeClass("disabled");
     $(".confirm-slot-cta").removeClass("disabled");
+    $(".slot-time-msg").text(moment(slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime).format("LT"));
+    const selectedDateBlock = slotsData[selectedDateIndex].date;
+    $(".slot-date-msg").text(
+      `${moment(selectedDateBlock).format("ddd")}, ${moment(selectedDateBlock).format("DD")} ${moment(selectedDateBlock).format("MMM")}`
+    );
   });
 };
 
@@ -614,7 +654,7 @@ const handleBookSlot = () => {
     slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime;
   $.ajax({
     type: "POST",
-    url: `https://nexfive.whjr.one/api/V1/trial/slots/book?timezone=Asia%2FCalcutta&regionId=US&courseType=${selectedSubj}`,
+    url: `https://stage-api.whjr.one/api/V1/trial/slots/book?timezone=Asia%2FCalcutta&regionId=US&courseType=${selectedSubj}`,
     cache: false,
     data: {
       countryCode: "IN",
@@ -645,7 +685,7 @@ const handleBookSlot = () => {
 const handleGetDashboardLink = (bookedSlot) => {
   $.ajax({
     type: "GET",
-    url: `https://nexfive.whjr.one/api/V1/students/${studentDetails.students[0].student_courses[0].studentId}/getDashbordLink?timezone=Asia%2FCalcutta&brandId=whitehatjr&clientVersion=%25clientBuildVersion%25&langCode=en_US&courseType=${selectedSubj}`,
+    url: `https://stage-api.whjr.one/api/V1/students/${studentDetails.students[0].student_courses[0].studentId}/getDashbordLink?timezone=Asia%2FCalcutta&brandId=whitehatjr&clientVersion=%25clientBuildVersion%25&langCode=en_US&courseType=${selectedSubj}`,
     cache: false,
     headers: {
       authorization: `Bearer ${token}`,
