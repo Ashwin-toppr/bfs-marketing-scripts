@@ -249,7 +249,7 @@ const isExist = () => {
 };
 
 const checkValidNum = (val) => {
-  const valid = $.isNumeric(val) && val.length === 10 && selectedGrade;
+  const valid =  val.length === 10;
 
   customCssMethod(".err-msg-pm", "display", valid ? "none" : "block");
   customClassMethod(".parent-num", !valid, "error-state");
@@ -260,13 +260,20 @@ const checkValidNum = (val) => {
   return valid;
 };
 
+(function () {
+  $(".parent-mobile-num").keypress(function (e) {
+    var charCode = e.which ? e.which : event.keyCode;
+
+    if (String.fromCharCode(charCode).match(/[^0-9]/g)) return false;
+  });
+});
+
 $(".parent-mobile-num").on("input", (e) => {
-  if (e.target.value.length > 9) {
+  // if (e.target.value.length > 9) {
     checkValidNum(e.target.value);
     parentMobileNum = e.target.value;
-    $('.valid-icon').css('display','block')
     isExist();
-  }
+  // }
   if (studentDetails) {
     selectedGrade = "";
     otpValue = "";
@@ -279,7 +286,7 @@ $(".parent-mobile-num").on("input", (e) => {
 
 
 $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => {
-  if (!checkValidNum(parentMobileNum)) return;
+  if (parentMobileNum.length !== 10 || !selectedGrade) return;
 
   if(isUserAuthenticated){
     handleMecall()
