@@ -382,6 +382,8 @@ $('.otp-input-box').on('input',(e)=>{
   $(`div.otp-box`).removeClass("orange isError focus blink");
   $(`div.otp-box:nth-child(${e.target.value.length+3})`).addClass('blink')
   $('.otp-box:nth-child(1)').focus()
+  $(".jss123").css("caret-color", "black");
+
   for(let i=2; i<e.target.value.length+2; i++){
     $(`div.otp-box:nth-child(${i})`).addClass(
       "orange focus"
@@ -390,6 +392,7 @@ $('.otp-input-box').on('input',(e)=>{
 
   if(e.target.value.length >= 4){
     otpValue = e.target.value;
+    $(".jss123").css("caret-color", "transparent");
 
     $(".otp-loader").css("display", "block");
 
@@ -412,7 +415,6 @@ $('.otp-input-box').on('input',(e)=>{
       success: function (res) {
         clearInterval(timeInterval);
         isUserAuthenticated = true
-        $(".otp-loader").css("display", "none");
         if (!isUserExist) {
           handleRegisterUser();
         } else {
@@ -549,6 +551,8 @@ const handleGetSlots = () => {
       handleDateBlockStructure();
       clearInterval(timeInterval);
       handleGetTimezonesList();
+      $(".otp-loader").css("display", "none");
+
       if (isMweb) {
         $(".mweb-otp-container").css("display", "none");
         $(".mweb-initial-form").css("display", "none");
@@ -705,10 +709,11 @@ const handleGetDashboardLink = (bookedSlot) => {
     success: function (res) {
       dashboardLink = res.data.url;
       if (bookedSlot) {
-        window.open("https://code-stage.whjr.one/s/trial/success", "_blank");
-         window.location = dashboardLink;
-        //  setTimeout(() => {
-        //  }, 2000);
+        window.location = dashboardLink;
+        setTimeout(() => {
+           window.open("https://code-stage.whjr.one/s/trial/success", "_blank");
+
+         }, 2000);
       }
     },
     error: function (err) {
