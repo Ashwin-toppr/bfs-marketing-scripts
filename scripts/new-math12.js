@@ -278,9 +278,13 @@ $(".parent-mobile-num").on("input", (e) => {
     selectedGrade = "";
     otpValue = "";
     selectedSubj = "";
+    isUserAuthenticated = false
     $(".subject-card-sp").removeClass("active-state");
     $(".grade-block").removeClass("active-state");
     $(".subject-card-sp").removeClass("disabled");
+    $(
+      `${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`
+    ).css("display", "none");
   }
 });
 
