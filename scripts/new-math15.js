@@ -276,8 +276,8 @@ const checkValidNum = (val) => {
 });
 
 $(".parent-mobile-num").on("input", (e) => {
+  checkValidNum(e.target.value);
   if (e.target.value.length > 9) {
-    checkValidNum(e.target.value);
     parentMobileNum = e.target.value;
     isExist();
   }
@@ -544,10 +544,20 @@ const handleMecall = () => {
   });
 };
 
+$('.music-radio').click((e)=>{
+  const musicType = e.currentTarget.nextElementSibling.id.split('-')[1].toUpperCase() 
+  if(musicType === 'NONE'){
+    courseSubType = ''
+  }else{
+    courseSubType = musicType
+    handleGetSlots()
+  }
+})
+
 const handleGetSlots = () => {
   $.ajax({
     type: "GET",
-    url: `https://stage-api.whjr.one/api/V1/trial/slots/get?countryCode=US&grade=${selectedGrade}&timezone=${timeZone}&courseType=${selectedSubj}`,
+    url: `https://stage-api.whjr.one/api/V1/trial/slots/get?countryCode=US&grade=${selectedGrade}&timezone=${timeZone}&courseType=${selectedSubj}${courseSubType ? '&courseSubType='+courseSubType : ''}`,
     cache: false,
     headers: {
       authorization: `Bearer ${token}`,
@@ -559,6 +569,8 @@ const handleGetSlots = () => {
       clearInterval(timeInterval);
       handleGetTimezonesList();
       $(".otp-loader").css("display", "none");
+      $(".timezone-value").text(timeZone);
+
 
       if (isMweb) {
         $(".mweb-otp-container").css("display", "none");
@@ -813,7 +825,7 @@ const handleGetTimezonesList = () => {
 };
 
 const getTimeZonesEmbedded = () => {
-  $(".timezones-list").empty();
+  $(".timezones-container").empty();
   timezonesList.map((zone) => {
     const item = `<div class="timezone-item">
         <p class="paragraph-50 events-none ">${zone.zoneName}</p>
@@ -821,11 +833,11 @@ const getTimeZonesEmbedded = () => {
         <div class="checked-image events-none ${
           timeZone == zone.zoneName ? "" : "d-none"
         } "><img src="https://uploads-ssl.webflow.com/616e5b481c168d84b208db74/61889840cc7f1927bc91374a_Clickable.png" loading="lazy" alt=""></div></div>`;
-    $(".timezones-list").append(item);
+    $(".timezones-container").append(item);
   });
 
   $(".timezone-item").click((e) => {
-    timezone = e.target.children[0].innerText;
+    timeZone = e.target.children[0].innerText;
     $(".timezones-list").css("display", "none");
     $(".timezone-value").text(e.target.children[0].innerText);
     handleGetSlots()
@@ -836,7 +848,7 @@ const GMTOffset = (val) => {
   const hours = `0${Math.floor(val / 3600)}`.slice(-2);
   const mins = `0${Math.abs(val / 60) % 60}`.slice(-2);
   const sign = `${val}`.charAt() == "-" ? "" : "+";
-  return `GMT ${sign}${hours}:${mins}`;
+  return `GMT${sign}${hours}:${mins}`;
 };
 
 // $('.sidepanel-container').click(()=>{
