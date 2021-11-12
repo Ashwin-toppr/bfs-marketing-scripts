@@ -161,6 +161,15 @@ var parentMobileNum = "",
 })();
 
 
+(function () {
+  $(".parent-mobile-num").keypress(function (e) {
+    var charCode = e.which ? e.which : event.keyCode;
+
+    if (String.fromCharCode(charCode).match(/[^0-9]/g)) return false;
+  });
+})();
+
+
 
 $(`${isMweb ? '.mweb-schedule-cta' : '.schedule-cta' }`).click(()=>{
   customCssMethod("body", "overflow", "hidden");
@@ -271,13 +280,7 @@ const checkValidNum = (val) => {
   return valid;
 };
 
-(function () {
-  $(".parent-mobile-num").keypress(function (e) {
-    var charCode = e.which ? e.which : event.keyCode;
 
-    if (String.fromCharCode(charCode).match(/[^0-9]/g)) return false;
-  });
-});
 
 $(".parent-mobile-num").on("input", (e) => {
   checkValidNum(e.target.value);
@@ -316,6 +319,7 @@ $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => {
       `${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`
     ).css("display", "none");
     $(".otp-input-box").val("");
+    $('form-loader').css('display','block')
   }
 
 });
@@ -326,14 +330,17 @@ const spInitialCtaSuccess = (res) => {
   if(!isMweb){
     $(".sp-initial-form").css("display", "none");
   }
+    $("form-loader").css("display", "none");
+
   $(`${isMweb ? '.mweb-otp-container' : '.otp-container'}`).css("display", "block");
   $(".otp-user-exist-msg").css("display", isUserExist ? "block" : "none");
-  // $(".otp-heading").text(
-  //   isUserExist ? "You are already registered" : "Enter the 4-digit code"
-  // );
-  $(".otp-message").text(
-    isUserExist ? "Login using OTP sent to" : "OTP sent to "
+  $(".otp-heading").text(
+    isUserExist ? "Enter the 4-digit code to login" : "Enter the 4-digit code"
   );
+  // $(".otp-message").text(
+  //   isUserExist ? "Login using OTP sent to" : "OTP sent to "
+  // );
+  $(".otp-message").text("OTP sent to ");
   otpTimer();
   $(".selected-num-display").text("+91 " + parentMobileNum);
 
@@ -652,7 +659,7 @@ const onDateBlockClick = (id) => {
 
 const getSlotsOnSelectedate = () => {
   $(".slots-container").empty();
-  const isSlotSelected=true;
+  let isSlotSelected=true;
   slotsData[selectedDateIndex].slots.map((slot, index) => {
     // const isSlotAvail = slot.teacherCount > 0 ? "" : "disable";
     const slotEle =
@@ -794,6 +801,9 @@ const handleReset = () => {
   $(".sp-initial-form").css("display", "block");
   clearInterval(timeInterval);
   $(".music-state").css("display", "none");
+  $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).addClass(
+    "disabled"
+  );
 };
 
 $(".sidepannel-close").click(() => {
