@@ -650,6 +650,7 @@ const onDateBlockClick = (id) => {
 
 const getSlotsOnSelectedate = () => {
   $(".slots-container").empty();
+  const isSlotSelected=false;
   slotsData[selectedDateIndex].slots.map((slot, index) => {
     // const isSlotAvail = slot.teacherCount > 0 ? "" : "disable";
     const slotEle =
@@ -663,9 +664,15 @@ const getSlotsOnSelectedate = () => {
 
       if (slot.teacherCount) $(".slots-container").append(slotEle);
       // for preselect of 1st slot
-      if(!!selectedTimeSlot){
+      if(isSlotSelected){
         $(".slot-" + index).addClass("active-state");
         selectedTimeSlot = index
+        isSlotSelected = true
+        $(".slot-time-msg").text(moment(slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime).format("LT"));
+          const selectedDateBlock = slotsData[selectedDateIndex].date;
+          $(".slot-date-msg").text(
+            `${moment(selectedDateBlock).format("ddd")}, ${moment(selectedDateBlock).format("DD")} ${moment(selectedDateBlock).format("MMM")}`
+          );
       } 
   });
 
@@ -674,7 +681,7 @@ const getSlotsOnSelectedate = () => {
     id = e.target.id.split("-").slice(-1)[0];
     $(".slot-" + id).addClass("active-state");
     selectedTimeSlot = id;
-    $(".mweb-sp-slot-cta").removeClass("disabled");
+    // $(".mweb-sp-slot-cta").removeClass("disabled");
     // $(".confirm-slot-cta").removeClass("disabled");
     $(".slot-time-msg").text(moment(slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime).format("LT"));
     const selectedDateBlock = slotsData[selectedDateIndex].date;
