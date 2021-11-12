@@ -221,6 +221,7 @@ const getGradeBlocks = () => {
       true,
       "active-state"
     );
+  enableScheduleCta();
   });
 };
 
@@ -293,16 +294,16 @@ $(".parent-mobile-num").on("input", (e) => {
       `${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`
     ).css("display", "none");
   }
+  enableScheduleCta();
 });
+
+const enableScheduleCta = () => {
+  if (parentMobileNum.length !== 10 || !selectedGrade) $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).removeClass('disabled')
+}
 
 
 $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => {
-  if (parentMobileNum.length !== 10 || !selectedGrade) {
-    Toastify({
-      text: "Please select all fields",
-      duration: 5000,
-    }).showToast();
-  };
+
 
   if(isUserAuthenticated){
     handleMecall()
