@@ -154,6 +154,7 @@ var parentMobileNum = "",
       $(".dial-code").click((e) => {
         dialCode = e.target.dataset.code;
         $(".dial-codes-list").removeClass("w--open");
+        $('.dial-code-value').text(dialCode)
       });
     },
   });
@@ -241,6 +242,7 @@ $(".subject-card-sp").click((e) => {
   selectedSubj = id;
   customCssMethod(".music-state", "display", id == "music" ? "block" : "none");
   getGradeBlocks();
+  enableScheduleCta();
 });
 
 
@@ -299,7 +301,7 @@ $(".parent-mobile-num").on("input", (e) => {
 });
 
 const enableScheduleCta = () => {
-  if (parentMobileNum.length === 10 && !!selectedGrade) $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).removeClass('disabled')
+  if (parentMobileNum.length === 10 && !!selectedGrade && !!selectedSubj) $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).removeClass('disabled')
 }
 
 
@@ -650,7 +652,7 @@ const onDateBlockClick = (id) => {
 
 const getSlotsOnSelectedate = () => {
   $(".slots-container").empty();
-  const isSlotSelected=false;
+  const isSlotSelected=true;
   slotsData[selectedDateIndex].slots.map((slot, index) => {
     // const isSlotAvail = slot.teacherCount > 0 ? "" : "disable";
     const slotEle =
@@ -667,7 +669,7 @@ const getSlotsOnSelectedate = () => {
       if(isSlotSelected){
         $(".slot-" + index).addClass("active-state");
         selectedTimeSlot = index
-        isSlotSelected = true
+        isSlotSelected = false
         $(".slot-time-msg").text(moment(slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime).format("LT"));
           const selectedDateBlock = slotsData[selectedDateIndex].date;
           $(".slot-date-msg").text(
@@ -675,6 +677,9 @@ const getSlotsOnSelectedate = () => {
           );
       } 
   });
+
+
+
 
   $(".slot-block-card").click((e) => {
     $(".slot-block-card").removeClass("active-state");
@@ -867,6 +872,10 @@ const GMTOffset = (val) => {
   const sign = `${val}`.charAt() == "-" ? "" : "+";
   return `GMT${sign}${hours}:${mins}`;
 };
+
+
+
+
 
 // $('.sidepanel-container').click(()=>{
 //     $(".timezones-list").css("display", "none");
