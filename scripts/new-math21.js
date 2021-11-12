@@ -117,7 +117,8 @@ var parentMobileNum = "",
   myToast,
   timeZone,
   isUserAuthenticated = false,
-  courseSubType;
+  courseSubType,
+  timeInterval;
 
   //side pannel code
 (function () {
@@ -319,7 +320,7 @@ $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => {
       `${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`
     ).css("display", "none");
     $(".otp-input-box").val("");
-    $('form-loader').css('display','block')
+    $('.form-loader').css('display','block')
   }
 
 });
@@ -330,7 +331,7 @@ const spInitialCtaSuccess = (res) => {
   if(!isMweb){
     $(".sp-initial-form").css("display", "none");
   }
-    $("form-loader").css("display", "none");
+    $(".form-loader").css("display", "none");
 
   $(`${isMweb ? '.mweb-otp-container' : '.otp-container'}`).css("display", "block");
   $(".otp-user-exist-msg").css("display", isUserExist ? "block" : "none");
@@ -671,17 +672,19 @@ const getSlotsOnSelectedate = () => {
       moment(slot.startTime).format("LT") +
       "</p></div>";
 
-      if (slot.teacherCount) $(".slots-container").append(slotEle);
-      // for preselect of 1st slot
-      if(isSlotSelected){
-        $(".slot-" + index).addClass("active-state");
-        selectedTimeSlot = index
-        isSlotSelected = false
-        $(".slot-time-msg").text(moment(slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime).format("LT"));
-          const selectedDateBlock = slotsData[selectedDateIndex].date;
-          $(".slot-date-msg").text(
-            `${moment(selectedDateBlock).format("ddd")}, ${moment(selectedDateBlock).format("DD")} ${moment(selectedDateBlock).format("MMM")}`
-          );
+      if (slot.teacherCount){
+        $(".slots-container").append(slotEle);
+        // for preselect of 1st slot
+        if(isSlotSelected ){
+          $(".slot-" + index).addClass("active-state");
+          selectedTimeSlot = index
+          isSlotSelected = false
+          $(".slot-time-msg").text(moment(slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime).format("LT"));
+            const selectedDateBlock = slotsData[selectedDateIndex].date;
+            $(".slot-date-msg").text(
+              `${moment(selectedDateBlock).format("ddd")}, ${moment(selectedDateBlock).format("DD")} ${moment(selectedDateBlock).format("MMM")}`
+            );
+        } 
       } 
   });
 
@@ -856,9 +859,9 @@ const handleGetTimezonesList = () => {
   });
 };
 
-const getTimeZonesEmbedded = () => {
+const getTimeZonesEmbedded = (TZList = timezonesList) => {
   $(".timezones-container").empty();
-  timezonesList.map((zone) => {
+  TZList.map((zone) => {
     const item = `<div class="timezone-item">
         <p class="paragraph-50 events-none ">${zone.zoneName}</p>
         <p class="paragraph-51 events-none ">(${GMTOffset(zone.gmtOffset)})</p>
@@ -882,6 +885,20 @@ const GMTOffset = (val) => {
   const sign = `${val}`.charAt() == "-" ? "" : "+";
   return `GMT${sign}${hours}:${mins}`;
 };
+
+
+$(".search-timezone-input").on("input", (e) => {
+  const val = e.target.value.toUpperCase()
+  let tempTZList;
+  if(val.length > 3){
+    tempTZList = timezonesList.filter((item) => item.zoneName.toUpperCase().indexOf(val) > -1);
+  }else{
+    tempTZList = timezonesList;
+  }
+  getTimeZonesEmbedded(tempTZList);
+
+});
+
 
 
 
