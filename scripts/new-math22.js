@@ -215,6 +215,11 @@ const getGradeBlocks = () => {
     }grade-${grade}"><p class="paragraph-41">Grade</p><p class="paragraph-42">${grade}</p></div>`;
 
     $(".child-grade-blk-copy").append(element);
+    customClassMethod(
+      `.${isMweb ? "mweb-" : ""}grade-${selectedGrade}`,
+      true,
+      "active-state"
+    );
   });
 
   $(".grade-block").click((e) => {
@@ -312,6 +317,7 @@ const enableScheduleCta = () => {
 $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => {
 
 
+  $('.form-loader').css('display','block')
   if(isUserAuthenticated){
     handleMecall()
   }else{
@@ -320,7 +326,6 @@ $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => {
       `${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`
     ).css("display", "none");
     $(".otp-input-box").val("");
-    $('.form-loader').css('display','block')
   }
 
 });
@@ -385,6 +390,10 @@ const getOtp = (callback, isResend) => {
     },
 
     success: callback,
+    error: ()=>{
+        $(".form-loader").css("display", "none");
+
+    }
   });
 };
 
@@ -531,6 +540,8 @@ const handleMecall = () => {
             isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"
           }`
         ).css("display", "flex");
+        $(".form-loader").css("display", "none");
+
         $(
           `${isMweb ? ".mweb-registered-user-msg" : ".registered-user-msg"}`
         ).text(errStatements[trailStatus[0].trialStatus]);
