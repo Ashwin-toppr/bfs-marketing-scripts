@@ -46,7 +46,7 @@ var dialCodesList, dialCode='+91',country='IN',isMweb = window.screen.width < 50
   function getCoursePackgesList() {
     $.ajax({
       type: "GET",
-      url: "https://api.byjusfutureschool.com/api/V1/public/packages/getV2?brandId=whitehatjr&courseType=MATH&country=US&grade="+Selectedgrade+"&source=website",
+      url: "https://api.byjusfutureschool.com/api/V1/public/packages/getV2?brandId=whitehatjr&courseType=MATH&country="+country+"&grade="+Selectedgrade+"&source=website",
       cache: false,
 
       success: handleAppendcourseCardChild
@@ -159,6 +159,7 @@ var parentMobileNum = "",
 })();
 
 
+
 $(`${isMweb ? '.mweb-schedule-cta' : '.schedule-cta' }`).click(()=>{
   customCssMethod("body", "overflow", "hidden");
   window.scrollTo(0, 0);
@@ -223,6 +224,12 @@ const getGradeBlocks = () => {
   });
 };
 
+$('.grade-home').click((e)=>{
+  selectedGrade = e.target.id.split("-").slice(-1)[0];
+  $('.grade-home').removeClass('active-state')
+  $(`#${e.target.id}`).addClass('active-state')
+})
+
 getGradeBlocks();
 
 $(".subject-card-sp").click((e) => {
@@ -238,7 +245,7 @@ $(".subject-card-sp").click((e) => {
 const isExist = () => {
   $.ajax({
     type: "POST",
-    url: `https://stage-api.whjr.one/api/V1/userDetail/existByEmailOrMobile?timezone=Asia%2FCalcutta&regionId=US&courseType=${selectedSubj}&brandId=whitehatjr`,
+    url: `https://stage-api.whjr.one/api/V1/userDetail/existByEmailOrMobile?timezone=${timeZone}&regionId=US&courseType=${selectedSubj}&brandId=whitehatjr`,
     cache: false,
     data: { mobile: parentMobileNum, dialCode },
 
@@ -269,11 +276,11 @@ const checkValidNum = (val) => {
 });
 
 $(".parent-mobile-num").on("input", (e) => {
-  // if (e.target.value.length > 9) {
+  if (e.target.value.length > 9) {
     checkValidNum(e.target.value);
     parentMobileNum = e.target.value;
     isExist();
-  // }
+  }
   if (studentDetails) {
     selectedGrade = "";
     otpValue = "";
@@ -346,8 +353,8 @@ const otpTimer = () => {
 
 const getOtp = (callback, isResend) => {
   const url = isUserExist
-    ? `https://stage-api.whjr.one/api/V1/users/sendStudentVerificationCode?timezone=Asia%2FCalcutta&regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=1632321880482`
-    : `https://stage-api.whjr.one/api/V1/otp/generate?regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr`;
+    ? `https://stage-api.whjr.one/api/V1/users/sendStudentVerificationCode?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=1632321880482`
+    : `https://stage-api.whjr.one/api/V1/otp/generate?regionId=${country}&timezone=${timeZone}&courseType=${selectedSubj}&brandId=whitehatjr`;
 
   $.ajax({
     type: "POST",
@@ -397,8 +404,8 @@ $('.otp-input-box').on('input',(e)=>{
     $(".otp-loader").css("display", "block");
 
     const url = isUserExist
-      ? `https://stage-api.whjr.one/api/V1/users/authenticateVerificationCode?timezone=Asia%2FCalcutta&_vercel_no_cache=1&regionId=US&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=1632322088178`
-      : `https://stage-api.whjr.one/api/V1/otp/verify`;
+      ? `https://stage-api.whjr.one/api/V1/users/authenticateVerificationCode?timezone=${timeZone}&_vercel_no_cache=1&regionId=US&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=1632322088178`
+      : `https://stage-api.whjr.one/api/V1/otp/verify?timezone=${timeZone}`;
     $.ajax({
       type: "POST",
       url: url,
@@ -444,7 +451,7 @@ $('.otp-input-box').on('input',(e)=>{
 const handleRegisterUser = () => {
   $.ajax({
     type: "POST",
-    url: `https://stage-api.whjr.one/api/V1/trial/users/minimalFieldRegister?timezone=Asia%2FCalcutta&timestamp=1608107097248&isMobilePlatform=false`,
+    url: `https://stage-api.whjr.one/api/V1/trial/users/minimalFieldRegister?timezone=${timeZone}&timestamp=1608107097248&isMobilePlatform=false`,
     cache: false,
     data: {
       mobile: parentMobileNum,
@@ -472,7 +479,7 @@ const handleRegisterUser = () => {
 const handleMecall = () => {
   $.ajax({
     type: "GET",
-    url: `https://stage-api.whjr.one/api/V1/userDetail/me?timezone=Asia%2FCalcutta&timestamp=1612940173960&clientVersion=main-ui-24d1afka4.whjr.dev`,
+    url: `https://stage-api.whjr.one/api/V1/userDetail/me?timezone=${timeZone}&timestamp=1612940173960&clientVersion=main-ui-24d1afka4.whjr.dev`,
     cache: false,
     headers: {
       authorization: `Bearer ${token}`,
@@ -540,7 +547,7 @@ const handleMecall = () => {
 const handleGetSlots = () => {
   $.ajax({
     type: "GET",
-    url: `https://stage-api.whjr.one/api/V1/trial/slots/get?countryCode=US&grade=${selectedGrade}&timezone=Asia/Calcutta&courseType=${selectedSubj}`,
+    url: `https://stage-api.whjr.one/api/V1/trial/slots/get?countryCode=US&grade=${selectedGrade}&timezone=${timeZone}&courseType=${selectedSubj}`,
     cache: false,
     headers: {
       authorization: `Bearer ${token}`,
@@ -564,7 +571,7 @@ const handleGetSlots = () => {
         $(`${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`).css("display", "none");
         $(".side-panel-slot").css("display", "block");
         $('.music-sub-cat').css('display',selectedSubj == 'music' ? 'block' : 'none')
-        $(".confirm-slot-cta").addClass("disabled");
+        // $(".confirm-slot-cta").addClass("disabled");
       }
     },
     error: function (err) {
@@ -622,31 +629,31 @@ const onDateBlockClick = (id) => {
 const getSlotsOnSelectedate = () => {
   $(".slots-container").empty();
   slotsData[selectedDateIndex].slots.map((slot, index) => {
-    const isSlotAvail = slot.teacherCount > 0 ? "" : "disable";
+    // const isSlotAvail = slot.teacherCount > 0 ? "" : "disable";
     const slotEle =
       '<div id="slot-' +
       index +
       '" class="slot-block-card slot-' +
       index +
-      " " +
-      isSlotAvail +
       '"><p class="slot-time">' +
       moment(slot.startTime).format("LT") +
       "</p></div>";
 
-    $(".slots-container").append(slotEle);
+      if (slot.teacherCount) $(".slots-container").append(slotEle);
+      // for preselect of 1st slot
+      if(!selectedTimeSlot){
+        $(".slot-" + index).addClass("active-state");
+        selectedTimeSlot = index
+      } 
   });
 
-  // for preselect of 1st slot
-  $('.slot-0').addClass('active-state')
-  selectedTimeSlot = 0
   $(".slot-block-card").click((e) => {
     $(".slot-block-card").removeClass("active-state");
     id = e.target.id.split("-").slice(-1)[0];
     $(".slot-" + id).addClass("active-state");
     selectedTimeSlot = id;
     $(".mweb-sp-slot-cta").removeClass("disabled");
-    $(".confirm-slot-cta").removeClass("disabled");
+    // $(".confirm-slot-cta").removeClass("disabled");
     $(".slot-time-msg").text(moment(slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime).format("LT"));
     const selectedDateBlock = slotsData[selectedDateIndex].date;
     $(".slot-date-msg").text(
@@ -667,9 +674,10 @@ $(".confirm-slot-cta").click(() => {
 const handleBookSlot = () => {
   const startTime =
     slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime;
+    $('.slot-loader').css('display','block')
   $.ajax({
     type: "POST",
-    url: `https://stage-api.whjr.one/api/V1/trial/slots/book?timezone=Asia%2FCalcutta&regionId=US&courseType=${selectedSubj}`,
+    url: `https://stage-api.whjr.one/api/V1/trial/slots/book?timezone=${timeZone}&regionId=US&courseType=${selectedSubj}`,
     cache: false,
     data: {
       countryCode: "IN",
@@ -700,7 +708,7 @@ const handleBookSlot = () => {
 const handleGetDashboardLink = (bookedSlot) => {
   $.ajax({
     type: "GET",
-    url: `https://stage-api.whjr.one/api/V1/students/${studentDetails.students[0].student_courses[0].studentId}/getDashbordLink?timezone=Asia%2FCalcutta&brandId=whitehatjr&clientVersion=%25clientBuildVersion%25&langCode=en_US&courseType=${selectedSubj}`,
+    url: `https://stage-api.whjr.one/api/V1/students/${studentDetails.students[0].student_courses[0].studentId}/getDashbordLink?timezone=${timeZone}&brandId=whitehatjr&clientVersion=%25clientBuildVersion%25&langCode=en_US&courseType=${selectedSubj}`,
     cache: false,
     headers: {
       authorization: `Bearer ${token}`,
@@ -708,12 +716,21 @@ const handleGetDashboardLink = (bookedSlot) => {
 
     success: function (res) {
       dashboardLink = res.data.url;
-      if (bookedSlot) {
-        window.location = dashboardLink;
-        setTimeout(() => {
-           window.open("https://code-stage.whjr.one/s/trial/success", "_blank");
+      $(".slot-loader").css("display", "none");
 
-         }, 2000);
+      const subjObj ={
+        math : 'math',
+        coding : 'code',
+        music : 'music'
+      }
+
+      if (bookedSlot) {
+        window.open(dashboardLink, "_blank");
+        window.focus();
+        self.focus();
+        setTimeout(() => {
+          window.location = `https://${subjObj[selectedSubj]}-stage.whjr.one/s/trial/success`;
+        }, 2000);
       }
     },
     error: function (err) {
@@ -795,7 +812,6 @@ const handleGetTimezonesList = () => {
   });
 };
 
-
 const getTimeZonesEmbedded = () => {
   $(".timezones-list").empty();
   timezonesList.map((zone) => {
@@ -812,15 +828,44 @@ const getTimeZonesEmbedded = () => {
     timezone = e.target.children[0].innerText;
     $(".timezones-list").css("display", "none");
     $(".timezone-value").text(e.target.children[0].innerText);
+    handleGetSlots()
   });
 };
 
 const GMTOffset = (val) => {
-  const hours = Math.floor(val / 3600);
-  const mins = Math.abs(val / 60) % 60;
+  const hours = `0${Math.floor(val / 3600)}`.slice(-2);
+  const mins = `0${Math.abs(val / 60) % 60}`.slice(-2);
   const sign = `${val}`.charAt() == "-" ? "" : "+";
   return `GMT ${sign}${hours}:${mins}`;
 };
+
+// $('.sidepanel-container').click(()=>{
+//     $(".timezones-list").css("display", "none");
+// })
+
+
+
+// const getTimeZonesEmbedded = () => {
+//   $(".timezones-container").empty();
+//   timezonesList.map((zone) => {
+//     const splitedTimeZone = zone.split(' - ')
+//     const item = `<div class="timezone-item " data-timezone = "${splitedTimeZone[0]}" >
+//         <p class="paragraph-50 events-none ">${splitedTimeZone[1]} - ${splitedTimeZone[2]} </p>
+//         <p class="paragraph-51 events-none ">(${splitedTimeZone[0]})</p>
+//         <div class="checked-image events-none ${
+//           timeZone == zone.zoneName ? "" : "d-none"
+//         } "><img src="https://uploads-ssl.webflow.com/616e5b481c168d84b208db74/61889840cc7f1927bc91374a_Clickable.png" loading="lazy" alt=""></div></div>`;
+//     $(".timezones-container").append(item);
+//   });
+
+//   $(".timezone-item").click((e) => {
+//     timezone = e.target.dataset.timezone;
+//     $(".timezones-list").css("display", "none");
+//     $(".timezone-value").text(timezone);
+//     handleGetSlots()
+//   });
+// };
+
 
 
 
