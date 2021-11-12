@@ -319,9 +319,9 @@ const spInitialCtaSuccess = (res) => {
   }
   $(`${isMweb ? '.mweb-otp-container' : '.otp-container'}`).css("display", "block");
   $(".otp-user-exist-msg").css("display", isUserExist ? "block" : "none");
-  $(".otp-heading").text(
-    isUserExist ? "You are already registered" : "Enter the 4-digit code"
-  );
+  // $(".otp-heading").text(
+  //   isUserExist ? "You are already registered" : "Enter the 4-digit code"
+  // );
   $(".otp-message").text(
     isUserExist ? "Login using OTP sent to" : "OTP sent to "
   );
