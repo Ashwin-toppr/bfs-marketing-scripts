@@ -116,7 +116,8 @@ var parentMobileNum = "",
   challengeCodeForOtp,
   myToast,
   timeZone,
-  isUserAuthenticated = false;
+  isUserAuthenticated = false,
+  courseSubType;
 
   //side pannel code
 (function () {
@@ -298,7 +299,7 @@ $(".parent-mobile-num").on("input", (e) => {
 });
 
 const enableScheduleCta = () => {
-  if (parentMobileNum.length !== 10 || !selectedGrade) $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).removeClass('disabled')
+  if (parentMobileNum.length === 10 || !!selectedGrade) $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).removeClass('disabled')
 }
 
 
