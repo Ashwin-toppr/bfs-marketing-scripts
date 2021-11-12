@@ -297,7 +297,12 @@ $(".parent-mobile-num").on("input", (e) => {
 
 
 $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => {
-  if (parentMobileNum.length !== 10 || !selectedGrade) return;
+  if (parentMobileNum.length !== 10 || !selectedGrade) {
+    Toastify({
+      text: "Please select all fields",
+      duration: 5000,
+    }).showToast();
+  };
 
   if(isUserAuthenticated){
     handleMecall()
