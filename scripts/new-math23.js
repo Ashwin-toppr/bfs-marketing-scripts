@@ -246,6 +246,7 @@ $('.grade-home').click((e)=>{
   selectedGrade = e.target.id.split("-").slice(-1)[0];
   $('.grade-home').removeClass('active-state')
   $(`#${e.target.id}`).addClass('active-state')
+  $(`.grade-1`).addClass("active-state");
 })
 
 getGradeBlocks();
@@ -358,7 +359,7 @@ const spInitialCtaSuccess = (res) => {
 
 
 const otpTimer = () => {
-  var timer = 50;
+  var timer = 15;
   $(".resend-otp").css("display", "none");
 
   timeInterval = setInterval(() => {
@@ -375,7 +376,7 @@ const otpTimer = () => {
 
 const getOtp = (callback, isResend) => {
   const url = isUserExist
-    ? `https://stage-api.whjr.one/api/V1/users/sendStudentVerificationCode?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=1632321880482`
+    ? `https://stage-api.whjr.one/api/V1/users/sendStudentVerificationCode?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=`
     : `https://stage-api.whjr.one/api/V1/otp/generate?regionId=${country}&timezone=${timeZone}&courseType=${selectedSubj}&brandId=whitehatjr`;
 
   $.ajax({
@@ -407,6 +408,7 @@ $(".resend-otp").click(() => {
 
 $(".mweb-otp-close").click(() => {
   $(".mweb-otp-container").css("display", "none");
+  clearInterval(timeInterval)
 });
 
 
@@ -430,7 +432,7 @@ $('.otp-input-box').on('input',(e)=>{
     $(".otp-loader").css("display", "block");
 
     const url = isUserExist
-      ? `https://stage-api.whjr.one/api/V1/users/authenticateVerificationCode?timezone=${timeZone}&_vercel_no_cache=1&regionId=US&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=1632322088178`
+      ? `https://stage-api.whjr.one/api/V1/users/authenticateVerificationCode?timezone=${timeZone}&_vercel_no_cache=1&regionId=US&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=`
       : `https://stage-api.whjr.one/api/V1/otp/verify?timezone=${timeZone}`;
     $.ajax({
       type: "POST",
@@ -477,7 +479,7 @@ $('.otp-input-box').on('input',(e)=>{
 const handleRegisterUser = () => {
   $.ajax({
     type: "POST",
-    url: `https://stage-api.whjr.one/api/V1/trial/users/minimalFieldRegister?timezone=${timeZone}&timestamp=1608107097248&isMobilePlatform=false`,
+    url: `https://stage-api.whjr.one/api/V1/trial/users/minimalFieldRegister?timezone=${timeZone}&isMobilePlatform=false&timestamp=`,
     cache: false,
     data: {
       mobile: parentMobileNum,
@@ -505,7 +507,7 @@ const handleRegisterUser = () => {
 const handleMecall = () => {
   $.ajax({
     type: "GET",
-    url: `https://stage-api.whjr.one/api/V1/userDetail/me?timezone=${timeZone}&timestamp=1612940173960&clientVersion=main-ui-24d1afka4.whjr.dev`,
+    url: `https://stage-api.whjr.one/api/V1/userDetail/me?timezone=${timeZone}&timestamp=`,
     cache: false,
     headers: {
       authorization: `Bearer ${token}`,
@@ -607,12 +609,12 @@ const handleGetSlots = () => {
         $(".mweb-otp-container").css("display", "none");
         $(".mweb-initial-form").css("display", "none");
         $(".mweb-slot-container").css("display", "block");
-        $(".mweb-sp-slot-cta").addClass("disabled");
+        // $(".mweb-sp-slot-cta").addClass("disabled");
       } else {
         $(".otp-container").css("display", "none");
         $(".otp-user-exist-msg").css("display", "none");$(`${isMweb ? ".mweb-initial-form" : ".sp-initial-form"}`).css("display","none");
         $(`${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`).css("display", "none");
-        $(".side-panel-slot").css("display", "block");
+        $(".side-panel-slot").css("display", "block");active - state;
         $('.music-sub-cat').css('display',selectedSubj == 'music' ? 'block' : 'none')
         // $(".confirm-slot-cta").addClass("disabled");
       }
