@@ -299,7 +299,7 @@ $(".parent-mobile-num").on("input", (e) => {
 });
 
 const enableScheduleCta = () => {
-  if (parentMobileNum.length === 10 || !!selectedGrade) $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).removeClass('disabled')
+  if (parentMobileNum.length === 10 && !!selectedGrade) $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).removeClass('disabled')
 }
 
 
@@ -557,11 +557,13 @@ $('.music-radio').click((e)=>{
     courseSubType = ''
   }else{
     courseSubType = musicType
-    handleGetSlots()
   }
+  handleGetSlots()
 })
 
 const handleGetSlots = () => {
+  $(".slot-loader").css("display", "block");
+
   $.ajax({
     type: "GET",
     url: `https://stage-api.whjr.one/api/V1/trial/slots/get?countryCode=US&grade=${selectedGrade}&timezone=${timeZone}&courseType=${selectedSubj}${courseSubType ? '&courseSubType='+courseSubType : ''}`,
@@ -577,6 +579,7 @@ const handleGetSlots = () => {
       handleGetTimezonesList();
       $(".otp-loader").css("display", "none");
       $(".timezone-value").text(timeZone);
+    $(".slot-loader").css("display", "none");
 
 
       if (isMweb) {
@@ -660,7 +663,7 @@ const getSlotsOnSelectedate = () => {
 
       if (slot.teacherCount) $(".slots-container").append(slotEle);
       // for preselect of 1st slot
-      if(!selectedTimeSlot){
+      if(!!selectedTimeSlot){
         $(".slot-" + index).addClass("active-state");
         selectedTimeSlot = index
       } 
