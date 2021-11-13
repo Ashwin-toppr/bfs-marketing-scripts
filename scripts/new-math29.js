@@ -117,8 +117,9 @@ var parentMobileNum = "",
   myToast,
   timeZone,
   isUserAuthenticated = false,
-  courseSubType = 'guitar',
-  timeInterval;
+  courseSubType = 'DIS',
+  timeInterval,
+  isMusicKids =true ;
 
   //side pannel code
 (function () {
@@ -160,7 +161,7 @@ var parentMobileNum = "",
 
       $(".dial-code").click((e) => {
         dialCode = e.target.dataset.code;
-        $(".dial-codes-list").removeClass("w--open");
+        $(`${isMweb ? ".mweb-dial-codes-list" : ".dial-codes-list"}`).removeClass("w--open");
         $(".dial-code-value").text(dialCode);
       });
     },
@@ -317,7 +318,7 @@ $(".parent-mobile-num").on("input", (e) => {
 });
 
 const enableScheduleCta = () => {
-  if (parentMobileNum.length === 10 && !!selectedGrade && !!selectedSubj) $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).removeClass('disabled')
+  if (parentMobileNum.length === 10 && !!selectedGrade && !!selectedSubj ) $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).removeClass('disabled')
 }
 
 
@@ -337,16 +338,28 @@ $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => {
 
 });
 
+$('.isMusicFor').click((e)=>{
+  isMusicKids = e.target.id === 'music-kids'
+  if(!isMusicKids){
+    selectedSubj = "music_for_all";
+    $("#music-gtr").siblings("div").addClass("w--redirected-checked");
+    courseSubType = 'GTR'
+    $('.radio-music-none').css('display','none')
+    selectedGrade = '8'
+  } 
+
+})
+
 
 
 const spInitialCtaSuccess = (res) => {
-  // if(!isMweb){
-    $(".sp-initial-form").css("display", "none");
-  // }
+  if(!isMweb){
+    $(".otp-user-exist-msg").css("display", isUserExist ? "block" : "none");
+  }
+  $(".sp-initial-form").css("display", "none");
     $(".form-loader").css("display", "none");
 
   $(`${isMweb ? '.mweb-otp-container' : '.otp-container'}`).css("display", "block");
-  $(".otp-user-exist-msg").css("display", isUserExist ? "block" : "none");
   $(".otp-heading").text(
     isUserExist ? "Enter the 4-digit code to login" : "Enter the 4-digit code"
   );
@@ -591,7 +604,7 @@ const handleGetSlots = () => {
 
   $.ajax({
     type: "GET",
-    url: `https://stage-api.whjr.one/api/V1/trial/slots/get?countryCode=US&grade=${selectedGrade}&timezone=${timeZone}&courseType=${selectedSubj}${selectedSubj == 'music' ? '&courseSubType='+courseSubType : ''}`,
+    url: `https://stage-api.whjr.one/api/V1/trial/slots/get?countryCode=US&grade=${selectedGrade}&timezone=${timeZone}&courseType=${selectedSubj}${selectedSubj.includes('music') ? '&courseSubType='+courseSubType : ''}`,
     cache: false,
     headers: {
       authorization: `Bearer ${token}`,
@@ -822,6 +835,8 @@ const handleReset = () => {
   $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).addClass(
     "disabled"
   );
+    $(".radio-music-none").css("display", "block");
+
 };
 
 $(".sidepannel-close").click(() => {
@@ -902,13 +917,17 @@ const getTimeZonesEmbedded = (TZList = timezonesList) => {
 
   $(`${isMweb ? ".mweb-timezone-item" : ".timezone-item"}`).click((e) => {
     timeZone = e.target.children[0].innerText;
-    $(`${isMweb ? ".mweb-timezone-list" : ".timezone-list"}`).css("display", "none");
+    $(`${isMweb ? ".mweb-timezones-list" : ".timezones-list"}`).css("display", "none");
     $(`${isMweb ? ".mweb-timezone-value" : ".timezone-value"}`).text(
       e.target.children[0].innerText
     );
     handleGetSlots();
   });
 };
+
+$('.timezone-close').click(()=>{
+  $('mweb-timezones-list').css('display','none')
+})
 
 const GMTOffset = (val) => {
   const hours = `0${Math.floor(val / 3600)}`.slice(-2);
