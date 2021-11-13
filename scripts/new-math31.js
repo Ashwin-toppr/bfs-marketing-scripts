@@ -289,7 +289,7 @@ const checkValidNum = (val) => {
   customClassMethod(".parent-num", !valid, "error-state");
   customClassMethod(".parent-num-dropdown", !valid, "error-state");
   customClassMethod(".parent-mobile-num", !valid, "error-state");
-  $(".valid-icon").css("display", valid ? "block" : 'none');
+  $(`${isMweb ? '.mweb-valid-icon':'.valid-icon'}`).css("display", valid ? "block" : 'none');
 
   return valid;
 };
@@ -338,8 +338,8 @@ $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => {
 
 });
 
-$('.isMusicFor').click((e)=>{
-  isMusicKids = e.target.id === 'music-kids'
+$('.ismusicfor').click((e)=>{
+  isMusicKids = e.currentTarget.nextElementSibling.id === "music-kids";
   if(!isMusicKids){
     selectedSubj = "music_for_all";
     $("#music-gtr").siblings("div").addClass("w--redirected-checked");
@@ -353,9 +353,9 @@ $('.isMusicFor').click((e)=>{
 
 
 const spInitialCtaSuccess = (res) => {
-  if(!isMweb){
+  // if(!isMweb){
     $(".otp-user-exist-msg").css("display", isUserExist ? "block" : "none");
-  }
+  // }
   $(".sp-initial-form").css("display", "none");
     $(".form-loader").css("display", "none");
 
@@ -625,12 +625,14 @@ const handleGetSlots = () => {
         $(".mweb-initial-form").css("display", "none");
         $(".mweb-slot-container").css("display", "block");
         // $(".mweb-sp-slot-cta").addClass("disabled");
+        $('.mweb-music-sub-cat').css('display',selectedSubj.includes('music') ? 'block' : 'none')
+
       } else {
         $(".otp-container").css("display", "none");
         $(".otp-user-exist-msg").css("display", "none");$(`${isMweb ? ".mweb-initial-form" : ".sp-initial-form"}`).css("display","none");
         $(`${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`).css("display", "none");
-        $(".side-panel-slot").css("display", "block");active - state;
-        $('.music-sub-cat').css('display',selectedSubj == 'music' ? 'block' : 'none')
+        $(".side-panel-slot").css("display", "block");
+        $('.music-sub-cat').css('display',selectedSubj.includes('music') ? 'block' : 'none')
         // $(".confirm-slot-cta").addClass("disabled");
       }
     },
@@ -937,7 +939,7 @@ const GMTOffset = (val) => {
 };
 
 
-$(".search-timezone-input").on("input", (e) => {
+$(`${isMweb ? '.mweb-search-timezone-input':'.search-timezone-input'}`).on("input", (e) => {
   const val = e.target.value.toUpperCase()
   let tempTZList;
   if(val.length > 3){
