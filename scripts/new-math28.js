@@ -117,7 +117,7 @@ var parentMobileNum = "",
   myToast,
   timeZone,
   isUserAuthenticated = false,
-  courseSubType,
+  courseSubType = 'guitar',
   timeInterval;
 
   //side pannel code
@@ -145,7 +145,9 @@ var parentMobileNum = "",
     success: (res) => {
       dialCodesList = res;
 
-      $(".dial-codes-list").empty();
+      $(
+        `${isMweb ? ".mweb-dial-codes-list" : ".dial-codes-list"}`
+      ).empty();
 
       dialCodesList.map((item) => {
         const ele = `<a href="#" class="dropdown-link dial-code w-dropdown-link" data-code='${item.dial_code}' tabindex="0">${item.flag} ${item.name} ${item.dial_code}</a>`;
@@ -334,9 +336,9 @@ $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => {
 
 
 const spInitialCtaSuccess = (res) => {
-  if(!isMweb){
+  // if(!isMweb){
     $(".sp-initial-form").css("display", "none");
-  }
+  // }
     $(".form-loader").css("display", "none");
 
   $(`${isMweb ? '.mweb-otp-container' : '.otp-container'}`).css("display", "block");
@@ -576,11 +578,7 @@ const handleMecall = () => {
 
 $('.music-radio').click((e)=>{
   const musicType = e.currentTarget.nextElementSibling.id.split('-')[1].toUpperCase() 
-  if(musicType === 'NONE'){
-    courseSubType = ''
-  }else{
-    courseSubType = musicType
-  }
+  courseSubType = musicType
   handleGetSlots()
 })
 
@@ -589,7 +587,7 @@ const handleGetSlots = () => {
 
   $.ajax({
     type: "GET",
-    url: `https://stage-api.whjr.one/api/V1/trial/slots/get?countryCode=US&grade=${selectedGrade}&timezone=${timeZone}&courseType=${selectedSubj}${courseSubType ? '&courseSubType='+courseSubType : ''}`,
+    url: `https://stage-api.whjr.one/api/V1/trial/slots/get?countryCode=US&grade=${selectedGrade}&timezone=${timeZone}&courseType=${selectedSubj}${selectedSubj == 'music' ? '&courseSubType='+courseSubType : ''}`,
     cache: false,
     headers: {
       authorization: `Bearer ${token}`,
@@ -860,6 +858,11 @@ $(".timezone-value").click(() => {
   getTimeZonesEmbedded();
 });
 
+$(".mweb-timezone-value").click(() => {
+  $(".mweb-timezones-list").css("display", "block");
+  getTimeZonesEmbedded();
+});
+
 const handleGetTimezonesList = () => {
   $.ajax({
     type: "GET",
@@ -873,22 +876,33 @@ const handleGetTimezonesList = () => {
 };
 
 const getTimeZonesEmbedded = (TZList = timezonesList) => {
-  $(".timezones-container").empty();
+  $(`${isMweb ? "mweb-timezones-container" : "timezones-container"}`).empty();
+  let item;
   TZList.map((zone) => {
-    const item = `<div class="timezone-item">
-        <p class="paragraph-50 events-none ">${zone.zoneName}</p>
-        <p class="paragraph-51 events-none ">(${GMTOffset(zone.gmtOffset)})</p>
-        <div class="checked-image events-none ${
-          timeZone == zone.zoneName ? "" : "d-none"
-        } "><img src="https://uploads-ssl.webflow.com/616e5b481c168d84b208db74/61889840cc7f1927bc91374a_Clickable.png" loading="lazy" alt=""></div></div>`;
-    $(".timezones-container").append(item);
+    if(isMweb){
+      item = `<div class="mweb-timezone-item"><p  class="paragraph-53 events-none">${zone.zoneName}</p><p class="paragraph-54 events-none">(${GMTOffset(zone.gmtOffset)})</p><div  class="mweb-checked-image events-none ${
+            timeZone == zone.zoneName ? "" : "d-none"
+          }"><img src="https://uploads-ssl.webflow.com/616e5b481c168d84b208db74/61889840cc7f1927bc91374a_Clickable.png" loading="lazy" alt=""></div></div>`;
+    }else{
+       item = `<div class="timezone-item">
+          <p class="paragraph-50 events-none ">${zone.zoneName}</p>
+          <p class="paragraph-51 events-none ">(${GMTOffset(zone.gmtOffset)})</p>
+          <div class="checked-image events-none ${
+            timeZone == zone.zoneName ? "" : "d-none"
+          } "><img src="https://uploads-ssl.webflow.com/616e5b481c168d84b208db74/61889840cc7f1927bc91374a_Clickable.png" loading="lazy" alt=""></div></div>`;
+    }
+    $(`${isMweb ? ".mweb-timezones-container" : ".timezones-container"}`).append(
+      item
+    );
   });
 
-  $(".timezone-item").click((e) => {
+  $(`${isMweb ? ".mweb-timezone-item" : ".timezone-item"}`).click((e) => {
     timeZone = e.target.children[0].innerText;
-    $(".timezones-list").css("display", "none");
-    $(".timezone-value").text(e.target.children[0].innerText);
-    handleGetSlots()
+    $(`${isMweb ? ".mweb-timezone-list" : ".timezone-list"}`).css("display", "none");
+    $(`${isMweb ? ".mweb-timezone-value" : ".timezone-value"}`).text(
+      e.target.children[0].innerText
+    );
+    handleGetSlots();
   });
 };
 
@@ -977,6 +991,8 @@ $(".search-timezone-input").on("input", (e) => {
 
 
  
+
+
 
 
 
