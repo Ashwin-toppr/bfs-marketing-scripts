@@ -268,7 +268,9 @@ $(".subject-card-sp").click((e) => {
   getGradeBlocks();
   enableScheduleCta();
   $('.grade-block').removeClass('active-state');
-  selectedgrade = '';
+
+  selectedGrade="";
+
   if(selectedSubj != 'music'){
     $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css("display", "block");
   }else{
@@ -367,9 +369,9 @@ $('.ismusicfor').click((e)=>{
 
 
 const spInitialCtaSuccess = (res) => {
-  // if(!isMweb){
+  if(!isMweb){
     $(".otp-user-exist-msg").css("display", isUserExist ? "block" : "none");
-  // }
+  }
   $(".sp-initial-form").css("display", "none");
     $(".form-loader").css("display", "none");
 
@@ -618,7 +620,7 @@ const handleGetSlots = () => {
 
   $.ajax({
     type: "GET",
-    url: `https://stage-api.whjr.one/api/V1/trial/slots/get?countryCode=US&grade=${selectedGrade}&timezone=${timeZone}&courseType=${selectedSubj}${selectedSubj.includes('music') ? '&courseSubType='+courseSubType : ''}`,
+    url: `https://stage-api.whjr.one/api/V1/trial/slots/get?countryCode=US&grade=${selectedGrade}&timezone=${timeZone}&courseType=${selectedSubj.toUpperCase()}${selectedSubj.includes('music') ? '&courseSubType='+courseSubType : ''}`,
     cache: false,
     headers: {
       authorization: `Bearer ${token}`,
@@ -630,7 +632,7 @@ const handleGetSlots = () => {
       clearInterval(timeInterval);
       handleGetTimezonesList();
       $(".otp-loader").css("display", "none");
-      $(".timezone-value").text(timeZone);
+      $(`${isMweb ? '.mweb-timezone-value' : 'timezone-value'}`).text(timeZone);
     $(".slot-loader").css("display", "none");
 
 
