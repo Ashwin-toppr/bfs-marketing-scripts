@@ -329,7 +329,11 @@ $(".parent-mobile-num").on("input", (e) => {
 });
 
 const enableScheduleCta = () => {
-  if (parentMobileNum.length === 10 && !!selectedGrade && !!selectedSubj ) $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).removeClass('disabled')
+  if (parentMobileNum.length === 10 && !!selectedGrade && !!selectedSubj ){
+      $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).removeClass('disabled')
+  }else{
+    $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).addClass('disabled')
+  }
 }
 
 
@@ -370,7 +374,7 @@ $('.ismusicfor').click((e)=>{
 
 const spInitialCtaSuccess = (res) => {
   // if(!isMweb){
-    $(".otp-user-exist-msg").css("display", isUserExist ? "block" : "none");
+    $(`${isMweb ? '.mweb-otp-user-exist-msg':'otp-user-exist-msg'}`).css("display", isUserExist ? "block" : "none");
   // }
   $(".sp-initial-form").css("display", "none");
     $(".form-loader").css("display", "none");
@@ -567,7 +571,7 @@ const handleMecall = () => {
           "display",
           "none"
         );
-        $(".otp-user-exist-msg").css("display", "none");
+        $(`${isMweb ? '.mweb-otp-user-exist-msg':'otp-user-exist-msg'}`).css("display", "none");
         $(`${isMweb ? ".mweb-initial-form" : ".sp-initial-form"}`).css(
           "display",
           "block"
@@ -634,7 +638,7 @@ const handleGetSlots = () => {
       $(".otp-loader").css("display", "none");
       $(`${isMweb ? '.mweb-timezone-value' : 'timezone-value'}`).text(timeZone);
     $(".slot-loader").css("display", "none");
-    $(".otp-user-exist-msg").css("display", "none");
+    $(`${isMweb ? '.mweb-otp-user-exist-msg':'otp-user-exist-msg'}`).css("display", "none");
 
       if (isMweb) {
         $(".mweb-otp-container").css("display", "none");
@@ -775,7 +779,7 @@ const handleBookSlot = () => {
         startTime: startTime,
         endTime: moment(startTime).add(1, "hours").toISOString(),
       },
-      courseType: selectedSubj,
+      courseType: selectedSubj.toUpperCase(),
       studentId: studentDetails.students[0]?.student_courses[0]?.studentId,
     },
     headers: {
@@ -846,7 +850,7 @@ const handleReset = () => {
   $(".subject-card-sp").removeClass("disabled");
   $(".otp-container").css("display", "none");
   $(".side-panel-slot").css("display", "none");
-  $(".otp-user-exist-msg").css("display", "none");
+  $(`${isMweb ? '.mweb-otp-user-exist-msg':'otp-user-exist-msg'}`).css("display", "none");
   $(".sp-initial-form").css("display", "block");
   clearInterval(timeInterval);
   $(".music-state").css("display", "none");
@@ -862,7 +866,7 @@ $(".sidepannel-close").click(() => {
   customCssMethod("body", "overflow", "auto");
   customCssMethod(".sidepanel-container", "display", "none");
   handleReset();
-  customCssMethod("otp-user-exist-msg", "display", "none");
+  customCssMethod(`${isMweb ? '.mweb-otp-user-exist-msg':'otp-user-exist-msg'}`, "display", "none");
 });
 
 $('.mweb-back-arrow').click(()=>{
