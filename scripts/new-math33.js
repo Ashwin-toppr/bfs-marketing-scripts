@@ -268,7 +268,7 @@ $(".subject-card-sp").click((e) => {
   getGradeBlocks();
   enableScheduleCta();
   $('.grade-block').removeClass('active-state');
-  Selectedgrade = '';
+  selectedgrade = '';
   if(selectedSubj != 'music'){
     $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css("display", "block");
   }else{
