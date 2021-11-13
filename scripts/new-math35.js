@@ -369,9 +369,9 @@ $('.ismusicfor').click((e)=>{
 
 
 const spInitialCtaSuccess = (res) => {
-  if(!isMweb){
+  // if(!isMweb){
     $(".otp-user-exist-msg").css("display", isUserExist ? "block" : "none");
-  }
+  // }
   $(".sp-initial-form").css("display", "none");
     $(".form-loader").css("display", "none");
 
@@ -634,7 +634,7 @@ const handleGetSlots = () => {
       $(".otp-loader").css("display", "none");
       $(`${isMweb ? '.mweb-timezone-value' : 'timezone-value'}`).text(timeZone);
     $(".slot-loader").css("display", "none");
-
+    $(".otp-user-exist-msg").css("display", "none");
 
       if (isMweb) {
         $(".mweb-otp-container").css("display", "none");
@@ -645,7 +645,7 @@ const handleGetSlots = () => {
 
       } else {
         $(".otp-container").css("display", "none");
-        $(".otp-user-exist-msg").css("display", "none");$(`${isMweb ? ".mweb-initial-form" : ".sp-initial-form"}`).css("display","none");
+        $(`${isMweb ? ".mweb-initial-form" : ".sp-initial-form"}`).css("display","none");
         $(`${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`).css("display", "none");
         $(".side-panel-slot").css("display", "block");
         $('.music-sub-cat').css('display',selectedSubj.includes('music') ? 'block' : 'none')
@@ -767,7 +767,7 @@ const handleBookSlot = () => {
     $('.slot-loader').css('display','block')
   $.ajax({
     type: "POST",
-    url: `https://stage-api.whjr.one/api/V1/trial/slots/book?timezone=${timeZone}&regionId=US&courseType=${selectedSubj}${selectedSubj.includes('music') ? '&courseSubType='+courseSubType : ''}`,
+    url: `https://stage-api.whjr.one/api/V1/trial/slots/book?timezone=${timeZone}&regionId=US&courseType=${selectedSubj.toUpperCase()}${selectedSubj.includes('music') ? '&courseSubType='+courseSubType : ''}`,
     cache: false,
     data: {
       countryCode: "IN",
