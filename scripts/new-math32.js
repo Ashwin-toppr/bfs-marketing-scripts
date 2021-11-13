@@ -183,7 +183,9 @@ $(`${isMweb ? '.mweb-schedule-cta' : '.schedule-cta' }`).click(()=>{
   customCssMethod("body", "overflow", "hidden");
   window.scrollTo(0, 0);
   selectedSubj = 'math'
-
+  $(`.${selectedSubj}-block`).addClass("active-state");
+  $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css("display", "block");
+  getGradeBlocks()
   
   if(parentMobileNum && selectedGrade){
       if (!isMweb) {
@@ -203,7 +205,6 @@ $(`${isMweb ? '.mweb-schedule-cta' : '.schedule-cta' }`).click(()=>{
   }
 })
 
-$(`.${selectedSubj}-block`).addClass('active-state')
 
 const getGradeBlocks = () => {
   const subjGrades = {
@@ -266,6 +267,14 @@ $(".subject-card-sp").click((e) => {
   customCssMethod(".music-state", "display", id == "music" ? "block" : "none");
   getGradeBlocks();
   enableScheduleCta();
+  $('.grade-block').removeClass('active-state');
+  Selectedgrade = '';
+  if(selectedSubj != 'music'){
+    $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css("display", "block");
+  }else{
+    $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css("display", isMusicKids ? "block" : 'none' );
+  }
+
 });
 
 
@@ -339,12 +348,13 @@ $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => {
 });
 
 $('.ismusicfor').click((e)=>{
-  isMusicKids = e.currentTarget.nextElementSibling.id === "music-kids";
+  isMusicKids = e.currentTarget.nextElementSibling.id.includes('kids');
   if(!isMusicKids){
     selectedSubj = "music_for_all";
     $('.radio-music-none').css('display','none')
     selectedGrade = '8'
     $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css("display", "none");
+    
   }else{
     selectedSubj = "music";
     $(".radio-music-none").css("display", "block");
@@ -842,6 +852,7 @@ const handleReset = () => {
     "disabled"
   );
     $(".radio-music-none").css("display", "block");
+    $('.grade-container').css('display','block')
 
 };
 
@@ -852,15 +863,18 @@ $(".sidepannel-close").click(() => {
   customCssMethod("otp-user-exist-msg", "display", "none");
 });
 
-$(".back-arrow").click(() => {
-  if ($(".mweb-slot-container").css("display") === "block") {
-    $(".mweb-slot-container").css("display", "none");
-    $(".mweb-initial-form").css("display", "block");
-  } else if ($(".mweb-initial-form").css("display") === "block") {
-    $(".m-web-side-pannel").css("display", "none");
-    $("body").css("overflow", "auto");
-    $(".mweb-banner-form").css("display", "block");
-  }
+$('.mweb-back-arrow').click(()=>{
+    if ($(".mweb-slot-container").css("display") === "block") {
+      $(".mweb-slot-container").css("display", "none");
+      $(".mweb-initial-form").css("display", "block");
+    } else if ($(".mweb-initial-form").css("display") === "block") {
+      $(".m-web-side-pannel").css("display", "none");
+      $("body").css("overflow", "auto");
+      $(".mweb-banner-form").css("display", "block");
+    }
+})
+
+$(".web-back-arrow").click(() => {
   if ($(".side-panel-slot").css("display") === "block") {
     $(".sp-initial-form").css("display", "block");
     $(".side-panel-slot").css("display", "none");
