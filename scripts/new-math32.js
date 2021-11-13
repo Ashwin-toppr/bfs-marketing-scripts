@@ -232,7 +232,7 @@ const getGradeBlocks = () => {
   $(".grade-block").click((e) => {
     selectedGrade = e.target.id.split("-").slice(-1)[0];
     customClassMethod(".grade-block", false, "active-state");
-    if (selectedSubj == "music") {
+    if (selectedSubj.includes('music')) {
       const musicGrade = e.target.id.split("-");
       customClassMethod(
         `.${isMweb ? "mweb-" : ""}grade-${musicGrade[1]}-${musicGrade[2]}`,
@@ -342,11 +342,15 @@ $('.ismusicfor').click((e)=>{
   isMusicKids = e.currentTarget.nextElementSibling.id === "music-kids";
   if(!isMusicKids){
     selectedSubj = "music_for_all";
-    $("#music-gtr").siblings("div").addClass("w--redirected-checked");
-    courseSubType = 'GTR'
     $('.radio-music-none').css('display','none')
     selectedGrade = '8'
-  } 
+    $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css("display", "none");
+  }else{
+    selectedSubj = "music";
+    $(".radio-music-none").css("display", "block");
+    $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css("display", "block");
+
+  }
 
 })
 
@@ -593,7 +597,7 @@ const handleMecall = () => {
   });
 };
 
-$('.music-radio').click((e)=>{
+$('.radio-music-sc').click((e)=>{
   const musicType = e.currentTarget.nextElementSibling.id.split('-')[1].toUpperCase() 
   courseSubType = musicType
   handleGetSlots()
@@ -751,7 +755,7 @@ const handleBookSlot = () => {
     $('.slot-loader').css('display','block')
   $.ajax({
     type: "POST",
-    url: `https://stage-api.whjr.one/api/V1/trial/slots/book?timezone=${timeZone}&regionId=US&courseType=${selectedSubj}`,
+    url: `https://stage-api.whjr.one/api/V1/trial/slots/book?timezone=${timeZone}&regionId=US&courseType=${selectedSubj}${selectedSubj.includes('music') ? '&courseSubType='+courseSubType : ''}`,
     cache: false,
     data: {
       countryCode: "IN",
@@ -897,7 +901,7 @@ const handleGetTimezonesList = () => {
 };
 
 const getTimeZonesEmbedded = (TZList = timezonesList) => {
-  $(`${isMweb ? "mweb-timezones-container" : "timezones-container"}`).empty();
+  $(`${isMweb ? ".mweb-timezones-container" : ".timezones-container"}`).empty();
   let item;
   TZList.map((zone) => {
     if(isMweb){
