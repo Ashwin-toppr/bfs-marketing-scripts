@@ -117,7 +117,7 @@ var parentMobileNum = "",
   myToast,
   timeZone,
   isUserAuthenticated = false,
-  courseSubType = 'DIS',
+  courseSubType = 'GTR',
   timeInterval,
   isMusicKids =true ;
 
@@ -266,16 +266,16 @@ $(".subject-card-sp").click((e) => {
   selectedSubj = id;
   customCssMethod(".music-state", "display", id == "music" ? "block" : "none");
   getGradeBlocks();
-  enableScheduleCta();
   $('.grade-block').removeClass('active-state');
-
+  
   selectedGrade="";
-
+  
   if(selectedSubj != 'music'){
     $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css("display", "block");
   }else{
     $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css("display", isMusicKids ? "block" : 'none' );
   }
+  enableScheduleCta();
 
 });
 
@@ -341,6 +341,10 @@ $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => {
 
 
   $('.form-loader').css('display','block')
+    $(
+      `${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`
+    ).css("display", "none");
+
   if(isUserAuthenticated){
     handleMecall()
   }else{
@@ -367,6 +371,7 @@ $('.ismusicfor').click((e)=>{
     $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css("display", "block");
 
   }
+  enableScheduleCta();
 
 })
 
@@ -374,7 +379,7 @@ $('.ismusicfor').click((e)=>{
 
 const spInitialCtaSuccess = (res) => {
   // if(!isMweb){
-    $(`${isMweb ? '.mweb-otp-user-exist-msg':'otp-user-exist-msg'}`).css("display", isUserExist ? "block" : "none");
+    $(`${isMweb ? '.mweb-otp-user-exist-msg':'.otp-user-exist-msg'}`).css("display", isUserExist ? "block" : "none");
   // }
   $(".sp-initial-form").css("display", "none");
     $(".form-loader").css("display", "none");
@@ -571,7 +576,7 @@ const handleMecall = () => {
           "display",
           "none"
         );
-        $(`${isMweb ? '.mweb-otp-user-exist-msg':'otp-user-exist-msg'}`).css("display", "none");
+        $(`${isMweb ? '.mweb-otp-user-exist-msg':'.otp-user-exist-msg'}`).css("display", "none");
         $(`${isMweb ? ".mweb-initial-form" : ".sp-initial-form"}`).css(
           "display",
           "block"
@@ -638,7 +643,8 @@ const handleGetSlots = () => {
       $(".otp-loader").css("display", "none");
       $(`${isMweb ? '.mweb-timezone-value' : 'timezone-value'}`).text(timeZone);
     $(".slot-loader").css("display", "none");
-    $(`${isMweb ? '.mweb-otp-user-exist-msg':'otp-user-exist-msg'}`).css("display", "none");
+    $(`${isMweb ? '.mweb-otp-user-exist-msg':'.otp-user-exist-msg'}`).css("display", "none");
+    $(`${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`).css("display", "none");
 
       if (isMweb) {
         $(".mweb-otp-container").css("display", "none");
@@ -650,7 +656,6 @@ const handleGetSlots = () => {
       } else {
         $(".otp-container").css("display", "none");
         $(`${isMweb ? ".mweb-initial-form" : ".sp-initial-form"}`).css("display","none");
-        $(`${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`).css("display", "none");
         $(".side-panel-slot").css("display", "block");
         $('.music-sub-cat').css('display',selectedSubj.includes('music') ? 'block' : 'none')
         // $(".confirm-slot-cta").addClass("disabled");
@@ -771,7 +776,7 @@ const handleBookSlot = () => {
     $('.slot-loader').css('display','block')
   $.ajax({
     type: "POST",
-    url: `https://stage-api.whjr.one/api/V1/trial/slots/book?timezone=${timeZone}$grade=${selectedGrade}&regionId=US&courseType=${selectedSubj.toUpperCase()}${selectedSubj.includes('music') ? '&courseSubType='+courseSubType : ''}`,
+    url: `https://stage-api.whjr.one/api/V1/trial/slots/book?timezone=${timeZone}&grade=${selectedGrade}&regionId=US&courseType=${selectedSubj.toUpperCase()}${selectedSubj.includes('music') ? '&courseSubType='+courseSubType : ''}`,
     cache: false,
     data: {
       countryCode: "IN",
@@ -850,7 +855,7 @@ const handleReset = () => {
   $(".subject-card-sp").removeClass("disabled");
   $(".otp-container").css("display", "none");
   $(".side-panel-slot").css("display", "none");
-  $(`${isMweb ? '.mweb-otp-user-exist-msg':'otp-user-exist-msg'}`).css("display", "none");
+  $(`${isMweb ? '.mweb-otp-user-exist-msg':'.otp-user-exist-msg'}`).css("display", "none");
   $(".sp-initial-form").css("display", "block");
   clearInterval(timeInterval);
   $(".music-state").css("display", "none");
@@ -866,7 +871,7 @@ $(".sidepannel-close").click(() => {
   customCssMethod("body", "overflow", "auto");
   customCssMethod(".sidepanel-container", "display", "none");
   handleReset();
-  customCssMethod(`${isMweb ? '.mweb-otp-user-exist-msg':'otp-user-exist-msg'}`, "display", "none");
+  customCssMethod(`${isMweb ? '.mweb-otp-user-exist-msg':'.otp-user-exist-msg'}`, "display", "none");
 });
 
 $('.mweb-back-arrow').click(()=>{
