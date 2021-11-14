@@ -186,6 +186,8 @@ $(`${isMweb ? '.mweb-schedule-cta' : '.schedule-cta' }`).click(()=>{
   $(`.${selectedSubj}-block`).addClass("active-state");
   $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css("display", "block");
   getGradeBlocks()
+
+      $(".parent-mobile-num").val(parentMobileNum);
   
   if(parentMobileNum && selectedGrade){
       if (!isMweb) {
@@ -194,7 +196,6 @@ $(`${isMweb ? '.mweb-schedule-cta' : '.schedule-cta' }`).click(()=>{
         $(".mweb-sp-initial-cta").click();
       }
   }else{
-      $(".parent-mobile-num").val(parentMobileNum);
       if(!isMweb){
           customCssMethod(".sidepanel-container", "display", "block");
       }else{
@@ -359,7 +360,7 @@ $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => {
 });
 
 $('.ismusicfor').click((e)=>{
-  isMusicKids = e.currentTarget.nextElementSibling.id.includes('kids');
+  isMusicKids = e.currentTarget.children[1].id.includes("kids");
   if(!isMusicKids){
     selectedSubj = "music_for_all";
     $('.radio-music-none').css('display','none')
@@ -851,7 +852,7 @@ const handleGetDashboardLink = (bookedSlot) => {
   });
 };
 
-$(`${isMweb ? '.web-dashboard-redirection':'dashboard-redirection'}`).click(() => {
+$(`${!isMweb ? '.web-dashboard-redirection':'.dashboard-redirection'}`).click(() => {
   window.open(dashboardLink, "_blank");
 });
 
@@ -873,6 +874,12 @@ const handleReset = () => {
   );
     $(".radio-music-none").css("display", "block");
     $('.grade-container').css('display','block')
+  $(`${isMweb ? ".mweb-valid-icon" : ".valid-icon"}`).css(
+    "display",
+    valid ? "block" : "none"
+  );
+  $('.parent-mobile-num').text('')
+  $('.grade-home').removeClass('active-state')
 
 };
 
