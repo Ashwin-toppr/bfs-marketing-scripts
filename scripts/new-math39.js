@@ -274,6 +274,7 @@ $(".subject-card-sp").click((e) => {
     $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css("display", "block");
   }else{
     $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css("display", isMusicKids ? "block" : 'none' );
+    selectedGrade = isMusicKids ? '' : '8'
   }
   enableScheduleCta();
 
@@ -369,6 +370,7 @@ $('.ismusicfor').click((e)=>{
     selectedSubj = "music";
     $(".radio-music-none").css("display", "block");
     $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css("display", "block");
+    selectedGrade=''
 
   }
   enableScheduleCta();
@@ -776,7 +778,7 @@ const handleBookSlot = () => {
     $('.slot-loader').css('display','block')
   $.ajax({
     type: "POST",
-    url: `https://stage-api.whjr.one/api/V1/trial/slots/book?timezone=${timeZone}&grade=${selectedGrade}&regionId=US&courseType=${selectedSubj.toUpperCase()}${selectedSubj.includes('music') ? '&courseSubType='+courseSubType : ''}`,
+    url: `https://stage-api.whjr.one/api/V1/trial/slots/book?timezone=${timeZone}&regionId=US&courseType=${selectedSubj.toUpperCase()}`,
     cache: false,
     data: {
       countryCode: "IN",
@@ -786,6 +788,8 @@ const handleBookSlot = () => {
       },
       courseType: selectedSubj.toUpperCase(),
       studentId: studentDetails.students[0]?.student_courses[0]?.studentId,
+      grade:selectedGrade,
+      timeZone:timeZone
     },
     headers: {
       authorization: `Bearer ${token}`,
