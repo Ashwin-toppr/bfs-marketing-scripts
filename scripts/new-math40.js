@@ -325,6 +325,7 @@ $(".parent-mobile-num").on("input", (e) => {
     $(
       `${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`
     ).css("display", "none");
+    $('.music-state').css('display','none')
   }
   enableScheduleCta();
 });
@@ -572,6 +573,7 @@ const handleMecall = () => {
       const trailStatus = studentDetails.students[0].student_courses.filter(
         (course) => course.courseType === selectedSubj.toUpperCase()
       );
+      $('.form-loader').css('display','none')
 
       if (trailStatus[0] && trailStatus[0].trialStatus !== "not_scheduled") {
         $(`${isMweb ? ".mweb-otp-container" : ".otp-container"}`).css(
@@ -588,7 +590,6 @@ const handleMecall = () => {
             isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"
           }`
         ).css("display", "flex");
-        $(".form-loader").css("display", "none");
 
         $(
           `${isMweb ? ".mweb-registered-user-msg" : ".registered-user-msg"}`
@@ -778,10 +779,10 @@ const handleBookSlot = () => {
     $('.slot-loader').css('display','block')
   $.ajax({
     type: "POST",
-    url: `https://stage-api.whjr.one/api/V1/trial/slots/book?timezone=${timeZone}&regionId=US&courseType=${selectedSubj.toUpperCase()}`,
+    url: `https://stage-api.whjr.one/api/V1/trial/slots/book?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj.toUpperCase()}`,
     cache: false,
     data: {
-      countryCode: "IN",
+      countryCode: country,
       slot: {
         startTime: startTime,
         endTime: moment(startTime).add(1, "hours").toISOString(),
@@ -961,7 +962,7 @@ const getTimeZonesEmbedded = (TZList = timezonesList) => {
 };
 
 $('.timezone-close').click(()=>{
-  $('mweb-timezones-list').css('display','none')
+  $('.mweb-timezones-list').css('display','none')
 })
 
 const GMTOffset = (val) => {
