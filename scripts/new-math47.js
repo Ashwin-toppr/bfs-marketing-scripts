@@ -860,6 +860,7 @@ const handleReset = () => {
   selectedGrade = "";
   otpValue = "";
   selectedSubj = "";
+  parentMobileNum=""
   $(".subject-card-sp").removeClass("active-state");
   $(".grade-block").removeClass("active-state");
   $(".subject-card-sp").removeClass("disabled");
@@ -875,8 +876,7 @@ const handleReset = () => {
     $(".radio-music-none").css("display", "block");
     $('.grade-container').css('display','block')
   $(`${isMweb ? ".mweb-valid-icon" : ".valid-icon"}`).css(
-    "display",
-    valid ? "block" : "none"
+    "display", "none"
   );
   $('.parent-mobile-num').text('')
   $('.grade-home').removeClass('active-state')
