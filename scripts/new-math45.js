@@ -382,11 +382,10 @@ $('.ismusicfor').click((e)=>{
 
 const spInitialCtaSuccess = (res) => {
   // if(!isMweb){
-    $(`${isMweb ? '.mweb-otp-user-exist-msg':'.otp-user-exist-msg'}`).css("display", isUserExist ? "block" : "none");
+    $(`${isMweb ? '.mweb-otp-user-exist-msg':'.otp-user-exist-msg'}`).css("display", isUserExist ? "flex" : "none");
   // }
   $(".sp-initial-form").css("display", "none");
     $(".form-loader").css("display", "none");
-
   $(`${isMweb ? '.mweb-otp-container' : '.otp-container'}`).css("display", "block");
   $(".otp-heading").text(
     isUserExist ? "Enter the 4-digit code to login" : "Enter the 4-digit code"
@@ -399,7 +398,8 @@ const spInitialCtaSuccess = (res) => {
   $(".selected-num-display").text("+91 " + parentMobileNum);
 
   if (parentMobileNum && selectedGrade) {
-    customCssMethod( `${isMweb ? 'm-web-side-pannel' : '.sidepanel-container'}`, "display", "block");
+    customCssMethod( `${isMweb ? '.m-web-side-pannel' : '.sidepanel-container'}`, "display", "block");
+    
   }
   challengeCodeForOtp = res.data.challenge;
 };
@@ -440,6 +440,10 @@ const getOtp = (callback, isResend) => {
     success: callback,
     error: ()=>{
         $(".form-loader").css("display", "none");
+      Toastify({
+        text: "Something went wrong.Please try again later!",
+        duration: 5000,
+      }).showToast();
 
     }
   });
