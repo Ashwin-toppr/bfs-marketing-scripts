@@ -220,7 +220,7 @@ const getGradeBlocks = () => {
       isMweb ? "mweb-" : ""
     }grade-${selectedSubj}  ${
       isMweb ? "mweb-" : ""
-    }grade-${grade}"><p class="paragraph-41">Grade</p><p class="paragraph-42">${grade}</p></div>`;
+    }grade-${grade}"><p class="grade-label">Grade</p><p class="grade-num">${grade}</p></div>`;
 
     $(".child-grade-blk-copy").append(element);
     customClassMethod(
@@ -253,7 +253,7 @@ const getGradeBlocks = () => {
 $('.grade-home').click((e)=>{
   selectedGrade = e.target.id.split("-").slice(-1)[0];
   $('.grade-home').removeClass('active-state')
-  $(`#${isMweb ? 'mweb-':''}${e.target.id}`).addClass('active-state')
+  $(`#${e.target.id}`).addClass('active-state')
 })
 
 getGradeBlocks();
@@ -398,9 +398,9 @@ const spInitialCtaSuccess = (res) => {
   otpTimer();
   $(".selected-num-display").text("+91 " + parentMobileNum);
 
-  // if (parentMobileNum && selectedGrade) {
-  //   customCssMethod(".sidepanel-container", "display", "block");
-  // }
+  if (parentMobileNum && selectedGrade) {
+    customCssMethod( `${isMweb ? 'm-web-side-pannel' : '.sidepanel-container'}`, "display", "block");
+  }
   challengeCodeForOtp = res.data.challenge;
 };
 
