@@ -253,8 +253,7 @@ const getGradeBlocks = () => {
 $('.grade-home').click((e)=>{
   selectedGrade = e.target.id.split("-").slice(-1)[0];
   $('.grade-home').removeClass('active-state')
-  $(`#${e.target.id}`).addClass('active-state')
-  $(`.grade-1`).addClass("active-state");
+  $(`#${isMweb ? 'mweb-':''}${e.target.id}`).addClass('active-state')
 })
 
 getGradeBlocks();
@@ -399,9 +398,9 @@ const spInitialCtaSuccess = (res) => {
   otpTimer();
   $(".selected-num-display").text("+91 " + parentMobileNum);
 
-  if (parentMobileNum && selectedGrade) {
-    customCssMethod(".sidepanel-container", "display", "block");
-  }
+  // if (parentMobileNum && selectedGrade) {
+  //   customCssMethod(".sidepanel-container", "display", "block");
+  // }
   challengeCodeForOtp = res.data.challenge;
 };
 
@@ -848,7 +847,7 @@ const handleGetDashboardLink = (bookedSlot) => {
   });
 };
 
-$(".dashboard-redirection").click(() => {
+$(`${isMweb ? '.web-dashboard-redirection':'dashboard-redirection'}`).click(() => {
   window.open(dashboardLink, "_blank");
 });
 
