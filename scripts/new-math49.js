@@ -882,10 +882,10 @@ const handleReset = () => {
   $(".radio-music-none").css("display", "block");
   $(".grade-container").css("display", "block");
   $(`${isMweb ? ".mweb-valid-icon" : ".valid-icon"}`).css("display", "none");
-  $(".parent-mobile-num").text("");
+  $(".parent-mobile-num").val("");
   $(".grade-home").removeClass("active-state");
 
-  $(".mweb-parent-mail-input").text(""); // main page form mobile number
+  $(".mweb-parent-mail-input").val(""); // main page form mobile number
 };;
 
 $(".sidepannel-close").click(() => {
