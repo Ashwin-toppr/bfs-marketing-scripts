@@ -859,7 +859,7 @@ const handleReset = () => {
   $(".subject-card-sp").removeClass("active-state");
   $(".grade-block").removeClass("active-state");
   $(".subject-card-sp").removeClass("disabled");
-  $(".otp-container").css("display", "none");
+  $(`${isMweb ? '.mweb-otp-container':'.otp-container'}`).css("display", "none");
   $(".side-panel-slot").css("display", "none");
   $(`${isMweb ? '.mweb-otp-user-exist-msg':'.otp-user-exist-msg'}`).css("display", "none");
   $(".sp-initial-form").css("display", "block");
@@ -888,6 +888,7 @@ $('.mweb-back-arrow').click(()=>{
       $(".m-web-side-pannel").css("display", "none");
       $("body").css("overflow", "auto");
       $(".mweb-banner-form").css("display", "block");
+      handleReset()
     }
 })
 
