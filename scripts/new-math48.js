@@ -860,28 +860,33 @@ const handleReset = () => {
   selectedGrade = "";
   otpValue = "";
   selectedSubj = "";
-  parentMobileNum=""
+  parentMobileNum = "";
   $(".subject-card-sp").removeClass("active-state");
   $(".grade-block").removeClass("active-state");
   $(".subject-card-sp").removeClass("disabled");
-  $(`${isMweb ? '.mweb-otp-container':'.otp-container'}`).css("display", "none");
+  $(`${isMweb ? ".mweb-otp-container" : ".otp-container"}`).css(
+    "display",
+    "none"
+  );
   $(".side-panel-slot").css("display", "none");
-  $(`${isMweb ? '.mweb-otp-user-exist-msg':'.otp-user-exist-msg'}`).css("display", "none");
+  $(`${isMweb ? ".mweb-otp-user-exist-msg" : ".otp-user-exist-msg"}`).css(
+    "display",
+    "none"
+  );
   $(".sp-initial-form").css("display", "block");
   clearInterval(timeInterval);
   $(".music-state").css("display", "none");
   $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).addClass(
     "disabled"
   );
-    $(".radio-music-none").css("display", "block");
-    $('.grade-container').css('display','block')
-  $(`${isMweb ? ".mweb-valid-icon" : ".valid-icon"}`).css(
-    "display", "none"
-  );
-  $('.parent-mobile-num').text('')
-  $('.grade-home').removeClass('active-state')
+  $(".radio-music-none").css("display", "block");
+  $(".grade-container").css("display", "block");
+  $(`${isMweb ? ".mweb-valid-icon" : ".valid-icon"}`).css("display", "none");
+  $(".parent-mobile-num").text("");
+  $(".grade-home").removeClass("active-state");
 
-};
+  $(".mweb-parent-mail-input").text(""); // main page form mobile number
+};;
 
 $(".sidepannel-close").click(() => {
   customCssMethod("body", "overflow", "auto");
