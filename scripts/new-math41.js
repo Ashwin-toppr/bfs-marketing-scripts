@@ -295,7 +295,7 @@ const isExist = () => {
 };
 
 const checkValidNum = (val) => {
-  const valid =  val.length === 10;
+  const valid = val.length === 10 && $.isNumeric(val);
 
   customCssMethod(".err-msg-pm", "display", valid ? "none" : "block");
   customClassMethod(".parent-num", !valid, "error-state");
@@ -372,6 +372,7 @@ $('.ismusicfor').click((e)=>{
     $(".radio-music-none").css("display", "block");
     $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css("display", "block");
     selectedGrade=''
+    $(".grade-block").removeClass("active-state");
 
   }
   enableScheduleCta();
