@@ -932,7 +932,7 @@ $(".timezone-value-container").click(() => {
   getTimeZonesEmbedded();
 });
 
-$(".mweb-timezone-value").click(() => {
+$(".mweb-timezone-value-container").click(() => {
   $(".mweb-timezones-list").css("display", "block");
   getTimeZonesEmbedded();
 });
