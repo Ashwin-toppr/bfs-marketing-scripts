@@ -338,6 +338,7 @@ $(".parent-mobile-num").on("input", (e) => {
   }else{
       checkValidNum(e.target.value);
       parentMobileNum = e.target.value;
+      formatedParentNum = e.target.value;
       if (e.target.value.length > 9) {
         isExist();
       }
