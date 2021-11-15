@@ -313,10 +313,14 @@ const checkValidNum = (val) => {
 
 $(".parent-mobile-num").on("input", (e) => {
   checkValidNum(e.target.value);
+  parentMobileNum = e.target.value;
   if (e.target.value.length > 9) {
-    parentMobileNum = e.target.value;
     isExist();
   }
+
+ 
+
+
   if (studentDetails) {
     selectedGrade = "";
     otpValue = "";
@@ -788,7 +792,7 @@ const handleBookSlot = () => {
     $('.slot-loader').css('display','block')
   $.ajax({
     type: "POST",
-    url: `https://stage-api.whjr.one/api/V1/trial/slots/book?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj.toUpperCase()}`,
+    url: `https://stage-api.whjr.one/api/V1/trial/slots/book?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj.toUpperCase()}&${selectedSubj.includes('music') ? `courseSubType=${courseSubType}`:''}`,
     cache: false,
     data: {
       countryCode: country,

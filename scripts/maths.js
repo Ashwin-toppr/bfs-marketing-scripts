@@ -445,3 +445,46 @@ const handleGetSlots = () => {
 <script src="https://cdn.jsdelivr.net/gh/Ashwin-toppr/bfs-marketing-scripts/scripts/Untitled-1.js"></script>
 
 
+//    Extract number from string
+//     </title>
+// </head>
+  
+// <body >
+//     <div align="center" style="background-color: green;">
+          
+//         <h1>GeeksforGeeks</h1>
+          
+//         <p>String is "jhkj7682834"</p>
+          
+//         <p id="GFG"> 
+//             Click the button to extract number
+//         </p>
+          
+//         <input type="button" value="click " onclick="myGeeks()">
+//     </div>
+      
+//     <script>
+//         function myGeeks() {
+//             var str = "jhkj7682834";
+//             var matches = str.match(/(\d+)/);
+              
+//             if (matches) {
+//                 document.getElementById('GFG').innerHTML
+//                         = matches[0];
+//             }
+//         }
+
+
+
+//          const input = e.target.value.replace(/\D/g, "").substring(0, 10); // First ten digits of input only
+//   const areaCode = input.substring(0, 3);
+//   const middle = input.substring(3, 6);
+//   const last = input.substring(6, 10);
+
+//   if (input.length > 6) {
+//     e.target.value = `(${areaCode})  ${middle} - ${last}`;
+//   } else if (input.length > 3) {
+//     e.target.value = `(${areaCode})  ${middle}`;
+//   } else if (input.length > 0) {
+//     e.target.value = `(${areaCode}`;
+//   }
