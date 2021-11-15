@@ -763,7 +763,7 @@ const getSlotsOnSelectedate = () => {
     selectedTimeSlot = id;
     // $(".mweb-sp-slot-cta").removeClass("disabled");
     // $(".confirm-slot-cta").removeClass("disabled");
-    $(".slot-time-msg").text(moment(slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime).format("LT"));
+    $(".slot-time-msg").text(`${moment(slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime).format("LT")}`);
     const selectedDateBlock = slotsData[selectedDateIndex].date;
     $(".slot-date-msg").text(
       `${moment(selectedDateBlock).format("ddd")}, ${moment(selectedDateBlock).format("DD")} ${moment(selectedDateBlock).format("MMM")}`
