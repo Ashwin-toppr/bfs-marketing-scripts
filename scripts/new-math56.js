@@ -190,7 +190,7 @@ $(`${isMweb ? '.mweb-schedule-cta' : '.schedule-cta' }`).click(()=>{
       $(".parent-mobile-num").val(parentMobileNum);
   
   if(parentMobileNum && selectedGrade){
-    if(!checkValidNum())return;
+    if (!checkValidNum(parentMobileNum)) return;
       if (!isMweb) {
         $(".sp-initial-cta").click();
       }else{
