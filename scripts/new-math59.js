@@ -164,6 +164,7 @@ var parentMobileNum = "",
         $(`${isMweb ? ".mweb-dial-codes-list" : ".dial-codes-list"}`).removeClass("w--open");
         $(".dial-code-value").text(dialCode);
         isUserAuthenticated = false
+        $(".parent-mobile-num").val('');
       });
     },
   });
