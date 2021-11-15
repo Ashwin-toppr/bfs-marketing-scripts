@@ -651,7 +651,7 @@ const handleGetSlots = () => {
       clearInterval(timeInterval);
       handleGetTimezonesList();
       $(".otp-loader").css("display", "none");
-      $(`${isMweb ? '.mweb-timezone-value' : 'timezone-value'}`).text(timeZone);
+      $(`${isMweb ? '.mweb-timezone-value' : '.timezone-value'}`).text(timeZone);
     $(".slot-loader").css("display", "none");
     $(`${isMweb ? '.mweb-otp-user-exist-msg':'.otp-user-exist-msg'}`).css("display", "none");
     $(`${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`).css("display", "none");
@@ -763,7 +763,7 @@ const getSlotsOnSelectedate = () => {
     selectedTimeSlot = id;
     // $(".mweb-sp-slot-cta").removeClass("disabled");
     // $(".confirm-slot-cta").removeClass("disabled");
-    $(".slot-time-msg").text(`${moment(slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime).format("LT")}`);
+    $(".slot-time-msg").text(`${moment(slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime).format("LT")} `);
     const selectedDateBlock = slotsData[selectedDateIndex].date;
     $(".slot-date-msg").text(
       `${moment(selectedDateBlock).format("ddd")}, ${moment(selectedDateBlock).format("DD")} ${moment(selectedDateBlock).format("MMM")}`
