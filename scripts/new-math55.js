@@ -799,7 +799,8 @@ const handleBookSlot = () => {
       courseType: selectedSubj.toUpperCase(),
       studentId: studentDetails.students[0]?.student_courses[0]?.studentId,
       grade:selectedGrade,
-      timeZone:timeZone
+      timeZone:timeZone,
+      ...selectedSubj.includes('music') && {courseSubType : courseSubType}
     },
     headers: {
       authorization: `Bearer ${token}`,
