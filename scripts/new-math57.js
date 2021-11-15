@@ -19,7 +19,7 @@
   $('.counter').addClass('animated fadeInDownBig');
   $('h3').addClass('animated fadeIn');
   
-var dialCodesList, dialCode='+91',country='IN',isMweb = window.screen.width < 500
+var dialCodesList, dialCode='+91',country='US',isMweb = window.screen.width < 500
   
  //curriculum functionality
   $('.grade-card').click((e)=>{
@@ -287,7 +287,7 @@ $(".subject-card-sp").click((e) => {
 const isExist = () => {
   $.ajax({
     type: "POST",
-    url: `https://stage-api.whjr.one/api/V1/userDetail/existByEmailOrMobile?timezone=${timeZone}&regionId=US&courseType=${selectedSubj}&brandId=whitehatjr`,
+    url: `https://stage-api.whjr.one/api/V1/userDetail/existByEmailOrMobile?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr`,
     cache: false,
     data: { mobile: parentMobileNum, dialCode },
 
@@ -488,7 +488,7 @@ $('.otp-input-box').on('input',(e)=>{
     $(".otp-loader").css("display", "block");
 
     const url = isUserExist
-      ? `https://stage-api.whjr.one/api/V1/users/authenticateVerificationCode?timezone=${timeZone}&_vercel_no_cache=1&regionId=US&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=`
+      ? `https://stage-api.whjr.one/api/V1/users/authenticateVerificationCode?timezone=${timeZone}&_vercel_no_cache=1&regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=`
       : `https://stage-api.whjr.one/api/V1/otp/verify?timezone=${timeZone}`;
     $.ajax({
       type: "POST",
@@ -641,7 +641,7 @@ const handleGetSlots = () => {
 
   $.ajax({
     type: "GET",
-    url: `https://stage-api.whjr.one/api/V1/trial/slots/get?countryCode=US&grade=${selectedGrade}&timezone=${timeZone}&courseType=${selectedSubj.toUpperCase()}${selectedSubj.includes('music') ? '&courseSubType='+courseSubType : ''}`,
+    url: `https://stage-api.whjr.one/api/V1/trial/slots/get?countryCode=${country}&grade=${selectedGrade}&timezone=${timeZone}&courseType=${selectedSubj.toUpperCase()}${selectedSubj.includes('music') ? '&courseSubType='+courseSubType : ''}`,
     cache: false,
     headers: {
       authorization: `Bearer ${token}`,
@@ -822,7 +822,7 @@ const handleBookSlot = () => {
 const handleGetDashboardLink = (bookedSlot) => {
   $.ajax({
     type: "GET",
-    url: `https://stage-api.whjr.one/api/V1/students/${studentDetails.students[0].student_courses[0].studentId}/getDashbordLink?timezone=${timeZone}&brandId=whitehatjr&clientVersion=%25clientBuildVersion%25&langCode=en_US&courseType=${selectedSubj}`,
+    url: `https://stage-api.whjr.one/api/V1/students/${studentDetails.students[0].student_courses[0].studentId}/getDashbordLink?timezone=${timeZone}&brandId=whitehatjr&langCode=en_US&courseType=${selectedSubj}`,
     cache: false,
     headers: {
       authorization: `Bearer ${token}`,
@@ -844,7 +844,7 @@ const handleGetDashboardLink = (bookedSlot) => {
         self.focus();
         setTimeout(() => {
           window.location = `https://${subjObj[selectedSubj]}-stage.whjr.one/s/trial/success`;
-        }, 2000);
+        }, 3000);
       }
     },
     error: function (err) {
