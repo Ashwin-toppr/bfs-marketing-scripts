@@ -163,6 +163,7 @@ var parentMobileNum = "",
         dialCode = e.target.dataset.code;
         $(`${isMweb ? ".mweb-dial-codes-list" : ".dial-codes-list"}`).removeClass("w--open");
         $(".dial-code-value").text(dialCode);
+        isUserAuthenticated = false
       });
     },
   });
@@ -391,6 +392,7 @@ const spInitialCtaSuccess = (res) => {
   $(".otp-heading").text(
     isUserExist ? "Enter the 4-digit code to login" : "Enter the 4-digit code"
   );
+    $(".jss123").css("caret-color", "black");
   // $(".otp-message").text(
   //   isUserExist ? "Login using OTP sent to" : "OTP sent to "
   // );
@@ -742,7 +744,7 @@ const getSlotsOnSelectedate = () => {
           $(".slot-" + index).addClass("active-state");
           selectedTimeSlot = index
           isSlotSelected = false
-          $(".slot-time-msg").text(moment(slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime).format("LT"));
+          $(".slot-time-msg").text(`${moment(slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime).format("LT")} `);
             const selectedDateBlock = slotsData[selectedDateIndex].date;
             $(".slot-date-msg").text(
               `${moment(selectedDateBlock).format("ddd")}, ${moment(selectedDateBlock).format("DD")} ${moment(selectedDateBlock).format("MMM")}`
@@ -925,7 +927,7 @@ $(".otp-input-box").focus(function () {
 
 
 
-$(".timezone-value").click(() => {
+$(".timezone-value-container").click(() => {
   $(".timezones-list").css("display", "block");
   getTimeZonesEmbedded();
 });
