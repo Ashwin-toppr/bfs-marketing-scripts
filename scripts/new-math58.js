@@ -312,13 +312,36 @@ const checkValidNum = (val) => {
 
 
 $(".parent-mobile-num").on("input", (e) => {
-  checkValidNum(e.target.value);
-  parentMobileNum = e.target.value;
-  if (e.target.value.length > 9) {
-    isExist();
+
+  if(dialCode == '+1'){
+    const input = e.target.value.replace(/\D/g, "").substring(0, 10); // First ten digits of input only
+    const areaCode = input.substring(0, 3);
+    const middle = input.substring(3, 6);
+    const last = input.substring(6, 10);
+  
+    if (input.length > 6) {
+      e.target.value = `(${areaCode}) ${middle} - ${last}`;
+    } else if (input.length > 3) {
+      e.target.value = `(${areaCode}) ${middle}`;
+    } else if (input.length > 0) {
+      e.target.value = `(${areaCode}`;
+    }
+  
+    if(e.target.value.length > 15){
+      const val = e.target.value
+      formatedParentNum = e.target.value;
+      parentMobileNum = `${val.substring(1, 4)}${val.substring(6, 9)}${val.substring(12,16)}`;
+      checkValidNum(parentMobileNum);
+      isExist();
+    }
+  }else{
+      checkValidNum(e.target.value);
+      parentMobileNum = e.target.value;
+      if (e.target.value.length > 9) {
+        isExist();
+      }
   }
 
- 
 
 
   if (studentDetails) {
@@ -404,7 +427,7 @@ const spInitialCtaSuccess = (res) => {
   // );
   $(".otp-message").text("OTP sent to ");
   otpTimer();
-  $(".selected-num-display").text("+91 " + parentMobileNum);
+  $(".selected-num-display").text(`${dialCode} ${formatedParentNum}`);
 
   if (parentMobileNum && selectedGrade) {
     customCssMethod( `${isMweb ? '.m-web-side-pannel' : '.sidepanel-container'}`, "display", "block");
