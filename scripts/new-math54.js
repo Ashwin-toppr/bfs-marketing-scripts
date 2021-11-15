@@ -181,8 +181,7 @@ var parentMobileNum = "",
 
 
 $(`${isMweb ? '.mweb-schedule-cta' : '.schedule-cta' }`).click(()=>{
-  customCssMethod("body", "overflow", "hidden");
-  window.scrollTo(0, 0);
+  
   selectedSubj = 'math'
   $(`.${selectedSubj}-block`).addClass("active-state");
   $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css("display", "block");
@@ -191,6 +190,7 @@ $(`${isMweb ? '.mweb-schedule-cta' : '.schedule-cta' }`).click(()=>{
       $(".parent-mobile-num").val(parentMobileNum);
   
   if(parentMobileNum && selectedGrade){
+    if(!checkValidNum())return;
       if (!isMweb) {
         $(".sp-initial-cta").click();
       }else{
@@ -205,6 +205,8 @@ $(`${isMweb ? '.mweb-schedule-cta' : '.schedule-cta' }`).click(()=>{
           customCssMethod(".mweb-banner-form", "display", "none");
       }
   }
+  customCssMethod("body", "overflow", "hidden");
+  window.scrollTo(0, 0);
 })
 
 
