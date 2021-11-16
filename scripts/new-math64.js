@@ -118,9 +118,10 @@ var parentMobileNum = "",
   myToast,
   timeZone,
   isUserAuthenticated = false,
-  courseSubType = 'GTR',
+  courseSubType = "GTR",
   timeInterval,
-  isMusicKids =true ;
+  isMusicKids = true,
+  formatedParentNum;
 
   //side pannel code
 (function () {
@@ -190,7 +191,7 @@ $(`${isMweb ? '.mweb-schedule-cta' : '.schedule-cta' }`).click(()=>{
   $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css("display", "block");
   getGradeBlocks()
 
-      $(".parent-mobile-num").val(parentMobileNum);
+      $(".parent-mobile-num").val(formatedParentNum);
   
   if(parentMobileNum && selectedGrade){
     if (!checkValidNum(parentMobileNum)) return;
