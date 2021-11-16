@@ -805,8 +805,9 @@ const handleGetDashboardLink = (bookedSlot) => {
           $(".mweb-initial-form").css("display", "block");
           $(".m-web-side-pannel").css('display','none')
           customCssMethod(".mweb-banner-form", "display", "block");
+        }else{
+          $(".sidepannel-close").click()
         }
-        $(".sidepannel-close").click()
       }
     },
     error: function (err) {

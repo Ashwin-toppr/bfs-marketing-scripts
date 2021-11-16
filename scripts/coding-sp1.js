@@ -19,7 +19,7 @@ const customCssMethod = (toclass, lhs, rhs) => {
 };
 
 var parentMobileNum = "",
-  selectedSubj = "math",
+  selectedSubj = "",
   selectedGrade,
   otpValue = "",
   isUserExist,
