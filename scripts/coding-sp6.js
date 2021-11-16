@@ -124,6 +124,8 @@ $(`${isMweb ? ".mweb-schedule-cta" : ".schedule-cta"}`).click(() => {
     "display",
     "block"
   );
+  customCssMethod(".music-state", "display", selectedSubj == "music" ? "block" : "none");
+
   getGradeBlocks();
 
   $(".parent-mobile-num").val(formatedParentNum);
