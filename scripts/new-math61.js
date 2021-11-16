@@ -19,7 +19,7 @@
   $('.counter').addClass('animated fadeInDownBig');
   $('h3').addClass('animated fadeIn');
   
-var dialCodesList, dialCode='+91',country='US',isMweb = window.screen.width < 500
+var dialCodesList, dialCode='+1',country='US',isMweb = window.screen.width < 500
   
  //curriculum functionality
   $('.grade-card').click((e)=>{
