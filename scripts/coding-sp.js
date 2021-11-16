@@ -845,7 +845,14 @@ const handleGetDashboardLink = (bookedSlot) => {
           "_blank"
         );
         handleReset();
-        $(".sidepannel-close").click();
+        if (isMweb) {
+          $(".mweb-slot-container").css("display", "none");
+          $(".mweb-initial-form").css("display", "block");
+          $(".m-web-side-pannel").css("display", "none");
+          customCssMethod(".mweb-banner-form", "display", "block");
+        }else{
+            $(".sidepannel-close").click();
+        }
       }
     },
     error: function (err) {
@@ -894,6 +901,7 @@ const handleReset = () => {
   $(".grade-home").removeClass("active-state");
 
   $(".mweb-parent-mail-input").val(""); // main page form mobile number
+  $('body').css('overflow','auto')
 };
 
 $(".sidepannel-close").click(() => {
