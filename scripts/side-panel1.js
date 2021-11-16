@@ -41,18 +41,18 @@ var parentMobileNum = "",
   formatedParentNum;
 
   //for preselecting subj
-  (function(){
-  const url = window.location.href
-  const subjects = {
-      math : 'math',
-      code : 'coding',
-      music : 'music',
-      musicplus : 'music_for_all',
-      home : ''
-  }
-  subj = Object.keys(subjects).filter((subject)=>url.includes(subject))
-  selectedSubj = subjects[subj]
-})()
+//   (function(){
+//   const url = window.location.href
+//   const subjects = {
+//       math : 'math',
+//       code : 'coding',
+//       music : 'music',
+//       musicplus : 'music_for_all',
+//       home : ''
+//   }
+//   subj = Object.keys(subjects).filter((subject)=>url.includes(subject))
+//   selectedSubj = subjects[subj]
+// })()
 
   //side pannel code
 (function () {
