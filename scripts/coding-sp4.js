@@ -87,6 +87,10 @@ var parentMobileNum = "",
         isUserAuthenticated = false;
         $(".parent-mobile-num").val("");
         parentMobileNum = "";
+        formatedParentNum= "";
+        $(`${isMweb ? ".mweb-valid-icon" : ".valid-icon"}`).css(
+          "display", "none"
+        );
       });
     },
   });
