@@ -977,9 +977,9 @@ const getTimeZonesEmbedded = (TZList = timezonesList) => {
   let item;
   TZList.map((zone) => {
     if (isMweb) {
-      item = `<div class="mweb-timezone-item"><p  class="paragraph-53 events-none">${
+      item = `<div class="mweb-timezone-item"><p  class="tz-name events-none">${
         zone.zoneName
-      }</p><p class="paragraph-54 events-none">(${GMTOffset(
+      }</p><p class="tz-gmt events-none">(${GMTOffset(
         zone.gmtOffset
       )})</p><div  class="mweb-checked-image events-none ${
         timeZone == zone.zoneName ? "" : "d-none"
