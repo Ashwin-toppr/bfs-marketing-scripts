@@ -38,18 +38,8 @@ var parentMobileNum = "",
   formatedParentNum;
 
 //   for preselecting subj
-(function () {
-  const url = window.location.href;
-  const subjects = {
-    math: "math",
-    code: "coding",
-    music: "music",
-    musicplus: "music_for_all",
-    home: "",
-  };
-  subj = Object.keys(subjects).filter((subject) => url.includes(subject));
-  selectedSubj = subjects[subj];
-})();
+
+
   //side pannel code
   (function () {
     $.ajax({
@@ -110,7 +100,21 @@ var parentMobileNum = "",
   });
 })();
 
+const subjPreSelect =  () => {
+  const url = window.location.href;
+  const subjects = {
+    math: "math",
+    code: "coding",
+    music: "music",
+    musicplus: "music_for_all",
+    home: "",
+  };
+  subj = Object.keys(subjects).filter((subject) => url.includes(subject));
+  selectedSubj = subjects[subj];
+}
+
 $(`${isMweb ? ".mweb-schedule-cta" : ".schedule-cta"}`).click(() => {
+  subjPreSelect()
   $(`.${selectedSubj}-block`).addClass("active-state");
   $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css(
     "display",
@@ -876,6 +880,7 @@ const handleReset = () => {
   otpValue = "";
   selectedSubj = "";
   parentMobileNum = "";
+  formatedParentNum = ""
   $(".subject-card-sp").removeClass("active-state");
   $(`${isMweb ? '.grade-block-mweb':'.grade-block-web'}`).removeClass("active-state");
   $(".subject-card-sp").removeClass("disabled");
