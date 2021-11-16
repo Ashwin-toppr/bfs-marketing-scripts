@@ -770,10 +770,12 @@ const handleBookSlot = () => {
     },
 
     success: function (res) {
-      console.log(res);
+      $(".slot-loader").css("display", "none");
       handleGetDashboardLink(true); // true - after booking slot
     },
     error: function (err) {
+    $(".slot-loader").css("display", "none");
+
       Toastify({
         text: err.responseJSON.error.message,
         duration: 5000,
