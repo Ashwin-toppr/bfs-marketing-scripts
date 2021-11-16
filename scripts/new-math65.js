@@ -1,94 +1,9 @@
-{/* <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js"></script>
-<script src="https://cdn.jsdelivr.net/jquery.counterup/1.0/jquery.counterup.min.js"></script>
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-<script> */}
- // scroll animation
- AOS.init();
 
 
 
 
- 
- //realted to counter on stats
-  $('.counter').counterUp({
-      delay: 10,
-      time: 1500
-  });
-  $('.counter').addClass('animated fadeInDownBig');
-  $('h3').addClass('animated fadeIn');
-  
 var dialCodesList, dialCode='+1',country='US',isMweb = window.screen.width < 500
   
- //curriculum functionality
-  $('.grade-card').click((e)=>{
-  	e.preventDefault()
-    const id = e.target.id
-  	selectingCourseTab(id)
-  })
-  
-  $('#grade-select').change((e)=>{
-  console.log(e)
-  selectingCourseTab(e.target.value)
-  })
-  
-  function selectingCourseTab(id){
-  	Selectedgrade = id.split('').slice(-1)[0]
-    const gradeCards =  document.getElementsByClassName('grade-card')
-    $('.grade-card').removeClass('active-grade')
-    $('#'+id).addClass('active-grade')
-    
-    
-    getCoursePackgesList();
-  }
-  
-  function getCoursePackgesList() {
-    $.ajax({
-      type: "GET",
-      url: "https://api.byjusfutureschool.com/api/V1/public/packages/getV2?brandId=whitehatjr&courseType=MATH&country="+country+"&grade="+Selectedgrade+"&source=website",
-      cache: false,
-
-      success: handleAppendcourseCardChild
-    });
-	}
-  
-  
-  
-  handleAppendcourseCardChild = (data) => {
-      const mainData = data.data
-      var dataRestructure = []
-      mainData.ONE_TO_ONE.ONE_TIME.map((pack)=>{
-      	dataRestructure = [...Object.values(pack),...dataRestructure]
-      })
-      
-      
-      dataRestructure.map((pack)=>{
-      	$('.pc'+pack.name.slice(0,1)+'-heading').text(pack.name)
-      	$('.pc'+pack.name.slice(0,1)+'-save').text('SAVE ' +pack.discount+'%')
-      	$('.pc'+pack.name.slice(0,1)+'-display-price').text('$'+pack.sellingPrice)
-      	$('.pc'+pack.name.slice(0,1)+'-cut-price').text('$'+pack.mrp)
-        $('.ppc-'+pack.name).text('Price per class $'+pack.perClassPrice)
-        $('.vdc-'+pack.name).attr('href',pack.courseItem.course.curriculumLink)
-        $('.badge-block-'+pack.name).empty()
-        
-	$('.pc'+pack.name.slice(0,1)+'-curr').text(pack.packageAdditionalInfo.curriculumIncludes)
-        
-        const classes = pack.credits ? `${pack.credits} classes`:''
-	const projects = `${pack.packageAdditionalInfo.numberOfProjects} projects`        
-        $('.class-prj-'+pack.name.slice(0,1)).text(`${classes} | ${projects}`)
-        
-        pack.packageAdditionalInfo.Achievement.map((achievement)=>{
-        	const data = '<div class="badge"><img src="'+achievement.imageLink+'" loading="lazy" alt="" class="bdg-img"><div class="bdg-txt">'+achievement.title+'</div></div>'
-        	$('.badge-block-'+pack.name).append(data)
-        })
-        
-      })
-    }
-    
-  	
-selectingCourseTab('g-1')
-
 var STAG_BASE_URL = "https://stage-api.whjr.one";
 var PROD_BASE_URL = "https://api.byjusfutureschool.com";  
 
