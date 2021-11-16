@@ -148,7 +148,7 @@ const getGradeBlocks = () => {
   };
   $( `${isMweb ? '.mweb-child-grade-blk-copy':'.child-grade-blk-copy'}`).empty();
 
-  subjGrades[selectedSubj].map((grade) => {
+  subjGrades[selectedSubj]?.map((grade) => {
     const element = `<div id="grade-${grade}" class="grade-block-${isMweb ? 'mweb':'web'} grade-card-sp  ${
       isMweb ? "mweb-" : ""
     }grade-${selectedSubj}  ${
