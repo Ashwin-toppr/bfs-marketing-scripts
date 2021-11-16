@@ -111,7 +111,6 @@ var parentMobileNum = "",
 })();
 
 $(`${isMweb ? ".mweb-schedule-cta" : ".schedule-cta"}`).click(() => {
-  selectedSubj = "math";
   $(`.${selectedSubj}-block`).addClass("active-state");
   $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css(
     "display",

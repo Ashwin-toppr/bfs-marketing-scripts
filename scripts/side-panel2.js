@@ -800,6 +800,12 @@ const handleGetDashboardLink = (bookedSlot) => {
       if (bookedSlot) {
         window.open(`https://code-stage.whjr.one/s/trial/success?jwt_token=${token}`, "_blank");
         handleReset()
+        if(isMweb){
+          $(".mweb-slot-container").css("display", "none");
+          $(".mweb-initial-form").css("display", "block");
+          $(".m-web-side-pannel").css('display','none')
+          customCssMethod(".mweb-banner-form", "display", "block");
+        }
         $(".sidepannel-close").click()
       }
     },
@@ -847,6 +853,7 @@ const handleReset = () => {
   $(".grade-home").removeClass("active-state");
 
   $(".mweb-parent-mail-input").val(""); // main page form mobile number
+  $('body').css('overflow','auto')
 };;
 
 $(".sidepannel-close").click(() => {
