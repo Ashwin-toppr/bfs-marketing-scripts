@@ -49,9 +49,9 @@ var parentMobileNum = "",
   };
   subj = Object.keys(subjects).filter((subject) => url.includes(subject));
   selectedSubj = subjects[subj];
-})()(
+})();
   //side pannel code
-  function () {
+  (function () {
     $.ajax({
       type: "GET",
       url: `${STAG_BASE_URL}/api/V1/geo/getInfo?_vercel_no_cache=1&courseType=${selectedSubj}&brandId=whitehatjr`,
