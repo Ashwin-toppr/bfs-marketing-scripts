@@ -603,9 +603,9 @@ const handleMecall = () => {
 
       const errStatements = {
         not_scheduled: "",
-        pre_trial: `You have already booked a trial class for ${selectedSubj}. Go to dashboard to manage your prior bookings.`,
-        post_trial: `You have already attended a trial class for ${selectedSubj}. Open dashboard to view your bookings`,
-        paid: `You have already attended a trial class for ${selectedSubj}. Open dashboard to view your bookings`,
+        pre_trial: `You have already booked a trial class for ${selectedSubj == 'music_for_all' ? 'MUSIC ADULTS' : selectedSubj.toUpperCase() }. Go to dashboard to manage your prior bookings.`,
+        post_trial: `You have already attended a trial class for ${selectedSubj == 'music_for_all' ? 'MUSIC ADULTS' : selectedSubj.toUpperCase()}. Open dashboard to view your bookings`,
+        paid: `You have already attended a trial class for ${selectedSubj == 'music_for_all' ? 'MUSIC ADULTS' : selectedSubj.toUpperCase()}. Open dashboard to view your bookings`,
       };
 
       const trailStatus = studentDetails.students[0].student_courses.filter(
