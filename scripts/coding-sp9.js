@@ -928,6 +928,7 @@ const handleReset = () => {
   customClassMethod(".parent-num", false, "error-state");
   customClassMethod(".parent-num-dropdown", false, "error-state");
 
+  $(".err-msg-pm").css("display", "none");
 };
 
 $(".sidepannel-close").click(() => {
