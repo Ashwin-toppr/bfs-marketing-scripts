@@ -120,6 +120,9 @@ const subjPreSelect =  () => {
   }else{
     selectedSubj = subjects[subj];
   }
+  if(!selectedSubj){
+    selectedSubj = 'coding'
+  }
 }
 
 $(`${isMweb ? ".mweb-schedule-cta" : ".schedule-cta"}`).click(() => {
@@ -305,6 +308,12 @@ $(".parent-mobile-num").on("input", (e) => {
     }
   }
   checkValidNum(parentMobileNum);
+  if(!e.target.value.length){
+    customCssMethod(".err-msg-pm", "display", "none");
+    customClassMethod(".parent-num", false, "error-state");
+    customClassMethod(".parent-num-dropdown", false, "error-state");
+    customClassMethod(".parent-mobile-num", false, "error-state");
+  }
 
   if (studentDetails) {
     selectedGrade = "";
