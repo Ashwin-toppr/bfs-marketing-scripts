@@ -111,7 +111,7 @@ const subjPreSelect =  () => {
     code: "coding",
     music: "music",
     musicplus: "music_for_all",
-    home: "",
+    home: "coding",
   };
   subj = Object.keys(subjects).filter((subject) => url.includes(subject));
   selectedSubj = subjects[subj];
@@ -247,6 +247,9 @@ const checkValidNum = (val) => {
   customClassMethod(".parent-num", !valid, "error-state");
   customClassMethod(".parent-num-dropdown", !valid, "error-state");
   customClassMethod(".parent-mobile-num", !valid, "error-state");
+
+  customClassMethod(".parent-num", valid, "active-state");
+  customClassMethod(".parent-num-dropdown", valid, "active-state");
   $(`${isMweb ? ".mweb-valid-icon" : ".valid-icon"}`).css(
     "display",
     valid ? "block" : "none"
@@ -256,6 +259,7 @@ const checkValidNum = (val) => {
 };
 
 $(".parent-mobile-num").on("input", (e) => {
+  $('.parent-mail').addClass('active-state')
   if (dialCode == "+1") {
     const input = e.target.value.replace(/\D/g, "").substring(0, 10); // First ten digits of input only
     const areaCode = input.substring(0, 3);
@@ -913,6 +917,8 @@ const handleReset = () => {
 
   $(".mweb-parent-mail-input").val(""); // main page form mobile number
   $('body').css('overflow','auto')
+  $(".parent-mail").removeClass("active-state");
+
 };
 
 $(".sidepannel-close").click(() => {
