@@ -15,11 +15,11 @@ ga('require', 'GTM-TF6NDC2'); ga('send', 'pageview');
 </script>
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-MY92R6VVR1"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-127138116-19"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-MY92R6VVR1');
+  gtag('config', 'UA-127138116-19');
 </script>
