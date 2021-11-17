@@ -115,6 +115,7 @@ const subjPreSelect =  () => {
   };
   subj = Object.keys(subjects).filter((subject) => url.includes(subject));
   selectedSubj = subjects[subj];
+  if(selectedSubj == 'music_for_all') selectedGrade = "8";
 }
 
 $(`${isMweb ? ".mweb-schedule-cta" : ".schedule-cta"}`).click(() => {
@@ -279,8 +280,8 @@ $(".parent-mobile-num").on("input", (e) => {
       6,
       9
     )}${val.substring(12, 16)}`;
+    formatedParentNum = e.target.value;
     if (e.target.value.length > 15) {
-      formatedParentNum = e.target.value;
       isExist();
     }
   } else {
@@ -918,6 +919,14 @@ const handleReset = () => {
   $(".mweb-parent-mail-input").val(""); // main page form mobile number
   $('body').css('overflow','auto')
   $(".parent-mail").removeClass("active-state");
+
+  customClassMethod(".parent-num", false, "error-state");
+  customClassMethod(".parent-num-dropdown", false, "error-state");
+  customClassMethod(".parent-mobile-num", false, "error-state");
+
+
+  customClassMethod(".parent-num", false, "error-state");
+  customClassMethod(".parent-num-dropdown", false, "error-state");
 
 };
 
