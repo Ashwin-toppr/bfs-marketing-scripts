@@ -249,8 +249,8 @@ const checkValidNum = (val) => {
   customClassMethod(".parent-num-dropdown", !valid, "error-state");
   customClassMethod(".parent-mobile-num", !valid, "error-state");
 
-  customClassMethod(".parent-num", valid, "active-state");
-  customClassMethod(".parent-num-dropdown", valid, "active-state");
+  customClassMethod(".parent-num", valid, "active-field");
+  customClassMethod(".parent-num-dropdown", valid, "active-field");
   $(`${isMweb ? ".mweb-valid-icon" : ".valid-icon"}`).css(
     "display",
     valid ? "block" : "none"
@@ -924,9 +924,6 @@ const handleReset = () => {
   customClassMethod(".parent-num-dropdown", false, "error-state");
   customClassMethod(".parent-mobile-num", false, "error-state");
 
-
-  customClassMethod(".parent-num", false, "error-state");
-  customClassMethod(".parent-num-dropdown", false, "error-state");
 
   $(".err-msg-pm").css("display", "none");
 };
