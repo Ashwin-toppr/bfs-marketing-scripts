@@ -260,7 +260,7 @@ const checkValidNum = (val) => {
 };
 
 $(".parent-mobile-num").on("input", (e) => {
-  $('.parent-mail').addClass('active-state')
+  $(".parent-mail").removeClass("parent-mobile-sp-number");
   if (dialCode == "+1") {
     const input = e.target.value.replace(/\D/g, "").substring(0, 10); // First ten digits of input only
     const areaCode = input.substring(0, 3);
@@ -918,7 +918,7 @@ const handleReset = () => {
 
   $(".mweb-parent-mail-input").val(""); // main page form mobile number
   $('body').css('overflow','auto')
-  $(".parent-mail").removeClass("active-state");
+  $(".parent-mail").addClass("parent-mobile-sp-number");
 
   customClassMethod(".parent-num", false, "error-state");
   customClassMethod(".parent-num-dropdown", false, "error-state");
