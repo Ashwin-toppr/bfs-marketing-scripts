@@ -159,12 +159,12 @@ const getGradeBlocks = () => {
   };
   $( `${isMweb ? '.mweb-child-grade-blk-copy':'.child-grade-blk-copy'}`).empty();
 
-  subjGrades[selectedSubj]?.map((grade) => {
+  subjGrades[selectedSubj]?.map((grade,index) => {
     const element = `<div id="grade-${grade}" class="grade-block-${isMweb ? 'mweb':'web'} grade-card-sp  ${
       isMweb ? "mweb-" : ""
     }grade-${selectedSubj}  ${
       isMweb ? "mweb-" : ""
-    }grade-${grade}"><p class="grade-label">Grade</p><p class="grade-num">${grade}</p></div>`;
+    }grade-${grade}"><p class="grade-label"> ${selectedSubj == "music" && index > 0 ? 'Grades' : 'Grade' } Grade</p><p class="grade-num">${grade}</p></div>`;
 
     $( `${isMweb ? '.mweb-child-grade-blk-copy':'.child-grade-blk-copy'}`).append(element);
     customClassMethod(
