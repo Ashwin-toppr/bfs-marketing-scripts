@@ -929,6 +929,9 @@ const handleReset = () => {
   customClassMethod(".parent-mobile-num", false, "error-state");
 
 
+  customClassMethod(".parent-num", false, "active-field");
+  customClassMethod(".parent-num-dropdown", false, "active-field");
+
   $(".err-msg-pm").css("display", "none");
 };
 
