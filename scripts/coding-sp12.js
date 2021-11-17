@@ -116,20 +116,28 @@ const subjPreSelect =  () => {
   subj = Object.keys(subjects).filter((subject) => url.includes(subject));
   if(subj.length > 1){
     selectedSubj = subjects[subj[1]];
+    selectedGrade = "8";
   }else{
     selectedSubj = subjects[subj];
   }
-  if(selectedSubj == 'music_for_all') selectedGrade = "8";
 }
 
 $(`${isMweb ? ".mweb-schedule-cta" : ".schedule-cta"}`).click(() => {
   subjPreSelect()
-  $(`.${selectedSubj}-block`).addClass("active-state");
-  $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css(
-    "display",
-    "block"
-  );
-  customCssMethod(".music-state", "display", selectedSubj == "music" ? "block" : "none");
+  $(`.${selectedSubj.split('_')[0]}-block`).addClass("active-state");
+  if (selectedSubj == "music_for_all"){
+    $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css(
+      "display",
+      "none"
+    );
+  }else{
+    $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css(
+      "display",
+      "block"
+    );
+  }
+    
+  customCssMethod(".music-state", "display", selectedSubj.includes("music") ? "block" : "none");
 
   getGradeBlocks();
 
