@@ -883,7 +883,7 @@ const handleGetDashboardLink = (bookedSlot) => {
 
       if (bookedSlot) {
         window.open(
-          `https://code-stage.whjr.one/s/trial/success?jwt_token=${token}`,
+          `https://code.byjusfutureschool.com/s/trial/success?jwt_token=${token}`,
           "_blank"
         );
         handleReset();
