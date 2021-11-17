@@ -114,7 +114,11 @@ const subjPreSelect =  () => {
     home: "coding",
   };
   subj = Object.keys(subjects).filter((subject) => url.includes(subject));
-  selectedSubj = subjects[subj];
+  if(subj.length > 1){
+    selectedSubj = subjects[subj[1]];
+  }else{
+    selectedSubj = subjects[subj];
+  }
   if(selectedSubj == 'music_for_all') selectedGrade = "8";
 }
 
@@ -164,7 +168,7 @@ const getGradeBlocks = () => {
       isMweb ? "mweb-" : ""
     }grade-${selectedSubj}  ${
       isMweb ? "mweb-" : ""
-    }grade-${grade}"><p class="grade-label"> ${selectedSubj == "music" && index > 0 ? 'Grades' : 'Grade' } Grade</p><p class="grade-num">${grade}</p></div>`;
+    }grade-${grade}"><p class="grade-label"> ${selectedSubj == "music" && index > 0 ? 'Grades' : 'Grade' }</p><p class="grade-num">${grade}</p></div>`;
 
     $( `${isMweb ? '.mweb-child-grade-blk-copy':'.child-grade-blk-copy'}`).append(element);
     customClassMethod(
