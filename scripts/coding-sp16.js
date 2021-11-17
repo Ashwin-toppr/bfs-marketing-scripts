@@ -91,6 +91,12 @@ var parentMobileNum = "",
         $(`${isMweb ? ".mweb-valid-icon" : ".valid-icon"}`).css(
           "display", "none"
         );
+        // if (!e.target.value.length) {
+          customCssMethod(".err-msg-pm", "display", "none");
+          customClassMethod(".parent-num", false, "error-state");
+          customClassMethod(".parent-num-dropdown", false, "error-state");
+          customClassMethod(".parent-mobile-num", false, "error-state");
+        // }
       });
     },
   });
