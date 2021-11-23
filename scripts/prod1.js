@@ -3,7 +3,7 @@ var dialCodesList,
   country = "US",
   isMweb = window.screen.width < 500;
 
-var PROD_BASE_URL = "https://stage-api.whjr.one";
+var STAGE_BASE_URL = "https://stage-api.whjr.one";
 var PROD_BASE_URL = "https://api.byjusfutureschool.com";
 
 const customClassMethod = (toClass, isAddClass, whichClass) => {
