@@ -131,7 +131,7 @@ const subjPreSelect =  () => {
   }
 }
 
-$(`${isMweb ? ".mweb-schedule-cta" : ".schedule-cta"}`).click(() => {
+$(`${isMweb ? ".mweb-schedule-cta" : ".schedule-cta"}`).click(() => { // book a free trail cta
   subjPreSelect()
   $(`.${selectedSubj.split('_')[0]}-block`).addClass("active-state");
   if (selectedSubj == "music_for_all"){
@@ -150,7 +150,7 @@ $(`${isMweb ? ".mweb-schedule-cta" : ".schedule-cta"}`).click(() => {
 
   getGradeBlocks();
 
-  $(".parent-mobile-num").val(formatedParentNum);
+  $(".parent-mobile-num").val(formatedParentNum); // mobile-input field
 
   if (parentMobileNum && selectedGrade) {
     if (!checkValidNum(parentMobileNum)) return;
@@ -195,7 +195,7 @@ const getGradeBlocks = () => {
     );
   });
 
-  $(`${isMweb ? '.grade-block-mweb':'.grade-block-web'}`).click((e) => {
+  $(`${isMweb ? '.grade-block-mweb':'.grade-block-web'}`).click((e) => { // side-pannel grade block card
     selectedGrade = e.target.id.split("-").slice(-1)[0];
     customClassMethod(`${isMweb ? '.grade-block-mweb':'.grade-block-web'}`, false, "active-state");
     if (selectedSubj.includes("music")) {
@@ -223,7 +223,7 @@ $(".grade-home").click((e) => {
 
 getGradeBlocks();
 
-$(".subject-card-sp").click((e) => {
+$(".subject-card-sp").click((e) => { // side-panel subject card 
   $(".subject-card-sp").removeClass("active-state");
   const id = e.target.id;
   $(`.${id}-block`).addClass("active-state");
@@ -351,7 +351,7 @@ const enableScheduleCta = () => {
   }
 };
 
-$(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => {
+$(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => { // side-panel initial form cta
   $(".form-loader").css("display", "block");
   $(
     `${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`
@@ -368,7 +368,7 @@ $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => {
   }
 });
 
-$(".ismusicfor").click((e) => {
+$(".ismusicfor").click((e) => { // toggle for music kids r adults
   isMusicKids = e.currentTarget.children[1].id.includes("kids");
   if (!isMusicKids) {
     selectedSubj = "music_for_all";
@@ -477,7 +477,7 @@ $(".mweb-otp-close").click(() => {
   clearInterval(timeInterval);
 });
 
-$(".otp-input-box").on("input", (e) => {
+$(".otp-input-box").on("input", (e) => { // verify-otp
   $(`div.otp-box`).removeClass("orange isError focus blink");
   $(`div.otp-box:nth-child(${e.target.value.length + 3})`).addClass("blink");
   $(".otp-box:nth-child(1)").focus();
@@ -648,7 +648,7 @@ const handleMecall = () => {
   });
 };
 
-$(".radio-music-sc").click((e) => {
+$(".radio-music-sc").click((e) => { // toggle for music sub-cat
   const musicType = e.currentTarget.nextElementSibling.id
     .split("-")[1]
     .toUpperCase();
@@ -744,7 +744,7 @@ const handleDateBlockStructure = () => {
 };
 
 const handleAddEventTODateBlock = () => {
-  $(".date-block").click((e) => {
+  $(".date-block").click((e) => { // date-block cta
     const id = e.target.id.split("-").slice(-1)[0];
     onDateBlockClick(id);
   });
@@ -798,7 +798,7 @@ const getSlotsOnSelectedate = () => {
     }
   });
 
-  $(".slot-block-card").click((e) => {
+  $(".slot-block-card").click((e) => { // slot-block cta
     $(".slot-block-card").removeClass("active-state");
     id = e.target.id.split("-").slice(-1)[0];
     $(".slot-" + id).addClass("active-state");
@@ -819,11 +819,11 @@ const getSlotsOnSelectedate = () => {
   });
 };
 
-$(".mweb-sp-slot-cta").click(() => {
+$(".mweb-sp-slot-cta").click(() => { // confirm slot cta for web
   handleBookSlot();
 });
 
-$(".confirm-slot-cta").click(() => {
+$(".confirm-slot-cta").click(() => { // confirm slot cta mweb
   handleBookSlot();
 });
 
