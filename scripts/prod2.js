@@ -75,10 +75,17 @@ handleGeoLocationData = ({ data }) => {
     geo_longitude: data.longitude,
     geo_postal_code: data.postalCode,
     geo_locale: "en_US",
-    fname: "pavan",
   };
 
   window.WHJR_ANALYTICS.setEventProps(geoObject);
+
+  handlePageLoadAnalytics();
+};
+
+handlePageLoadAnalytics = () => {
+  window.WHJR_ANALYTICS.trackEvent("test", {
+    test: "home page",
+  });
 };
 
 //   for preselecting subj
