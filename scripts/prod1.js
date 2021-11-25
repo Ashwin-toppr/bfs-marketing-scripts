@@ -35,8 +35,8 @@ var parentMobileNum = "",
   courseSubType = "GTR",
   timeInterval,
   isMusicKids = true,
-  formatedParentNum;
-  eventSource = window.location.href.includes("byjusfutureschool") ? "TRIAL_REGISTER_BYJUS" : "TRIAL_REGISTER_BYJUS_BYJUS"
+  formatedParentNum,
+  eventSource = window.location.href.includes("byjusfutureschool") ? "TRIAL_REGISTER_BYJUS" : "TRIAL_REGISTER_BYJUS_BYJUS";
  
 
   
