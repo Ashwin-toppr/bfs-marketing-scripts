@@ -46,6 +46,8 @@ window.addEventListener("load", () => {
   window.onWhjrAnalyticsLoad = function () {
     WHJR_ANALYTICS.load("0byCdi3R80vgmBwtcGL6jHBiTo7ElN8P");
     window.WHJR_ANALYTICS.init({});
+
+    getGeoLocation(); // to set geo location props globally
   };
 
   var e = document.createElement("script");
@@ -53,8 +55,6 @@ window.addEventListener("load", () => {
   e.src =
     "https://s3-cdnwhjr.whjr.online/ebe4be0c-b789-4f37-a235-93422336de4c.js";
   document.head.appendChild(e);
-
-  getGeoLocation(); // to set geo location props globally
 });
 
 function getGeoLocation() {
