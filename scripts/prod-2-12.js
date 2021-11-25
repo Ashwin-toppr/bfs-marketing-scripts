@@ -650,6 +650,9 @@ $(".otp-input-box").on("input", (e) => {
           token = res.data.token;
           handleMecall();
         }
+
+        const student = res.data.data.students[0];
+        handleUserPropsAnalytics(student);
       },
       error: function (err) {
         $(".otp-box").addClass("isError");
@@ -666,6 +669,20 @@ $(".otp-input-box").on("input", (e) => {
     });
   }
 });
+
+const handleUserPropsAnalytics = (student) => {
+  window.WHJR_ANALYTICS.trackUser(student.id);
+  window.WHJR_ANALYTICS.setUserProps({
+    userId: student.id,
+    trial_status: student.trialStatus,
+    user_dial_code: student.dialCode,
+    user_mobile: student.mobile,
+    user_is_laptop: student.isLaptop,
+    user_grade: student.grade,
+    user_email: student.email,
+    tracking_code: "",
+  });
+};
 
 const handleRegisterUser = () => {
   $.ajax({
@@ -687,17 +704,7 @@ const handleRegisterUser = () => {
       handleGetSlots();
 
       const student = res.data.data.students[0];
-      window.WHJR_ANALYTICS.trackUser(student.id);
-      window.WHJR_ANALYTICS.setUserProps({
-        userId: student.id,
-        trial_status: student.trialStatus,
-        user_dial_code: student.dialCode,
-        user_mobile: student.mobile,
-        user_is_laptop: student.isLaptop,
-        user_grade: student.grade,
-        user_email: student.email,
-        tracking_code: "",
-      });
+      handleUserPropsAnalytics(student);
     },
     error: function (err) {
       Toastify({
