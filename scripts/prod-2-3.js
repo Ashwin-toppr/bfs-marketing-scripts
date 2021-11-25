@@ -68,6 +68,9 @@ function getGeoLocation() {
 }
 
 handleGeoLocationData = ({ data }) => {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+
   const geoObject = {
     geo_country_iso_code: data.countryIsoCode,
     geo_country_name: data.countryName,
@@ -83,6 +86,10 @@ handleGeoLocationData = ({ data }) => {
     ua_device_type: navigator.userAgentData.mobile ? "mobile" : "desktop",
     ua_browser_major_version: navigator.userAgentData.brands[0].version,
     ua_browser: navigator.userAgentData.brands[0].brand,
+    utm_source: urlParams.get("utm_source"),
+    utm_medium: urlParams.get("utm_medium"),
+    utm_campaign: urlParams.get("utm_campaign"),
+    search: urlParams.get("search"),
   };
 
   window.WHJR_ANALYTICS.setEventProps(geoObject);
