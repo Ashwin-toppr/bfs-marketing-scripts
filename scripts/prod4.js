@@ -1193,7 +1193,7 @@ const sendEventsHOF = ({
 
 const sendEvents = (eventDetails) => {
   $.ajax({
-    type: "GET",
+    type: "POST",
     url: `${PROD_BASE_URL}/api/V1/events/saveEvent?regionId=${country}&courseType=${selectedSubj}&brandId=BYJUS_BFS`,
     cache: false,
     data: { ...eventDetails },
