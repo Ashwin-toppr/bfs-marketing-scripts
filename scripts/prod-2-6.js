@@ -115,6 +115,8 @@ handleGeoLocationData = ({ data }) => {
 };
 
 handlePageLoadAnalytics = () => {
+  const url = window.location.href.replace(/\/$/, "");
+  const lastString = url.substr(url.lastIndexOf("/") + 1);
   var page = "Home";
 
   if (lastString === "code") {
