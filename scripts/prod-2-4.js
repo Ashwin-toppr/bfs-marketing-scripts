@@ -70,6 +70,20 @@ function getGeoLocation() {
 handleGeoLocationData = ({ data }) => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
+  const url = window.location.href.replace(/\/$/, "");
+  const lastString = url.substr(url.lastIndexOf("/") + 1);
+
+  var page_name = "home";
+
+  if (lastString === "code") {
+    page_name = "coding";
+  } else if (lastString === "math") {
+    page_name = "math";
+  } else if (lastString === "music") {
+    page_name = "music-kids";
+  } else if (lastString === "musicplus") {
+    page_name = "music-adults";
+  }
 
   const geoObject = {
     geo_country_iso_code: data.countryIsoCode,
@@ -79,7 +93,9 @@ handleGeoLocationData = ({ data }) => {
     geo_postal_code: data.postalCode,
     geo_locale: "en_US",
     frontend_origin: window.location.hostname,
+    page_name,
     page_locale: "en_us",
+    page_type: "webflow",
     ua_os: navigator.userAgentData.platform,
     ua_os_version: navigator.appVersion,
     ua_platform: navigator.platform,
@@ -89,6 +105,7 @@ handleGeoLocationData = ({ data }) => {
     utm_source: urlParams.get("utm_source"),
     utm_medium: urlParams.get("utm_medium"),
     utm_campaign: urlParams.get("utm_campaign"),
+    path: url,
     search: urlParams.get("search"),
   };
 
@@ -98,9 +115,19 @@ handleGeoLocationData = ({ data }) => {
 };
 
 handlePageLoadAnalytics = () => {
-  window.WHJR_ANALYTICS.trackEvent("test", {
-    test: "home page",
-  });
+  var page = "Home";
+
+  if (lastString === "code") {
+    page = "Coding";
+  } else if (lastString === "math") {
+    page = "Math";
+  } else if (lastString === "music") {
+    page = "Music";
+  } else if (lastString === "musicplus") {
+    page = "Music plus";
+  }
+
+  window.WHJR_ANALYTICS.trackEvent(`${lastString} page viewed`, {});
 };
 
 //   for preselecting subj
