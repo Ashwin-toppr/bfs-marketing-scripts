@@ -671,7 +671,6 @@ $(".otp-input-box").on("input", (e) => {
 });
 
 const handleUserPropsAnalytics = (student) => {
-  window.WHJR_ANALYTICS.trackUser(student.id);
   window.WHJR_ANALYTICS.setUserProps({
     userId: student.id,
     trial_status: student.trialStatus,
@@ -682,6 +681,17 @@ const handleUserPropsAnalytics = (student) => {
     user_email: student.email,
     tracking_code: "",
   });
+  console.log("user props obj", {
+    userId: student.id,
+    trial_status: student.trialStatus,
+    user_dial_code: student.dialCode,
+    user_mobile: student.mobile,
+    user_is_laptop: student.isLaptop,
+    user_grade: student.grade,
+    user_email: student.email,
+    tracking_code: "",
+  });
+  window.WHJR_ANALYTICS.trackUser(student.id);
 };
 
 const handleRegisterUser = () => {
