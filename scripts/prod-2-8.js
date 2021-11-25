@@ -67,26 +67,25 @@ function getGeoLocation() {
   });
 }
 
+function removeEmpty(obj) {
+  return Object.fromEntries(Object.entries(obj).filter(([_, v]) => v != null));
+}
+
 handleGeoLocationData = ({ data }) => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const url = window.location.href.replace(/\/$/, "");
 
-  var page_name = "home";
-  var page = "Home";
+  var page_name = "HOME";
 
   if (url.indexOf("/code") !== -1) {
-    page_name = "coding";
-    page = "Coding";
+    page_name = "CODING";
   } else if (url.indexOf("/math") !== -1) {
-    page_name = "math";
-    page = "Math";
+    page_name = "MATH";
   } else if (url.indexOf("/musicplus") !== -1) {
-    page_name = "music-adults";
-    page = "Music plus";
+    page_name = "MUSIC FOR ALL";
   } else if (url.indexOf("/music") !== -1) {
-    page_name = "music-kids";
-    page = "Music";
+    page_name = "MUSIC";
   }
 
   const geoObject = {
@@ -113,13 +112,18 @@ handleGeoLocationData = ({ data }) => {
     search: urlParams.get("search"),
   };
 
-  window.WHJR_ANALYTICS.setEventProps(geoObject);
+  window.WHJR_ANALYTICS.setEventProps(removeEmpty(geoObject));
 
-  handlePageLoadAnalytics(page);
+  handlePageLoadAnalytics(page_name);
 };
 
-handlePageLoadAnalytics = (page) => {
-  window.WHJR_ANALYTICS.trackEvent(`${page} page viewed`, {});
+handlePageLoadAnalytics = (page_name) => {
+  if (page_name === "HOME") {
+    window.WHJR_ANALYTICS.trackPageView("Home", {});
+  } else {
+    window.WHJR_ANALYTICS.trackPageView("Registration", {});
+  }
+  // window.WHJR_ANALYTICS.trackEvent(`${page} page viewed`, {});
 };
 
 //   for preselecting subj
