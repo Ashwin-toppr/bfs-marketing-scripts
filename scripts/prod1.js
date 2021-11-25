@@ -36,7 +36,7 @@ var parentMobileNum = "",
   timeInterval,
   isMusicKids = true,
   formatedParentNum;
-  eventSource = window.location.href.includes("byjusfutureschool") ? "TRIAL_REGISTER_BFS" : "TRIAL_REGISTER_BYJUS_BFS"
+  eventSource = window.location.href.includes("byjusfutureschool") ? "TRIAL_REGISTER_BYJUS" : "TRIAL_REGISTER_BYJUS_BYJUS"
  
 
   
