@@ -71,18 +71,22 @@ handleGeoLocationData = ({ data }) => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const url = window.location.href.replace(/\/$/, "");
-  const lastString = url.substr(url.lastIndexOf("/") + 1);
 
   var page_name = "home";
+  var page = "Home";
 
-  if (lastString === "code") {
+  if (url.indexOf("/code") !== -1) {
     page_name = "coding";
-  } else if (lastString === "math") {
+    page = "Coding";
+  } else if (url.indexOf("/math") !== -1) {
     page_name = "math";
-  } else if (lastString === "music") {
-    page_name = "music-kids";
-  } else if (lastString === "musicplus") {
+    page = "Math";
+  } else if (url.indexOf("/musicplus") !== -1) {
     page_name = "music-adults";
+    page = "Music plus";
+  } else if (url.indexOf("/music") !== -1) {
+    page_name = "music-kids";
+    page = "Music";
   }
 
   const geoObject = {
@@ -111,25 +115,11 @@ handleGeoLocationData = ({ data }) => {
 
   window.WHJR_ANALYTICS.setEventProps(geoObject);
 
-  handlePageLoadAnalytics();
+  handlePageLoadAnalytics(page);
 };
 
-handlePageLoadAnalytics = () => {
-  const url = window.location.href.replace(/\/$/, "");
-  const lastString = url.substr(url.lastIndexOf("/") + 1);
-  var page = "Home";
-
-  if (lastString === "code") {
-    page = "Coding";
-  } else if (lastString === "math") {
-    page = "Math";
-  } else if (lastString === "music") {
-    page = "Music";
-  } else if (lastString === "musicplus") {
-    page = "Music plus";
-  }
-
-  window.WHJR_ANALYTICS.trackEvent(`${lastString} page viewed`, {});
+handlePageLoadAnalytics = (page) => {
+  window.WHJR_ANALYTICS.trackEvent(`${page} page viewed`, {});
 };
 
 //   for preselecting subj
