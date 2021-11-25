@@ -1145,7 +1145,7 @@ const sendEventsHOF = ({
   s6SchemaName,
 }) => {
   let s3Val = checkForDeviceType(s3SchemaName);
-  let userId = studentDetails.students[0].student_courses[0].studentId;
+  let userId = studentDetails?.students[0]?.student_courses[0]?.studentId || null; 
   let eventDetails = {
     eventName: eventName,
     eventSource: eventSource,
