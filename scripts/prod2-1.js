@@ -75,6 +75,14 @@ handleGeoLocationData = ({ data }) => {
     geo_longitude: data.longitude,
     geo_postal_code: data.postalCode,
     geo_locale: "en_US",
+    frontend_origin: window.location.hostname,
+    page_locale: "en_us",
+    ua_os: navigator.userAgentData.platform,
+    ua_os_version: navigator.appVersion,
+    ua_platform: navigator.platform,
+    ua_device_type: navigator.userAgentData.mobile ? "mobile" : "desktop",
+    ua_browser_major_version: navigator.userAgentData.brands[0].version,
+    ua_browser: navigator.userAgentData.brands[0].brand,
   };
 
   window.WHJR_ANALYTICS.setEventProps(geoObject);
