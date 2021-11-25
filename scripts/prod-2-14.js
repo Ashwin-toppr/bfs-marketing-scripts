@@ -703,7 +703,7 @@ const handleRegisterUser = () => {
       handleMecall();
       handleGetSlots();
 
-      const student = res.data.data.students[0];
+      const student = res.data.students[0];
       handleUserPropsAnalytics(student);
     },
     error: function (err) {
