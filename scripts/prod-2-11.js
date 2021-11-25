@@ -223,7 +223,8 @@ const subjPreSelect = () => {
   }
 };
 
-$(`${isMweb ? ".mweb-schedule-cta" : ".schedule-cta"}`).click(() => {
+$(`${isMweb ? ".mweb-schedule-cta" : ".schedule-cta"}`).click((e) => {
+  console.log(e.currentTarget.id);
   // book a free trail cta
   subjPreSelect();
   $(`.${selectedSubj.split("_")[0]}-block`).addClass("active-state");
@@ -322,6 +323,10 @@ const getGradeBlocks = () => {
       "active-state"
     );
     enableScheduleCta();
+
+    window.WHJR_ANALYTICS.trackEvent("Grade Selected", {
+      grade: selectedGrade,
+    });
   });
 };
 
@@ -680,6 +685,19 @@ const handleRegisterUser = () => {
       token = res.data.token;
       handleMecall();
       handleGetSlots();
+
+      const student = res.data.data.students[0];
+      window.WHJR_ANALYTICS.trackUser(student.id);
+      window.WHJR_ANALYTICS.setUserProps({
+        userId: student.id,
+        trial_status: student.trialStatus,
+        user_dial_code: student.dialCode,
+        user_mobile: student.mobile,
+        user_is_laptop: student.isLaptop,
+        user_grade: student.grade,
+        user_email: student.email,
+        tracking_code: "",
+      });
     },
     error: function (err) {
       Toastify({
