@@ -226,16 +226,23 @@ const subjPreSelect = () => {
 $(`${isMweb ? ".mweb-schedule-cta" : ".schedule-cta"}`).click((e) => {
   console.log(e.currentTarget.id);
   // book a free trail cta
+
+  if (!isSidePanelOpen) {
+    isSidePanelOpen = true;
+
+    window.WHJR_ANALYTICS.trackEvent("viewed registration form", {
+      grade: selectedGrade,
+    });
+  }
+
   subjPreSelect();
   $(`.${selectedSubj.split("_")[0]}-block`).addClass("active-state");
   if (selectedSubj == "music_for_all") {
-    isSidePanelOpen = false;
     $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css(
       "display",
       "none"
     );
   } else {
-    isSidePanelOpen = true;
     $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css(
       "display",
       "block"
@@ -1088,6 +1095,7 @@ const handleReset = () => {
   selectedSubj = "";
   parentMobileNum = "";
   formatedParentNum = "";
+  isSidePanelOpen = false;
   $(".subject-card-sp").removeClass("active-state");
   $(`${isMweb ? ".grade-block-mweb" : ".grade-block-web"}`).removeClass(
     "active-state"
@@ -1137,6 +1145,7 @@ $(".sidepannel-close").click(() => {
     "display",
     "none"
   );
+  isSidePanelOpen = false;
 });
 
 $(".mweb-back-arrow").click(() => {
