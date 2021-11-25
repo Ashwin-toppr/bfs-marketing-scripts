@@ -341,6 +341,7 @@ $(".grade-home").click((e) => {
   selectedGrade = e.target.id.split("-").slice(-1)[0];
   $(".grade-home").removeClass("active-state");
   $(`#${e.target.id}`).addClass("active-state");
+
   window.WHJR_ANALYTICS.trackEvent("Grade Selected", {
     grade: selectedGrade,
   });
@@ -375,6 +376,10 @@ $(".subject-card-sp").click((e) => {
     selectedGrade = isMusicKids ? "" : "8";
   }
   enableScheduleCta();
+
+  window.WHJR_ANALYTICS.trackEvent("Course Selected", {
+    course_type: selectedSubj,
+  });
 });
 
 const isExist = () => {
@@ -386,6 +391,11 @@ const isExist = () => {
 
     success: function (res) {
       isUserExist = res.data.isExist;
+      window.WHJR_ANALYTICS.trackEvent("Mobile entered", {
+        position: isSidePanelOpen ? "side_panel" : "on_page_form",
+        is_mobile: true,
+        user_type: isUserExist ? "old" : "new",
+      });
     },
   });
 };
@@ -404,12 +414,6 @@ const checkValidNum = (val) => {
     "display",
     valid ? "block" : "none"
   );
-
-  if (valid) {
-    window.WHJR_ANALYTICS.trackEvent("Mobile entered", {
-      position: isSidePanelOpen ? "side_panel" : "on_page_form",
-    });
-  }
 
   return valid;
 };
@@ -495,6 +499,7 @@ $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => {
   if (isUserAuthenticated) {
     handleMecall();
   } else {
+    window.WHJR_ANALYTICS.trackPageView("Verification OTP Initiated", {});
     getOtp(spInitialCtaSuccess);
     $(
       `${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`
@@ -561,6 +566,8 @@ const spInitialCtaSuccess = (res) => {
     );
   }
   challengeCodeForOtp = res.data.challenge;
+
+  window.WHJR_ANALYTICS.trackEvent("Verification pop up viewed", {});
 };
 
 const otpTimer = () => {
@@ -606,6 +613,7 @@ const getOtp = (callback, isResend) => {
 };
 
 $(".resend-otp").click(() => {
+  window.WHJR_ANALYTICS.trackPageView("Resend Code clicked", {});
   getOtp(spInitialCtaSuccess, true);
   $(".otp-input-box").val("");
 });
@@ -631,6 +639,8 @@ $(".otp-input-box").on("input", (e) => {
     $(".jss123").css("caret-color", "transparent");
 
     $(".otp-loader").css("display", "block");
+
+    window.WHJR_ANALYTICS.trackEvent("Verification code entered", {});
 
     const url = isUserExist
       ? `${PROD_BASE_URL}/api/V1/users/authenticateVerificationCode?timezone=${timeZone}&_vercel_no_cache=1&regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=`
@@ -660,6 +670,11 @@ $(".otp-input-box").on("input", (e) => {
 
         const student = res.data;
         handleUserPropsAnalytics(student);
+
+        window.WHJR_ANALYTICS.trackEvent(
+          isUserExist ? "Login success frontend" : "Signed up frontend",
+          {}
+        );
       },
       error: function (err) {
         $(".otp-box").addClass("isError");
@@ -672,6 +687,11 @@ $(".otp-input-box").on("input", (e) => {
           text: "Invalid OTP. Please try again",
           duration: 5000,
         }).showToast();
+
+        window.WHJR_ANALYTICS.trackEvent(
+          isUserExist ? "Login error frontend" : "Verification OTP Failure",
+          {}
+        );
       },
     });
   }
@@ -679,16 +699,6 @@ $(".otp-input-box").on("input", (e) => {
 
 const handleUserPropsAnalytics = (student) => {
   window.WHJR_ANALYTICS.setUserProps({
-    userId: student.id,
-    trial_status: student.trialStatus,
-    user_dial_code: student.dialCode,
-    user_mobile: student.mobile,
-    user_is_laptop: student.isLaptop,
-    user_grade: student.grade,
-    user_email: student.email,
-    tracking_code: "",
-  });
-  console.log("user props obj", {
     userId: student.id,
     trial_status: student.trialStatus,
     user_dial_code: student.dialCode,
@@ -806,6 +816,10 @@ const handleMecall = () => {
         $(".music-state").css("display", "none");
 
         handleGetDashboardLink();
+
+        if (trailStatus[0].trailStatus === "pre_trial") {
+          window.WHJR_ANALYTICS.trackEvent("Trial already booked", {});
+        }
       } else {
         handleGetSlots();
       }
