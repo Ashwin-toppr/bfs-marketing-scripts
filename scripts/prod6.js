@@ -35,9 +35,11 @@ var parentMobileNum = "",
   courseSubType = "GTR",
   timeInterval,
   isMusicKids = true,
-  formatedParentNum;
+  formatedParentNum,
+  eventSource = window.location.href.includes("byjusfutureschool") ? "TRIAL_REGISTER_BYJUS" : "TRIAL_REGISTER_BYJUS_BYJUS";
+ 
 
-//   for preselecting subj
+  
 
 
   //side pannel code
@@ -152,6 +154,12 @@ $(`${isMweb ? ".mweb-schedule-cta" : ".schedule-cta"}`).click(() => { // book a 
 
   $(".parent-mobile-num").val(formatedParentNum); // mobile-input field
 
+  sendEventsHOF({
+    eventName: "REGISTRATION_INIT",
+    eventSource: eventSource,
+    s3SchemaName: "deviceType",
+  });
+
   if (parentMobileNum && selectedGrade) {
     if (!checkValidNum(parentMobileNum)) return;
     if (!isMweb) {
@@ -172,7 +180,7 @@ $(`${isMweb ? ".mweb-schedule-cta" : ".schedule-cta"}`).click(() => { // book a 
   window.scrollTo(0, 0);
 });
 
-const getGradeBlocks = () => {
+const getGradeBlocks = () => { //grades will vary by subject, this method will structure the grades by selected subject
   const subjGrades = {
     music: ["1", "2-3", "4-6", "7-9", "10-12"],
     math: [1, 2, 3, 4, 5, 6, 7, 8],
@@ -195,7 +203,7 @@ const getGradeBlocks = () => {
     );
   });
 
-  $(`${isMweb ? '.grade-block-mweb':'.grade-block-web'}`).click((e) => { // side-pannel grade block card
+  $(`${isMweb ? '.grade-block-mweb':'.grade-block-web'}`).click((e) => { // side-pannel grade block card click method
     selectedGrade = e.target.id.split("-").slice(-1)[0];
     customClassMethod(`${isMweb ? '.grade-block-mweb':'.grade-block-web'}`, false, "active-state");
     if (selectedSubj.includes("music")) {
@@ -223,7 +231,7 @@ $(".grade-home").click((e) => {
 
 getGradeBlocks();
 
-$(".subject-card-sp").click((e) => { // side-panel subject card 
+$(".subject-card-sp").click((e) => { // side-panel subject card click method
   $(".subject-card-sp").removeClass("active-state");
   const id = e.target.id;
   $(`.${id}-block`).addClass("active-state");
@@ -233,6 +241,7 @@ $(".subject-card-sp").click((e) => { // side-panel subject card
   $(`${isMweb ? '.grade-block-mweb':'.grade-block-web'}`).removeClass("active-state");
 
   selectedGrade = "";
+
 
   if (selectedSubj != "music") {
     $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css(
@@ -265,6 +274,8 @@ const isExist = () => {
 const checkValidNum = (val) => {
   const valid = val.length === 10 && $.isNumeric(val);
 
+
+
   customCssMethod(".err-msg-pm", "display", valid ? "none" : "block");
   customClassMethod(".parent-num", !valid, "error-state");
   customClassMethod(".parent-num-dropdown", !valid, "error-state");
@@ -282,6 +293,8 @@ const checkValidNum = (val) => {
 
 $(".parent-mobile-num").on("input", (e) => {
   $(".parent-mail").removeClass("parent-mobile-sp-number");
+
+
   if (dialCode == "+1") {
     const input = e.target.value.replace(/\D/g, "").substring(0, 10); // First ten digits of input only
     const areaCode = input.substring(0, 3);
@@ -319,6 +332,7 @@ $(".parent-mobile-num").on("input", (e) => {
     customClassMethod(".parent-num", false, "error-state");
     customClassMethod(".parent-num-dropdown", false, "error-state");
     customClassMethod(".parent-mobile-num", false, "error-state");
+    $(".parent-mail").addClass("parent-mobile-sp-number");
   }
 
   if (studentDetails) {
@@ -445,6 +459,8 @@ const getOtp = (callback, isResend) => {
     ? `${PROD_BASE_URL}/api/V1/users/sendStudentVerificationCode?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=`
     : `${PROD_BASE_URL}/api/V1/otp/generate?regionId=${country}&timezone=${timeZone}&courseType=${selectedSubj}&brandId=whitehatjr`;
 
+
+
   $.ajax({
     type: "POST",
     url,
@@ -470,6 +486,7 @@ const getOtp = (callback, isResend) => {
 $(".resend-otp").click(() => {
   getOtp(spInitialCtaSuccess, true);
   $(".otp-input-box").val("");
+
 });
 
 $(".mweb-otp-close").click(() => {
@@ -512,6 +529,7 @@ $(".otp-input-box").on("input", (e) => { // verify-otp
       success: function (res) {
         clearInterval(timeInterval);
         isUserAuthenticated = true;
+
         if (!isUserExist) {
           handleRegisterUser();
         } else {
@@ -553,6 +571,12 @@ const handleRegisterUser = () => {
       token = res.data.token;
       handleMecall();
       handleGetSlots();
+      sendEventsHOF({
+        eventName: "NEW_USER_REGISTERED",
+        eventSource: eventSource,
+        s3SchemaName: "deviceType",
+        n1: +dialCode,
+      });
     },
     error: function (err) {
       Toastify({
@@ -856,6 +880,12 @@ const handleBookSlot = () => {
     success: function (res) {
       $(".slot-loader").css("display", "none");
       handleGetDashboardLink(true); // true - after booking slot
+      sendEventsHOF({
+        eventName: "TRAIL_SLOT_BOOKED",
+        eventSource: eventSource,
+        s3SchemaName: "deviceType",
+        n1: +dialCode,
+      });
     },
     error: function (err) {
       $(".slot-loader").css("display", "none");
@@ -1068,7 +1098,7 @@ const GMTOffset = (val) => {
   return `GMT${sign}${hours}:${mins}`;
 };
 
-$(`${isMweb ? ".mweb-search-timezone-input" : ".search-timezone-input"}`).on(
+$(`${isMweb ? ".mweb-search-timezone-input" : ".search-timezone-input"}`).on(  //timezone search filter
   "input",
   (e) => {
     const val = e.target.value.toUpperCase();
@@ -1083,3 +1113,96 @@ $(`${isMweb ? ".mweb-search-timezone-input" : ".search-timezone-input"}`).on(
     getTimeZonesEmbedded(tempTZList);
   }
 );
+
+
+
+const checkForDeviceType = (s3) => {
+  if (s3 === "deviceType") {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    return isMobile ? "mobile" : "desktop";
+  } else {
+    return s3;
+  }
+};
+
+
+const sendEventsHOF = ({
+  eventName,
+  eventSource,
+  s3 = null,
+  s4 = null,
+  s5 = null,
+  s6 = null,
+  tc = null,
+  b1 = null,
+  b2 = null,
+  n1 = null,
+  n2 = null,
+  n3 = null,
+  s3SchemaName,
+  s4SchemaName,
+  s5SchemaName,
+  s6SchemaName,
+}) => {
+  let s3Val = checkForDeviceType(s3SchemaName);
+  let userId = studentDetails?.students[0]?.student_courses[0]?.studentId || null; 
+  let eventDetails = {
+    eventName: eventName,
+    eventSource: eventSource,
+    data: { s3: s3Val, s4, s5, s6, tc, b1, b2, n1, n2, n3, userId:userId, screenName : eventSource   },
+    schema: {
+      //don't use s1, its reserved for userId
+      //don't use s2, its reserved ofr eventSource
+      userId: "s1",
+      screenName : "s2",
+      [s3SchemaName || "s3"]: "s3",
+      [s4SchemaName || "s4"]: "s4",
+      [s5SchemaName || "s5"]: "s5",
+      [s6SchemaName || "s6"]: "s6",
+      tc: "tc",
+      b1: "b1",
+      b2: "b2",
+      n1: "n1",
+      n2: "n2",
+      n3: "n3",
+    },
+  };
+  if (s3SchemaName) {
+    if (s3SchemaName === "deviceType") {
+      eventDetails.data[s3SchemaName] = s3Val;
+    } else {
+      eventDetails.data[s3SchemaName] = s3;
+    }
+    delete eventDetails.data.s3;
+  }
+  if (s4SchemaName) {
+    eventDetails.data[s4SchemaName] = s4;
+    delete eventDetails.data.s4;
+  }
+  if (s5SchemaName) {
+    eventDetails.data[s5SchemaName] = s5;
+    delete eventDetails.data.s5;
+  }
+  if (s6SchemaName) {
+    eventDetails.data[s6SchemaName] = s6;
+    delete eventDetails.data.s6;
+  }
+  sendEvents(eventDetails);
+};
+
+
+const sendEvents = (eventDetails) => {
+  $.ajax({
+    type: "POST",
+    url: `${PROD_BASE_URL}/api/V1/events/saveEvent?regionId=${country}&courseType=${selectedSubj}&brandId=BYJUS_BFS`,
+    cache: false,
+    data: { ...eventDetails },
+  });
+};
+
+
+sendEventsHOF({
+  eventName: "LANDED",
+  eventSource: eventSource,
+  s3SchemaName: "deviceType",
+});
