@@ -651,7 +651,7 @@ $(".otp-input-box").on("input", (e) => {
           handleMecall();
         }
 
-        const student = res.data.data.students[0];
+        const student = res.data;
         handleUserPropsAnalytics(student);
       },
       error: function (err) {
