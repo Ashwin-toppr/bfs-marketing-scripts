@@ -329,6 +329,9 @@ $(".grade-home").click((e) => {
   selectedGrade = e.target.id.split("-").slice(-1)[0];
   $(".grade-home").removeClass("active-state");
   $(`#${e.target.id}`).addClass("active-state");
+  window.WHJR_ANALYTICS.trackEvent("Grade Selected", {
+    grade: selectedGrade,
+  });
 });
 
 getGradeBlocks();
