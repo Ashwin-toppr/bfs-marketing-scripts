@@ -835,7 +835,7 @@ const handleMecall = () => {
 
 $(".radio-music-sc").click((e) => {
   // toggle for music sub-cat
-  const musicType = e.currentTarget.nextElementSibling.id
+  const musicType = e.currentTarget.children.radio.id
     .split("-")[1]
     .toUpperCase();
   courseSubType = musicType;
