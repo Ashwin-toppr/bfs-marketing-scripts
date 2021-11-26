@@ -106,7 +106,7 @@ handleGeoLocationData = ({ data }) => {
     ua_platform: navigator.platform,
     ua_device_type: navigator.userAgentData.mobile ? "mobile" : "desktop",
     ua_browser_major_version: navigator.userAgentData?.brands[0]?.version,
-    ua_browser: navigator.userAgentData.brands[0].brand,
+    ua_browser: navigator.userAgentData?.brands[0]?.brand,
     ua_flow: "v2",
     utm_source: urlParams.get("utm_source"),
     utm_medium: urlParams.get("utm_medium"),
