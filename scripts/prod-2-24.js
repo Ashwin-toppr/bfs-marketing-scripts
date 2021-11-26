@@ -567,7 +567,7 @@ const spInitialCtaSuccess = (res) => {
   }
   challengeCodeForOtp = res.data.challenge;
 
-  window.WHJR_ANALYTICS.trackEvent("Verification pop up viewed", {});
+  window.WHJR_ANALYTICS.trackPageView("Verification pop up viewed", {});
 };
 
 const otpTimer = () => {
