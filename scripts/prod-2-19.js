@@ -841,7 +841,9 @@ $(".radio-music-sc").click((e) => {
   courseSubType = musicType;
   handleGetSlots();
 
-  window.trackEvent('Booking Instrument Selected', {instrument_selected: musicType});
+  window.trackEvent("Booking Instrument Selected", {
+    instrument_selected: musicType,
+  });
 });
 
 const handleGetSlots = () => {
@@ -937,10 +939,8 @@ const handleAddEventTODateBlock = () => {
     const id = e.target.id.split("-").slice(-1)[0];
     onDateBlockClick(id);
 
-    window.WHJR_ANALYTICS.trackEvent('Booking Day Clicked', {
-      slot_date: moment(selectedDateBlock).format("ddd")}, ${moment(
-        selectedDateBlock
-      ).format("DD"),
+    window.WHJR_ANALYTICS.trackEvent("Booking Day Clicked", {
+      slot_date: moment(selectedDateBlock).format("ddd"),
       day_position: id,
       timezone: timeZone,
     });
@@ -998,9 +998,7 @@ const getSlotsOnSelectedate = () => {
         preselected_slot_time: moment(
           slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime
         ).format("LT"),
-        preselected_slot_date: moment(selectedDateBlock).format("ddd")}, ${moment(
-          selectedDateBlock
-        ).format("DD"),
+        preselected_slot_date: moment(selectedDateBlock).format("ddd"),
         preselected_slot_timezone: timeZone,
       });
     }
@@ -1026,16 +1024,14 @@ const getSlotsOnSelectedate = () => {
       ).format("DD")} ${moment(selectedDateBlock).format("MMM")}`
     );
 
-    window.WHJR_ANALYTICS.trackEvent('Booking Time Selected', {
+    window.WHJR_ANALYTICS.trackEvent("Booking Time Selected", {
       slot_time: moment(
         slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime
       ).format("LT"),
-      slot_date: moment(selectedDateBlock).format("ddd")}, ${moment(
-        selectedDateBlock
-      ).format("DD"),
+      slot_date: moment(selectedDateBlock).format("ddd"),
       time_position: selectedDateIndex,
       timezone: timeZone,
-    })
+    });
   });
 };
 
@@ -1054,10 +1050,10 @@ const handleBookSlot = () => {
     slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime;
   $(".slot-loader").css("display", "block");
 
-  window.WHJR_ANALYTICS.trackEvent('Confirm class time clicked', {
+  window.WHJR_ANALYTICS.trackEvent("Confirm class time clicked", {
     slot_date: moment(startTime).format("ddd"),
     slot_time: moment(startTime).format("LT"),
-  })
+  });
   $.ajax({
     type: "POST",
     url: `${PROD_BASE_URL}/api/V1/trial/slots/book?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj.toUpperCase()}&${
@@ -1084,11 +1080,11 @@ const handleBookSlot = () => {
       $(".slot-loader").css("display", "none");
       handleGetDashboardLink(true); // true - after booking slot
 
-      window.WHJR_ANALYTICS.trackEvent('Trial Booking Confirmed frontend', {
+      window.WHJR_ANALYTICS.trackEvent("Trial Booking Confirmed frontend", {
         slot_date: moment(startTime).format("ddd"),
         slot_time: moment(startTime).format("LT"),
         timezone: timeZone,
-      })
+      });
     },
     error: function (err) {
       $(".slot-loader").css("display", "none");
@@ -1291,7 +1287,9 @@ const getTimeZonesEmbedded = (TZList = timezonesList) => {
     );
     handleGetSlots();
 
-    window.WHJR_ANALYTICS.trackEvent('Timezone Changed', {timezone: timeZone});
+    window.WHJR_ANALYTICS.trackEvent("Timezone Changed", {
+      timezone: timeZone,
+    });
   });
 };
 
