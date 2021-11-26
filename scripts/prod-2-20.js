@@ -939,6 +939,8 @@ const handleAddEventTODateBlock = () => {
     const id = e.target.id.split("-").slice(-1)[0];
     onDateBlockClick(id);
 
+    const selectedDateBlock = slotsData[id].date;
+
     window.WHJR_ANALYTICS.trackEvent("Booking Day Clicked", {
       slot_date: moment(selectedDateBlock).format("ddd"),
       day_position: id,
