@@ -993,16 +993,16 @@ const getSlotsOnSelectedate = () => {
             selectedDateBlock
           ).format("DD")} ${moment(selectedDateBlock).format("MMM")}`
         );
-      }
 
-      window.WHJR_ANALYTICS.trackEvent("Viewed Slot Screen", {
-        is_slot_preselected: true,
-        preselected_slot_time: moment(
-          slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime
-        ).format("LT"),
-        preselected_slot_date: moment(selectedDateBlock).format("ddd"),
-        preselected_slot_timezone: timeZone,
-      });
+        window.WHJR_ANALYTICS.trackEvent("Viewed Slot Screen", {
+          is_slot_preselected: true,
+          preselected_slot_time: moment(
+            slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime
+          ).format("LT"),
+          preselected_slot_date: moment(selectedDateBlock).format("ddd"),
+          preselected_slot_timezone: timeZone,
+        });
+      }
     }
   });
 
