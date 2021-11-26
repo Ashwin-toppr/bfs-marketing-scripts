@@ -89,7 +89,7 @@ handleGeoLocationData = ({ data }) => {
     page_name = "MUSIC";
   }
 
-  const geoObject = {
+  const globalObj = {
     geo_country_iso_code: data.countryIsoCode,
     geo_country_name: data.countryName,
     geo_latitude: data.latitude,
@@ -105,8 +105,8 @@ handleGeoLocationData = ({ data }) => {
     ua_os_version: navigator.appVersion,
     ua_platform: navigator.platform,
     ua_device_type: navigator.userAgentData.mobile ? "mobile" : "desktop",
-    ua_browser_major_version: navigator.userAgentData.brands[0].version,
-    ua_browser: navigator.userAgentData.brands[0].brand,
+    ua_browser_major_version: navigator.userAgentData?.brands[0]?.version,
+    ua_browser: navigator.userAgentData?.brands[0]?.brand,
     ua_flow: "v2",
     utm_source: urlParams.get("utm_source"),
     utm_medium: urlParams.get("utm_medium"),
@@ -116,7 +116,7 @@ handleGeoLocationData = ({ data }) => {
     course_type: page_name === "HOME" ? "ALL" : page_name,
   };
 
-  window.WHJR_ANALYTICS.setEventProps(removeEmpty(geoObject));
+  window.WHJR_ANALYTICS.setEventProps(removeEmpty(globalObj));
 
   handlePageLoadAnalytics(page_name);
 };
@@ -136,7 +136,7 @@ handlePageLoadAnalytics = (page_name) => {
 (function () {
   $.ajax({
     type: "GET",
-    url: `${PROD_BASE_URL}/api/V1/geo/getInfo?_vercel_no_cache=1&courseType=${selectedSubj}&brandId=whitehatjr`,
+    url: `${STAGE_BASE_URL}/api/V1/geo/getInfo?_vercel_no_cache=1&courseType=${selectedSubj}&brandId=whitehatjr`,
     cache: false,
     success: function (res) {
       timeZone = res.data.timezone;
@@ -223,18 +223,26 @@ const subjPreSelect = () => {
   }
 };
 
-$(`${isMweb ? ".mweb-schedule-cta" : ".schedule-cta"}`).click(() => {
+$(`${isMweb ? ".mweb-schedule-cta" : ".schedule-cta"}`).click((e) => {
+  console.log(e.currentTarget.id);
   // book a free trail cta
+
+  if (!isSidePanelOpen) {
+    isSidePanelOpen = true;
+
+    window.WHJR_ANALYTICS.trackEvent("viewed registration form", {
+      grade: selectedGrade,
+    });
+  }
+
   subjPreSelect();
   $(`.${selectedSubj.split("_")[0]}-block`).addClass("active-state");
   if (selectedSubj == "music_for_all") {
-    isSidePanelOpen = false;
     $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css(
       "display",
       "none"
     );
   } else {
-    isSidePanelOpen = true;
     $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css(
       "display",
       "block"
@@ -322,6 +330,10 @@ const getGradeBlocks = () => {
       "active-state"
     );
     enableScheduleCta();
+
+    window.WHJR_ANALYTICS.trackEvent("Grade Selected", {
+      grade: selectedGrade,
+    });
   });
 };
 
@@ -329,6 +341,7 @@ $(".grade-home").click((e) => {
   selectedGrade = e.target.id.split("-").slice(-1)[0];
   $(".grade-home").removeClass("active-state");
   $(`#${e.target.id}`).addClass("active-state");
+
   window.WHJR_ANALYTICS.trackEvent("Grade Selected", {
     grade: selectedGrade,
   });
@@ -363,17 +376,26 @@ $(".subject-card-sp").click((e) => {
     selectedGrade = isMusicKids ? "" : "8";
   }
   enableScheduleCta();
+
+  window.WHJR_ANALYTICS.trackEvent("Course Selected", {
+    course_type: selectedSubj,
+  });
 });
 
 const isExist = () => {
   $.ajax({
     type: "POST",
-    url: `${PROD_BASE_URL}/api/V1/userDetail/existByEmailOrMobile?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr`,
+    url: `${STAGE_BASE_URL}/api/V1/userDetail/existByEmailOrMobile?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr`,
     cache: false,
     data: { mobile: parentMobileNum, dialCode },
 
     success: function (res) {
       isUserExist = res.data.isExist;
+      window.WHJR_ANALYTICS.trackEvent("Mobile entered", {
+        position: isSidePanelOpen ? "side_panel" : "on_page_form",
+        is_mobile: true,
+        user_type: isUserExist ? "old" : "new",
+      });
     },
   });
 };
@@ -392,12 +414,6 @@ const checkValidNum = (val) => {
     "display",
     valid ? "block" : "none"
   );
-
-  if (valid) {
-    window.WHJR_ANALYTICS.trackEvent("Mobile entered", {
-      position: isSidePanelOpen ? "side_panel" : "on_page_form",
-    });
-  }
 
   return valid;
 };
@@ -483,6 +499,7 @@ $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => {
   if (isUserAuthenticated) {
     handleMecall();
   } else {
+    window.WHJR_ANALYTICS.trackPageView("Verification OTP Initiated", {});
     getOtp(spInitialCtaSuccess);
     $(
       `${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`
@@ -549,6 +566,8 @@ const spInitialCtaSuccess = (res) => {
     );
   }
   challengeCodeForOtp = res.data.challenge;
+
+  window.WHJR_ANALYTICS.trackPageView("Verification pop up viewed", {});
 };
 
 const otpTimer = () => {
@@ -568,8 +587,8 @@ const otpTimer = () => {
 
 const getOtp = (callback, isResend) => {
   const url = isUserExist
-    ? `${PROD_BASE_URL}/api/V1/users/sendStudentVerificationCode?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=`
-    : `${PROD_BASE_URL}/api/V1/otp/generate?regionId=${country}&timezone=${timeZone}&courseType=${selectedSubj}&brandId=whitehatjr`;
+    ? `${STAGE_BASE_URL}/api/V1/users/sendStudentVerificationCode?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=`
+    : `${STAGE_BASE_URL}/api/V1/otp/generate?regionId=${country}&timezone=${timeZone}&courseType=${selectedSubj}&brandId=whitehatjr`;
 
   $.ajax({
     type: "POST",
@@ -594,6 +613,7 @@ const getOtp = (callback, isResend) => {
 };
 
 $(".resend-otp").click(() => {
+  window.WHJR_ANALYTICS.trackPageView("Resend Code clicked", {});
   getOtp(spInitialCtaSuccess, true);
   $(".otp-input-box").val("");
 });
@@ -620,9 +640,11 @@ $(".otp-input-box").on("input", (e) => {
 
     $(".otp-loader").css("display", "block");
 
+    window.WHJR_ANALYTICS.trackEvent("Verification code entered", {});
+
     const url = isUserExist
-      ? `${PROD_BASE_URL}/api/V1/users/authenticateVerificationCode?timezone=${timeZone}&_vercel_no_cache=1&regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=`
-      : `${PROD_BASE_URL}/api/V1/otp/verify?timezone=${timeZone}`;
+      ? `${STAGE_BASE_URL}/api/V1/users/authenticateVerificationCode?timezone=${timeZone}&_vercel_no_cache=1&regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=`
+      : `${STAGE_BASE_URL}/api/V1/otp/verify?timezone=${timeZone}`;
     $.ajax({
       type: "POST",
       url: url,
@@ -645,6 +667,14 @@ $(".otp-input-box").on("input", (e) => {
           token = res.data.token;
           handleMecall();
         }
+
+        const student = res.data;
+        handleUserPropsAnalytics(student);
+
+        window.WHJR_ANALYTICS.trackEvent(
+          isUserExist ? "Login success frontend" : "Signed up frontend",
+          {}
+        );
       },
       error: function (err) {
         $(".otp-box").addClass("isError");
@@ -657,15 +687,34 @@ $(".otp-input-box").on("input", (e) => {
           text: "Invalid OTP. Please try again",
           duration: 5000,
         }).showToast();
+
+        window.WHJR_ANALYTICS.trackEvent(
+          isUserExist ? "Login error frontend" : "Verification OTP Failure",
+          {}
+        );
       },
     });
   }
 });
 
+const handleUserPropsAnalytics = (student) => {
+  window.WHJR_ANALYTICS.setUserProps({
+    userId: student.id,
+    trial_status: student.trialStatus,
+    user_dial_code: student.dialCode,
+    user_mobile: student.mobile,
+    user_is_laptop: student.isLaptop,
+    user_grade: student.grade,
+    user_email: student.email,
+    tracking_code: "",
+  });
+  window.WHJR_ANALYTICS.trackUser(student.id);
+};
+
 const handleRegisterUser = () => {
   $.ajax({
     type: "POST",
-    url: `${PROD_BASE_URL}/api/V1/trial/users/minimalFieldRegister?timezone=${timeZone}&isMobilePlatform=false&timestamp=`,
+    url: `${STAGE_BASE_URL}/api/V1/trial/users/minimalFieldRegister?timezone=${timeZone}&isMobilePlatform=false&timestamp=`,
     cache: false,
     data: {
       mobile: parentMobileNum,
@@ -680,6 +729,9 @@ const handleRegisterUser = () => {
       token = res.data.token;
       handleMecall();
       handleGetSlots();
+
+      const student = res.data.students[0];
+      handleUserPropsAnalytics(student);
     },
     error: function (err) {
       Toastify({
@@ -693,7 +745,7 @@ const handleRegisterUser = () => {
 const handleMecall = () => {
   $.ajax({
     type: "GET",
-    url: `${PROD_BASE_URL}/api/V1/userDetail/me?timezone=${timeZone}&timestamp=`,
+    url: `${STAGE_BASE_URL}/api/V1/userDetail/me?timezone=${timeZone}&timestamp=`,
     cache: false,
     headers: {
       authorization: `Bearer ${token}`,
@@ -764,6 +816,10 @@ const handleMecall = () => {
         $(".music-state").css("display", "none");
 
         handleGetDashboardLink();
+
+        if (trailStatus[0].trailStatus === "pre_trial") {
+          window.WHJR_ANALYTICS.trackEvent("Trial already booked", {});
+        }
       } else {
         handleGetSlots();
       }
@@ -784,6 +840,10 @@ $(".radio-music-sc").click((e) => {
     .toUpperCase();
   courseSubType = musicType;
   handleGetSlots();
+
+  window.trackEvent("Booking Instrument Selected", {
+    instrument_selected: musicType,
+  });
 });
 
 const handleGetSlots = () => {
@@ -791,7 +851,7 @@ const handleGetSlots = () => {
 
   $.ajax({
     type: "GET",
-    url: `${PROD_BASE_URL}/api/V1/trial/slots/get?countryCode=${country}&grade=${selectedGrade}&timezone=${timeZone}&courseType=${selectedSubj.toUpperCase()}${
+    url: `${STAGE_BASE_URL}/api/V1/trial/slots/get?countryCode=${country}&grade=${selectedGrade}&timezone=${timeZone}&courseType=${selectedSubj.toUpperCase()}${
       selectedSubj.includes("music") ? "&courseSubType=" + courseSubType : ""
     }`,
     cache: false,
@@ -878,6 +938,14 @@ const handleAddEventTODateBlock = () => {
     // date-block cta
     const id = e.target.id.split("-").slice(-1)[0];
     onDateBlockClick(id);
+
+    const selectedDateBlock = slotsData[id].date;
+
+    window.WHJR_ANALYTICS.trackEvent("Booking Day Clicked", {
+      slot_date: moment(selectedDateBlock).format("ddd"),
+      day_position: id,
+      timezone: timeZone,
+    });
   });
   onDateBlockClick(0);
 };
@@ -925,6 +993,15 @@ const getSlotsOnSelectedate = () => {
             selectedDateBlock
           ).format("DD")} ${moment(selectedDateBlock).format("MMM")}`
         );
+
+        window.WHJR_ANALYTICS.trackEvent("Viewed Slot Screen", {
+          is_slot_preselected: true,
+          preselected_slot_time: moment(
+            slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime
+          ).format("LT"),
+          preselected_slot_date: moment(selectedDateBlock).format("ddd"),
+          preselected_slot_timezone: timeZone,
+        });
       }
     }
   });
@@ -948,6 +1025,15 @@ const getSlotsOnSelectedate = () => {
         selectedDateBlock
       ).format("DD")} ${moment(selectedDateBlock).format("MMM")}`
     );
+
+    window.WHJR_ANALYTICS.trackEvent("Booking Time Selected", {
+      slot_time: moment(
+        slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime
+      ).format("LT"),
+      slot_date: moment(selectedDateBlock).format("ddd"),
+      time_position: selectedDateIndex,
+      timezone: timeZone,
+    });
   });
 };
 
@@ -965,9 +1051,14 @@ const handleBookSlot = () => {
   const startTime =
     slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime;
   $(".slot-loader").css("display", "block");
+
+  window.WHJR_ANALYTICS.trackEvent("Confirm class time clicked", {
+    slot_date: moment(startTime).format("ddd"),
+    slot_time: moment(startTime).format("LT"),
+  });
   $.ajax({
     type: "POST",
-    url: `${PROD_BASE_URL}/api/V1/trial/slots/book?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj.toUpperCase()}&${
+    url: `${STAGE_BASE_URL}/api/V1/trial/slots/book?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj.toUpperCase()}&${
       selectedSubj.includes("music") ? `courseSubType=${courseSubType}` : ""
     }`,
     cache: false,
@@ -990,6 +1081,12 @@ const handleBookSlot = () => {
     success: function (res) {
       $(".slot-loader").css("display", "none");
       handleGetDashboardLink(true); // true - after booking slot
+
+      window.WHJR_ANALYTICS.trackEvent("Trial Booking Confirmed frontend", {
+        slot_date: moment(startTime).format("ddd"),
+        slot_time: moment(startTime).format("LT"),
+        timezone: timeZone,
+      });
     },
     error: function (err) {
       $(".slot-loader").css("display", "none");
@@ -1005,7 +1102,7 @@ const handleBookSlot = () => {
 const handleGetDashboardLink = (bookedSlot) => {
   $.ajax({
     type: "GET",
-    url: `${PROD_BASE_URL}/api/V1/students/${studentDetails.students[0].student_courses[0].studentId}/getDashbordLink?timezone=${timeZone}&brandId=whitehatjr&langCode=en_US&courseType=${selectedSubj}`,
+    url: `${STAGE_BASE_URL}/api/V1/students/${studentDetails.students[0].student_courses[0].studentId}/getDashbordLink?timezone=${timeZone}&brandId=whitehatjr&langCode=en_US&courseType=${selectedSubj}`,
     cache: false,
     headers: {
       authorization: `Bearer ${token}`,
@@ -1053,6 +1150,7 @@ const handleReset = () => {
   selectedSubj = "";
   parentMobileNum = "";
   formatedParentNum = "";
+  isSidePanelOpen = false;
   $(".subject-card-sp").removeClass("active-state");
   $(`${isMweb ? ".grade-block-mweb" : ".grade-block-web"}`).removeClass(
     "active-state"
@@ -1102,6 +1200,7 @@ $(".sidepannel-close").click(() => {
     "display",
     "none"
   );
+  isSidePanelOpen = false;
 });
 
 $(".mweb-back-arrow").click(() => {
@@ -1189,6 +1288,10 @@ const getTimeZonesEmbedded = (TZList = timezonesList) => {
       e.target.children[0].innerText
     );
     handleGetSlots();
+
+    window.WHJR_ANALYTICS.trackEvent("Timezone Changed", {
+      timezone: timeZone,
+    });
   });
 };
 
