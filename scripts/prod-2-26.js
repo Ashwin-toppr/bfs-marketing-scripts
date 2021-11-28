@@ -224,8 +224,11 @@ const subjPreSelect = () => {
 };
 
 $(`${isMweb ? ".mweb-schedule-cta" : ".schedule-cta"}`).click((e) => {
-  console.log(e.currentTarget.id);
   // book a free trail cta
+
+  window.WHJR_ANALYTICS.trackEvent("Book a class clicked", {
+    position: e.currentTarget.id,
+  });
 
   if (!isSidePanelOpen) {
     isSidePanelOpen = true;
