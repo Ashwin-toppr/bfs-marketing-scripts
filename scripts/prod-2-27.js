@@ -502,7 +502,7 @@ $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => {
   if (isUserAuthenticated) {
     handleMecall();
   } else {
-    window.WHJR_ANALYTICS.trackPageView("Verification OTP Initiated", {});
+    window.WHJR_ANALYTICS.trackEvent("Verification OTP Initiated", {});
     getOtp(spInitialCtaSuccess);
     $(
       `${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`
@@ -570,7 +570,7 @@ const spInitialCtaSuccess = (res) => {
   }
   challengeCodeForOtp = res.data.challenge;
 
-  window.WHJR_ANALYTICS.trackPageView("Verification pop up viewed", {});
+  window.WHJR_ANALYTICS.trackEvent("Verification pop up viewed", {});
 };
 
 const otpTimer = () => {
