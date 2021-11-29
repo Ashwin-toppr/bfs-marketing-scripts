@@ -844,7 +844,7 @@ $(".radio-music-sc").click((e) => {
   courseSubType = musicType;
   handleGetSlots();
 
-  window.trackEvent("Booking Instrument Selected", {
+  window.WHJR_ANALYTICS.trackEvent("Booking Instrument Selected", {
     instrument_selected: musicType,
   });
 });
