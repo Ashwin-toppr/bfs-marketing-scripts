@@ -36,26 +36,23 @@ var parentMobileNum = "",
   timeInterval,
   isMusicKids = true,
   formatedParentNum,
-  eventSource = window.location.href.includes("byjusfutureschool") ? "TRIAL_REGISTER_BYJUS" : "TRIAL_REGISTER_BYJUS_BYJUS";
- 
+  eventSource = window.location.href.includes("byjusfutureschool")
+    ? "TRIAL_REGISTER_BYJUS"
+    : "TRIAL_REGISTER_BYJUS_BYJUS";
 
-  
-
-
-  //side pannel code
-  (function () {
-    $.ajax({
-      type: "GET",
-      url: `${PROD_BASE_URL}/api/V1/geo/getInfo?_vercel_no_cache=1&courseType=${selectedSubj}&brandId=whitehatjr`,
-      cache: false,
-      success: function (res) {
-        timeZone = res.data.timezone;
-        country = res.data.countryIsoCode;
-        console.log(res.data);
-      },
-    });
-  }
-)();
+//side pannel code
+(function () {
+  $.ajax({
+    type: "GET",
+    url: `${PROD_BASE_URL}/api/V1/geo/getInfo?_vercel_no_cache=1&courseType=${selectedSubj}&brandId=whitehatjr`,
+    cache: false,
+    success: function (res) {
+      timeZone = res.data.timezone;
+      country = res.data.countryIsoCode;
+      console.log(res.data);
+    },
+  });
+})();
 
 // for dial codes
 (function () {
@@ -89,15 +86,16 @@ var parentMobileNum = "",
         isUserAuthenticated = false;
         $(".parent-mobile-num").val("");
         parentMobileNum = "";
-        formatedParentNum= "";
+        formatedParentNum = "";
         $(`${isMweb ? ".mweb-valid-icon" : ".valid-icon"}`).css(
-          "display", "none"
+          "display",
+          "none"
         );
         // if (!e.target.value.length) {
-          customCssMethod(".err-msg-pm", "display", "none");
-          customClassMethod(".parent-num", false, "error-state");
-          customClassMethod(".parent-num-dropdown", false, "error-state");
-          customClassMethod(".parent-mobile-num", false, "error-state");
+        customCssMethod(".err-msg-pm", "display", "none");
+        customClassMethod(".parent-num", false, "error-state");
+        customClassMethod(".parent-num-dropdown", false, "error-state");
+        customClassMethod(".parent-mobile-num", false, "error-state");
         // }
       });
     },
@@ -112,7 +110,7 @@ var parentMobileNum = "",
   });
 })();
 
-const subjPreSelect =  () => {
+const subjPreSelect = () => {
   const url = window.location.href;
   const subjects = {
     math: "math",
@@ -122,33 +120,38 @@ const subjPreSelect =  () => {
     home: "coding",
   };
   subj = Object.keys(subjects).filter((subject) => url.includes(subject));
-  if(subj.length > 1){
+  if (subj.length > 1) {
     selectedSubj = subjects[subj[1]];
     selectedGrade = "8";
-  }else{
+  } else {
     selectedSubj = subjects[subj];
   }
-  if(!selectedSubj){
-    selectedSubj = 'coding'
+  if (!selectedSubj) {
+    selectedSubj = "coding";
   }
-}
+};
 
-$(`${isMweb ? ".mweb-schedule-cta" : ".schedule-cta"}`).click(() => { // book a free trail cta
-  subjPreSelect()
-  $(`.${selectedSubj.split('_')[0]}-block`).addClass("active-state");
-  if (selectedSubj == "music_for_all"){
+$(`${isMweb ? ".mweb-schedule-cta" : ".schedule-cta"}`).click(() => {
+  // book a free trail cta
+  subjPreSelect();
+  $(`.${selectedSubj.split("_")[0]}-block`).addClass("active-state");
+  if (selectedSubj == "music_for_all") {
     $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css(
       "display",
       "none"
     );
-  }else{
+  } else {
     $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css(
       "display",
       "block"
     );
   }
-    
-  customCssMethod(".music-state", "display", selectedSubj.includes("music") ? "block" : "none");
+
+  customCssMethod(
+    ".music-state",
+    "display",
+    selectedSubj.includes("music") ? "block" : "none"
+  );
 
   getGradeBlocks();
 
@@ -180,22 +183,29 @@ $(`${isMweb ? ".mweb-schedule-cta" : ".schedule-cta"}`).click(() => { // book a 
   window.scrollTo(0, 0);
 });
 
-const getGradeBlocks = () => { //grades will vary by subject, this method will structure the grades by selected subject
+const getGradeBlocks = () => {
+  //grades will vary by subject, this method will structure the grades by selected subject
   const subjGrades = {
     music: ["1", "2-3", "4-6", "7-9", "10-12"],
     math: [1, 2, 3, 4, 5, 6, 7, 8],
     coding: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
   };
-  $( `${isMweb ? '.mweb-child-grade-blk-copy':'.child-grade-blk-copy'}`).empty();
+  $(
+    `${isMweb ? ".mweb-child-grade-blk-copy" : ".child-grade-blk-copy"}`
+  ).empty();
 
-  subjGrades[selectedSubj.split('_')[0]]?.map((grade,index) => {
-    const element = `<div id="grade-${grade}" class="grade-block-${isMweb ? 'mweb':'web'} grade-card-sp  ${
-      isMweb ? "mweb-" : ""
-    }grade-${selectedSubj.split('_')[0]}  ${
-      isMweb ? "mweb-" : ""
-    }grade-${grade}"><p class="grade-label"> ${selectedSubj.split('_')[0] == "music" && index > 0 ? 'Grades' : 'Grade' }</p><p class="grade-num">${grade}</p></div>`;
+  subjGrades[selectedSubj.split("_")[0]]?.map((grade, index) => {
+    const element = `<div id="grade-${grade}" class="grade-block-${
+      isMweb ? "mweb" : "web"
+    } grade-card-sp  ${isMweb ? "mweb-" : ""}grade-${
+      selectedSubj.split("_")[0]
+    }  ${isMweb ? "mweb-" : ""}grade-${grade}"><p class="grade-label"> ${
+      selectedSubj.split("_")[0] == "music" && index > 0 ? "Grades" : "Grade"
+    }</p><p class="grade-num">${grade}</p></div>`;
 
-    $( `${isMweb ? '.mweb-child-grade-blk-copy':'.child-grade-blk-copy'}`).append(element);
+    $(
+      `${isMweb ? ".mweb-child-grade-blk-copy" : ".child-grade-blk-copy"}`
+    ).append(element);
     customClassMethod(
       `.${isMweb ? "mweb-" : ""}grade-${selectedGrade}`,
       true,
@@ -203,9 +213,14 @@ const getGradeBlocks = () => { //grades will vary by subject, this method will s
     );
   });
 
-  $(`${isMweb ? '.grade-block-mweb':'.grade-block-web'}`).click((e) => { // side-pannel grade block card click method
+  $(`${isMweb ? ".grade-block-mweb" : ".grade-block-web"}`).click((e) => {
+    // side-pannel grade block card click method
     selectedGrade = e.target.id.split("-").slice(-1)[0];
-    customClassMethod(`${isMweb ? '.grade-block-mweb':'.grade-block-web'}`, false, "active-state");
+    customClassMethod(
+      `${isMweb ? ".grade-block-mweb" : ".grade-block-web"}`,
+      false,
+      "active-state"
+    );
     if (selectedSubj.includes("music")) {
       const musicGrade = e.target.id.split("-");
       customClassMethod(
@@ -231,17 +246,19 @@ $(".grade-home").click((e) => {
 
 getGradeBlocks();
 
-$(".subject-card-sp").click((e) => { // side-panel subject card click method
+$(".subject-card-sp").click((e) => {
+  // side-panel subject card click method
   $(".subject-card-sp").removeClass("active-state");
   const id = e.target.id;
   $(`.${id}-block`).addClass("active-state");
   selectedSubj = id;
   customCssMethod(".music-state", "display", id == "music" ? "block" : "none");
   getGradeBlocks();
-  $(`${isMweb ? '.grade-block-mweb':'.grade-block-web'}`).removeClass("active-state");
+  $(`${isMweb ? ".grade-block-mweb" : ".grade-block-web"}`).removeClass(
+    "active-state"
+  );
 
   selectedGrade = "";
-
 
   if (selectedSubj != "music") {
     $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css(
@@ -274,8 +291,6 @@ const isExist = () => {
 const checkValidNum = (val) => {
   const valid = val.length === 10 && $.isNumeric(val);
 
-
-
   customCssMethod(".err-msg-pm", "display", valid ? "none" : "block");
   customClassMethod(".parent-num", !valid, "error-state");
   customClassMethod(".parent-num-dropdown", !valid, "error-state");
@@ -293,7 +308,6 @@ const checkValidNum = (val) => {
 
 $(".parent-mobile-num").on("input", (e) => {
   $(".parent-mail").removeClass("parent-mobile-sp-number");
-
 
   if (dialCode == "+1") {
     const input = e.target.value.replace(/\D/g, "").substring(0, 10); // First ten digits of input only
@@ -327,7 +341,7 @@ $(".parent-mobile-num").on("input", (e) => {
     }
   }
   checkValidNum(parentMobileNum);
-  if(!e.target.value.length){
+  if (!e.target.value.length) {
     customCssMethod(".err-msg-pm", "display", "none");
     customClassMethod(".parent-num", false, "error-state");
     customClassMethod(".parent-num-dropdown", false, "error-state");
@@ -365,7 +379,8 @@ const enableScheduleCta = () => {
   }
 };
 
-$(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => { // side-panel initial form cta
+$(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => {
+  // side-panel initial form cta
   $(".form-loader").css("display", "block");
   $(
     `${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`
@@ -382,7 +397,8 @@ $(`${isMweb ? ".mweb-sp-initial-cta" : ".sp-initial-cta"}`).click(() => { // sid
   }
 });
 
-$(".ismusicfor").click((e) => { // toggle for music kids r adults
+$(".ismusicfor").click((e) => {
+  // toggle for music kids r adults
   isMusicKids = e.currentTarget.children[1].id.includes("kids");
   if (!isMusicKids) {
     selectedSubj = "music_for_all";
@@ -400,7 +416,9 @@ $(".ismusicfor").click((e) => { // toggle for music kids r adults
       "block"
     );
     selectedGrade = "";
-    $(`${isMweb ? '.grade-block-mweb':'.grade-block-web'}`).removeClass("active-state");
+    $(`${isMweb ? ".grade-block-mweb" : ".grade-block-web"}`).removeClass(
+      "active-state"
+    );
   }
   enableScheduleCta();
 });
@@ -459,8 +477,6 @@ const getOtp = (callback, isResend) => {
     ? `${PROD_BASE_URL}/api/V1/users/sendStudentVerificationCode?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=`
     : `${PROD_BASE_URL}/api/V1/otp/generate?regionId=${country}&timezone=${timeZone}&courseType=${selectedSubj}&brandId=whitehatjr`;
 
-
-
   $.ajax({
     type: "POST",
     url,
@@ -486,7 +502,6 @@ const getOtp = (callback, isResend) => {
 $(".resend-otp").click(() => {
   getOtp(spInitialCtaSuccess, true);
   $(".otp-input-box").val("");
-
 });
 
 $(".mweb-otp-close").click(() => {
@@ -494,7 +509,8 @@ $(".mweb-otp-close").click(() => {
   clearInterval(timeInterval);
 });
 
-$(".otp-input-box").on("input", (e) => { // verify-otp
+$(".otp-input-box").on("input", (e) => {
+  // verify-otp
   $(`div.otp-box`).removeClass("orange isError focus blink");
   $(`div.otp-box:nth-child(${e.target.value.length + 3})`).addClass("blink");
   $(".otp-box:nth-child(1)").focus();
@@ -655,7 +671,9 @@ const handleMecall = () => {
         });
         $(".otp-loader").css("display", "none");
         $(".otp-input").val("");
-        $(`${isMweb ? '.grade-block-mweb':'.grade-block-web'}`).removeClass("active-state");
+        $(`${isMweb ? ".grade-block-mweb" : ".grade-block-web"}`).removeClass(
+          "active-state"
+        );
         $(".music-state").css("display", "none");
 
         handleGetDashboardLink();
@@ -672,7 +690,8 @@ const handleMecall = () => {
   });
 };
 
-$(".radio-music-sc").click((e) => { // toggle for music sub-cat
+$(".radio-music-sc").click((e) => {
+  // toggle for music sub-cat
   const musicType = e.currentTarget.children.radio.id
     .split("-")[1]
     .toUpperCase();
@@ -768,7 +787,8 @@ const handleDateBlockStructure = () => {
 };
 
 const handleAddEventTODateBlock = () => {
-  $(".date-block").click((e) => { // date-block cta
+  $(".date-block").click((e) => {
+    // date-block cta
     const id = e.target.id.split("-").slice(-1)[0];
     onDateBlockClick(id);
   });
@@ -822,7 +842,8 @@ const getSlotsOnSelectedate = () => {
     }
   });
 
-  $(".slot-block-card").click((e) => { // slot-block cta
+  $(".slot-block-card").click((e) => {
+    // slot-block cta
     $(".slot-block-card").removeClass("active-state");
     id = e.target.id.split("-").slice(-1)[0];
     $(".slot-" + id).addClass("active-state");
@@ -843,11 +864,13 @@ const getSlotsOnSelectedate = () => {
   });
 };
 
-$(".mweb-sp-slot-cta").click(() => { // confirm slot cta for web
+$(".mweb-sp-slot-cta").click(() => {
+  // confirm slot cta for web
   handleBookSlot();
 });
 
-$(".confirm-slot-cta").click(() => { // confirm slot cta mweb
+$(".confirm-slot-cta").click(() => {
+  // confirm slot cta mweb
   handleBookSlot();
 });
 
@@ -922,8 +945,8 @@ const handleGetDashboardLink = (bookedSlot) => {
           $(".mweb-initial-form").css("display", "block");
           $(".m-web-side-pannel").css("display", "none");
           customCssMethod(".mweb-banner-form", "display", "block");
-        }else{
-            $(".sidepannel-close").click();
+        } else {
+          $(".sidepannel-close").click();
         }
       }
     },
@@ -948,9 +971,11 @@ const handleReset = () => {
   otpValue = "";
   selectedSubj = "";
   parentMobileNum = "";
-  formatedParentNum = ""
+  formatedParentNum = "";
   $(".subject-card-sp").removeClass("active-state");
-  $(`${isMweb ? '.grade-block-mweb':'.grade-block-web'}`).removeClass("active-state");
+  $(`${isMweb ? ".grade-block-mweb" : ".grade-block-web"}`).removeClass(
+    "active-state"
+  );
   $(".subject-card-sp").removeClass("disabled");
   $(`${isMweb ? ".mweb-otp-container" : ".otp-container"}`).css(
     "display",
@@ -974,13 +999,12 @@ const handleReset = () => {
   $(".grade-home").removeClass("active-state");
 
   $(".mweb-parent-mail-input").val(""); // main page form mobile number
-  $('body').css('overflow','auto')
+  $("body").css("overflow", "auto");
   $(".parent-mail").addClass("parent-mobile-sp-number");
 
   customClassMethod(".parent-num", false, "error-state");
   customClassMethod(".parent-num-dropdown", false, "error-state");
   customClassMethod(".parent-mobile-num", false, "error-state");
-
 
   customClassMethod(".parent-num", false, "active-field");
   customClassMethod(".parent-num-dropdown", false, "active-field");
@@ -1098,7 +1122,8 @@ const GMTOffset = (val) => {
   return `GMT${sign}${hours}:${mins}`;
 };
 
-$(`${isMweb ? ".mweb-search-timezone-input" : ".search-timezone-input"}`).on(  //timezone search filter
+$(`${isMweb ? ".mweb-search-timezone-input" : ".search-timezone-input"}`).on(
+  //timezone search filter
   "input",
   (e) => {
     const val = e.target.value.toUpperCase();
@@ -1114,8 +1139,6 @@ $(`${isMweb ? ".mweb-search-timezone-input" : ".search-timezone-input"}`).on(  /
   }
 );
 
-
-
 const checkForDeviceType = (s3) => {
   if (s3 === "deviceType") {
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -1124,7 +1147,6 @@ const checkForDeviceType = (s3) => {
     return s3;
   }
 };
-
 
 const sendEventsHOF = ({
   eventName,
@@ -1145,16 +1167,30 @@ const sendEventsHOF = ({
   s6SchemaName,
 }) => {
   let s3Val = checkForDeviceType(s3SchemaName);
-  let userId = studentDetails?.students[0]?.student_courses[0]?.studentId || null; 
+  let userId =
+    studentDetails?.students[0]?.student_courses[0]?.studentId || null;
   let eventDetails = {
     eventName: eventName,
     eventSource: eventSource,
-    data: { s3: s3Val, s4, s5, s6, tc, b1, b2, n1, n2, n3, userId:userId, screenName : eventSource   },
+    data: {
+      s3: s3Val,
+      s4,
+      s5,
+      s6,
+      tc,
+      b1,
+      b2,
+      n1,
+      n2,
+      n3,
+      userId: userId,
+      screenName: eventSource,
+    },
     schema: {
       //don't use s1, its reserved for userId
       //don't use s2, its reserved ofr eventSource
       userId: "s1",
-      screenName : "s2",
+      screenName: "s2",
       [s3SchemaName || "s3"]: "s3",
       [s4SchemaName || "s4"]: "s4",
       [s5SchemaName || "s5"]: "s5",
@@ -1190,7 +1226,6 @@ const sendEventsHOF = ({
   sendEvents(eventDetails);
 };
 
-
 const sendEvents = (eventDetails) => {
   $.ajax({
     type: "POST",
@@ -1199,7 +1234,6 @@ const sendEvents = (eventDetails) => {
     data: { ...eventDetails },
   });
 };
-
 
 sendEventsHOF({
   eventName: "LANDED",
