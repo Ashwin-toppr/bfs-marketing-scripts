@@ -53,7 +53,7 @@ window.addEventListener("load", () => {
   // function will auto call when whjr-analytics library loaded.
   window.onWhjrAnalyticsLoad = function () {
     window.WHJR_ANALYTICS.init({});
-    window.WHJR_ANALYTICS.load("0byCdi3R80vgmBwtcGL6jHBiTo7ElN8P");
+    window.WHJR_ANALYTICS.load("mjUFVeDvP9JdV2Gep3ZtWgF6Vqq977AA");
 
     getGeoLocation(); // to set geo location props globally
   };
