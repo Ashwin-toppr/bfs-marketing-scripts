@@ -350,6 +350,12 @@ $(".grade-home").click((e) => {
   });
 });
 
+$(".redirect-login").click((e) => {
+  window.WHJR_ANALYTICS.trackEvent("Login clicked", {
+    position: e.target.id,
+  });
+});
+
 getGradeBlocks();
 
 $(".subject-card-sp").click((e) => {
