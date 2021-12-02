@@ -143,7 +143,7 @@ handlePageLoadAnalytics = (page_name) => {
 (function () {
   $.ajax({
     type: "GET",
-    url: `${PROD_BASE_URL}/api/V1/geo/getInfo?_vercel_no_cache=1&courseType=${selectedSubj}&brandId=byju`,
+    url: `${PROD_BASE_URL}/api/V1/geo/getInfo?courseType=ALL&brandId=byju`,
     cache: false,
     success: function (res) {
       timeZone = res.data.timezone;
