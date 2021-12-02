@@ -45,9 +45,11 @@ var parentMobileNum = "",
     ? "TRIAL_REGISTER_BYJUS"
     : "TRIAL_REGISTER_BYJUS_BYJUS";
 
+
 // Analytics
 
 window.addEventListener("load", () => {
+  timeZone = moment.tz.guess();
   window.WHJR_ANALYTICS = window.WHJR_ANALYTICS || {};
 
   // function will auto call when whjr-analytics library loaded.
@@ -141,16 +143,18 @@ handlePageLoadAnalytics = (page_name) => {
 
 //side pannel code
 (function () {
-  $.ajax({
-    type: "GET",
-    url: `${PROD_BASE_URL}/api/V1/geo/getInfo?courseType=ALL&brandId=byju`,
-    cache: false,
-    success: function (res) {
-      timeZone = res.data.timezone;
-      country = res.data.countryIsoCode;
-      console.log(res.data);
-    },
-  });
+  if(!timeZone){
+    $.ajax({
+      type: "GET",
+      url: `${PROD_BASE_URL}/api/V1/geo/getInfo?courseType=ALL&brandId=byju`,
+      cache: false,
+      success: function (res) {
+        timeZone = res.data.timezone;
+        country = res.data.countryIsoCode;
+        console.log(res.data);
+      },
+    });
+  }
 })();
 
 // for dial codes
@@ -748,7 +752,7 @@ const handleRegisterUser = () => {
       isLaptop: "1",
       dialCode: dialCode,
       countryCode: country,
-      timezone: "Asia/Calcutta",
+      timezone: timeZone,
     },
 
     success: function (res) {
@@ -1090,8 +1094,8 @@ const handleBookSlot = () => {
   });
   $.ajax({
     type: "POST",
-    url: `${PROD_BASE_URL}/api/V1/trial/slots/book?timezone=${timeZone}&regionId=${country}&brandId=byju&courseType=${selectedSubj.toUpperCase()}&${
-      selectedSubj.includes("music") ? `courseSubType=${courseSubType}` : ""
+    url: `${PROD_BASE_URL}/api/V1/trial/slots/book?timezone=${timeZone}&regionId=${country}&brandId=byju&courseType=${selectedSubj.toUpperCase()}${
+      selectedSubj.includes("music") ? `&courseSubType=${courseSubType}` : ""
     }`,
     cache: false,
     data: {
@@ -1101,7 +1105,7 @@ const handleBookSlot = () => {
         endTime: moment(startTime).add(1, "hours").toISOString(),
       },
       courseType: selectedSubj.toUpperCase(),
-      studentId: studentDetails.students[0]?.student_courses[0]?.studentId,
+      studentId: studentDetails.students[0]?.id,
       grade: selectedGrade,
       timeZone: timeZone,
       ...(selectedSubj.includes("music") && { courseSubType: courseSubType }),
@@ -1140,7 +1144,7 @@ const handleBookSlot = () => {
 const handleGetDashboardLink = (bookedSlot) => {
   $.ajax({
     type: "GET",
-    url: `${PROD_BASE_URL}/api/V1/students/${studentDetails.students[0].student_courses[0].studentId}/getDashbordLink?timezone=${timeZone}&brandId=byju&courseType=${selectedSubj}`,
+    url: `${PROD_BASE_URL}/api/V1/students/${studentDetails.students[0].id}/getDashbordLink?timezone=${timeZone}&brandId=byju&courseType=${selectedSubj}`,
     cache: false,
     headers: {
       authorization: `Bearer ${token}`,
