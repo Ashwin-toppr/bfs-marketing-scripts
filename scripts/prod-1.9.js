@@ -832,6 +832,8 @@ const handleMecall = () => {
             isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"
           }`
         ).css("display", "flex");
+        $(".subject-card-sp").removeClass("active-state");
+
 
         $(
           `${isMweb ? ".mweb-registered-user-msg" : ".registered-user-msg"}`
