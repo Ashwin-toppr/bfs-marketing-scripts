@@ -49,7 +49,7 @@ var parentMobileNum = "",
 // Analytics
 
 window.addEventListener("load", () => {
-  timeZone = moment.tz.guess();
+  timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   window.WHJR_ANALYTICS = window.WHJR_ANALYTICS || {};
 
   // function will auto call when whjr-analytics library loaded.
