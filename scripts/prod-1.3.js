@@ -68,7 +68,7 @@ window.addEventListener("load", () => {
 function getGeoLocation() {
   $.ajax({
     type: "GET",
-    url: `${PROD_BASE_URL}/api/V1/geo/getInfo?brandId=byju&courseType= ALL`,
+    url: `${PROD_BASE_URL}/api/V1/geo/getInfo?brandId=byju&courseType=ALL`,
     cache: false,
 
     success: handleGeoLocationData,
