@@ -68,7 +68,7 @@ window.addEventListener("load", () => {
 function getGeoLocation() {
   $.ajax({
     type: "GET",
-    url: "https://nexfive.whjr.one/api/V1/geo/getInfo",
+    url: `${PROD_BASE_URL}/api/V1/geo/getInfo?brandId=byju&courseType= ALL`,
     cache: false,
 
     success: handleGeoLocationData,
@@ -143,7 +143,7 @@ handlePageLoadAnalytics = (page_name) => {
 (function () {
   $.ajax({
     type: "GET",
-    url: `${PROD_BASE_URL}/api/V1/geo/getInfo?_vercel_no_cache=1&courseType=${selectedSubj}&brandId=whitehatjr`,
+    url: `${PROD_BASE_URL}/api/V1/geo/getInfo?_vercel_no_cache=1&courseType=${selectedSubj}&brandId=byju`,
     cache: false,
     success: function (res) {
       timeZone = res.data.timezone;
@@ -408,7 +408,7 @@ $(".subject-card-sp").click((e) => {
 const isExist = () => {
   $.ajax({
     type: "POST",
-    url: `${PROD_BASE_URL}/api/V1/userDetail/existByEmailOrMobile?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr`,
+    url: `${PROD_BASE_URL}/api/V1/userDetail/existByEmailOrMobile?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj}&brandId=byju`,
     cache: false,
     data: { mobile: parentMobileNum, dialCode },
 
@@ -612,8 +612,8 @@ const otpTimer = () => {
 
 const getOtp = (callback, isResend) => {
   const url = isUserExist
-    ? `${PROD_BASE_URL}/api/V1/users/sendStudentVerificationCode?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=`
-    : `${PROD_BASE_URL}/api/V1/otp/generate?regionId=${country}&timezone=${timeZone}&courseType=${selectedSubj}&brandId=whitehatjr`;
+    ? `${PROD_BASE_URL}/api/V1/users/sendStudentVerificationCode?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj}&brandId=byju&timestamp=`
+    : `${PROD_BASE_URL}/api/V1/otp/generate?regionId=${country}&timezone=${timeZone}&courseType=${selectedSubj}&brandId=byju`;
 
   $.ajax({
     type: "POST",
@@ -668,8 +668,8 @@ $(".otp-input-box").on("input", (e) => {
     window.WHJR_ANALYTICS.trackEvent("Verification code entered", {});
 
     const url = isUserExist
-      ? `${PROD_BASE_URL}/api/V1/users/authenticateVerificationCode?timezone=${timeZone}&_vercel_no_cache=1&regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr&timestamp=`
-      : `${PROD_BASE_URL}/api/V1/otp/verify?timezone=${timeZone}`;
+      ? `${PROD_BASE_URL}/api/V1/users/authenticateVerificationCode?timezone=${timeZone}&_vercel_no_cache=1&regionId=${country}&courseType=${selectedSubj}&brandId=byju&timestamp=`
+      : `${PROD_BASE_URL}/api/V1/otp/verify?timezone=${timeZone}&brandId=byju`;
     $.ajax({
       type: "POST",
       url: url,
@@ -740,7 +740,7 @@ const handleUserPropsAnalytics = (student) => {
 const handleRegisterUser = () => {
   $.ajax({
     type: "POST",
-    url: `${PROD_BASE_URL}/api/V1/trial/users/minimalFieldRegister?timezone=${timeZone}&isMobilePlatform=false&timestamp=`,
+    url: `${PROD_BASE_URL}/api/V1/trial/users/minimalFieldRegister?timezone=${timeZone}&isMobilePlatform=false&brandId=byju&timestamp=`,
     cache: false,
     data: {
       mobile: parentMobileNum,
@@ -777,7 +777,7 @@ const handleRegisterUser = () => {
 const handleMecall = () => {
   $.ajax({
     type: "GET",
-    url: `${PROD_BASE_URL}/api/V1/userDetail/me?timezone=${timeZone}&timestamp=`,
+    url: `${PROD_BASE_URL}/api/V1/userDetail/me?timezone=${timeZone}&brandId=byju&timestamp=`,
     cache: false,
     headers: {
       authorization: `Bearer ${token}`,
@@ -883,7 +883,7 @@ const handleGetSlots = () => {
 
   $.ajax({
     type: "GET",
-    url: `${PROD_BASE_URL}/api/V1/trial/slots/get?countryCode=${country}&grade=${selectedGrade}&timezone=${timeZone}&courseType=${selectedSubj.toUpperCase()}${
+    url: `${PROD_BASE_URL}/api/V1/trial/slots/get?countryCode=${country}&grade=${selectedGrade}&timezone=${timeZone}&brandId=byju&courseType=${selectedSubj.toUpperCase()}${
       selectedSubj.includes("music") ? "&courseSubType=" + courseSubType : ""
     }`,
     cache: false,
@@ -1090,7 +1090,7 @@ const handleBookSlot = () => {
   });
   $.ajax({
     type: "POST",
-    url: `${PROD_BASE_URL}/api/V1/trial/slots/book?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj.toUpperCase()}&${
+    url: `${PROD_BASE_URL}/api/V1/trial/slots/book?timezone=${timeZone}&regionId=${country}&brandId=byju&courseType=${selectedSubj.toUpperCase()}&${
       selectedSubj.includes("music") ? `courseSubType=${courseSubType}` : ""
     }`,
     cache: false,
@@ -1140,7 +1140,7 @@ const handleBookSlot = () => {
 const handleGetDashboardLink = (bookedSlot) => {
   $.ajax({
     type: "GET",
-    url: `${PROD_BASE_URL}/api/V1/students/${studentDetails.students[0].student_courses[0].studentId}/getDashbordLink?timezone=${timeZone}&brandId=whitehatjr&langCode=en_US&courseType=${selectedSubj}`,
+    url: `${PROD_BASE_URL}/api/V1/students/${studentDetails.students[0].student_courses[0].studentId}/getDashbordLink?timezone=${timeZone}&brandId=byju&courseType=${selectedSubj}`,
     cache: false,
     headers: {
       authorization: `Bearer ${token}`,
@@ -1451,7 +1451,7 @@ const sendEventsHOF = ({
 const sendEvents = (eventDetails) => {
   $.ajax({
     type: "POST",
-    url: `${PROD_BASE_URL}/api/V1/events/saveEvent?regionId=${country}&courseType=${selectedSubj}&brandId=whitehatjr`,
+    url: `${PROD_BASE_URL}/api/V1/events/saveEvent?regionId=${country}&courseType=${selectedSubj}&brandId=byju`,
     cache: false,
     data: { ...eventDetails },
   });
