@@ -143,18 +143,18 @@ handlePageLoadAnalytics = (page_name) => {
 //side pannel code
 (function () {
   timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  if(!timeZone){
+  // if(!timeZone){
     $.ajax({
       type: "GET",
       url: `${PROD_BASE_URL}/api/V1/geo/getInfo?courseType=ALL&brandId=byju`,
       cache: false,
       success: function (res) {
-        timeZone = res.data.timezone;
+        if (!timeZone) timeZone = res.data.timezone;
         country = res.data.countryIsoCode;
         console.log(res.data);
       },
     });
-  }
+  // }
 })();
 
 // for dial codes
