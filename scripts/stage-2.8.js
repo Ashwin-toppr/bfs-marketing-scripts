@@ -976,7 +976,7 @@ const handleAddEventTODateBlock = () => {
     const selectedDateBlock = slotsData[id].date;
 
     window.WHJR_ANALYTICS.trackEvent("Booking Day Clicked", {
-      slot_date: moment(selectedDateBlock).format("ddd"),
+      slot_date: moment.tz(selectedDateBlock,timeZone).format("ddd"),
       day_position: id,
       timezone: timeZone,
     });
@@ -1030,10 +1030,10 @@ const getSlotsOnSelectedate = () => {
 
         window.WHJR_ANALYTICS.trackEvent("Viewed Slot Screen", {
           is_slot_preselected: true,
-          preselected_slot_time: moment(
-            slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime
+          preselected_slot_time: moment.tz(
+            slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime,timeZone
           ).format("LT"),
-          preselected_slot_date: moment(selectedDateBlock).format("ddd"),
+          preselected_slot_date: moment.tz(selectedDateBlock,timeZone).format("ddd"),
           preselected_slot_timezone: timeZone,
         });
       }
@@ -1061,10 +1061,10 @@ const getSlotsOnSelectedate = () => {
     );
 
     window.WHJR_ANALYTICS.trackEvent("Booking Time Selected", {
-      slot_time: moment(
-        slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime
+      slot_time: moment.tz(
+        slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime, timeZone
       ).format("LT"),
-      slot_date: moment(selectedDateBlock).format("ddd"),
+      slot_date: moment.tz(selectedDateBlock,timeZone).format("ddd"),
       time_position: selectedDateIndex,
       timezone: timeZone,
     });
@@ -1087,8 +1087,8 @@ const handleBookSlot = () => {
   $(".slot-loader").css("display", "block");
 
   window.WHJR_ANALYTICS.trackEvent("Confirm class time clicked", {
-    slot_date: moment(startTime).format("ddd"),
-    slot_time: moment(startTime).format("LT"),
+    slot_date: moment.tz(startTime,timeZone).format("ddd"),
+    slot_time: moment.tz(startTime,timeZone).format("LT"),
   });
   $.ajax({
     type: "POST",
@@ -1100,7 +1100,7 @@ const handleBookSlot = () => {
       countryCode: country,
       slot: {
         startTime: startTime,
-        endTime: moment(startTime).add(1, "hours").toISOString(),
+        endTime: moment.tz(startTime).add(1, "hours").toISOString(),
       },
       courseType: selectedSubj.toUpperCase(),
       studentId: studentDetails.students[0]?.id,
@@ -1123,8 +1123,8 @@ const handleBookSlot = () => {
       });
 
       window.WHJR_ANALYTICS.trackEvent("Trial Booking Confirmed frontend", {
-        slot_date: moment(startTime).format("ddd"),
-        slot_time: moment(startTime).format("LT"),
+        slot_date: moment.tz(startTime,timeZone).format("ddd"),
+        slot_time: moment.tz(startTime,timeZone).format("LT"),
         timezone: timeZone,
       });
     },
