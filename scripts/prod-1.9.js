@@ -1,7 +1,5 @@
-
 // production code
-
-
+// import TIMEZONE_DATA from "./timezonesList";
 var dialCodesList,
   dialCode = "+1",
   country = "US",
@@ -45,7 +43,6 @@ var parentMobileNum = "",
     ? "TRIAL_REGISTER_BYJUS"
     : "TRIAL_REGISTER_BYJUS_BYJUS";
 
-
 // Analytics
 
 window.addEventListener("load", () => {
@@ -54,7 +51,7 @@ window.addEventListener("load", () => {
   // function will auto call when whjr-analytics library loaded.
   window.onWhjrAnalyticsLoad = function () {
     window.WHJR_ANALYTICS.init({});
-    window.WHJR_ANALYTICS.load("mjUFVeDvP9JdV2Gep3ZtWgF6Vqq977AA");
+    window.WHJR_ANALYTICS.load("w7YH8EJ1PxsEiWlAazGGdKaKbIXKcZl0");
 
     getGeoLocation(); // to set geo location props globally
   };
@@ -69,7 +66,7 @@ window.addEventListener("load", () => {
 function getGeoLocation() {
   $.ajax({
     type: "GET",
-    url: `${PROD_BASE_URL}/api/V1/geo/getInfo?brandId=byju&courseType=ALL`,
+    url: `${PROD_BASE_URL}/api/V1/geo/getInfo?brandId=byju&courseType=ALL&timestamp=${new Date().getTime()}`,
     cache: false,
 
     success: handleGeoLocationData,
@@ -138,22 +135,20 @@ handlePageLoadAnalytics = (page_name) => {
   // window.WHJR_ANALYTICS.trackEvent(`${page} page viewed`, {});
 };
 
-//   for preselecting subj
-
 //side pannel code
 (function () {
   timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   // if(!timeZone){
-    $.ajax({
-      type: "GET",
-      url: `${PROD_BASE_URL}/api/V1/geo/getInfo?courseType=ALL&brandId=byju`,
-      cache: false,
-      success: function (res) {
-        if (!timeZone) timeZone = res.data.timezone;
-        country = res.data.countryIsoCode;
-        console.log(res.data);
-      },
-    });
+  $.ajax({
+    type: "GET",
+    url: `${PROD_BASE_URL}/api/V1/geo/getInfo?courseType=ALL&brandId=byju&timestamp=${new Date().getTime()}`,
+    cache: false,
+    success: function (res) {
+      if (!timeZone) timeZone = res.data.timezone;
+      country = res.data.countryIsoCode;
+      console.log(res.data);
+    },
+  });
   // }
 })();
 
@@ -412,7 +407,7 @@ $(".subject-card-sp").click((e) => {
 const isExist = () => {
   $.ajax({
     type: "POST",
-    url: `${PROD_BASE_URL}/api/V1/userDetail/existByEmailOrMobile?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj}&brandId=byju`,
+    url: `${PROD_BASE_URL}/api/V1/userDetail/existByEmailOrMobile?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj}&brandId=byju&timestamp=${new Date().getTime()}`,
     cache: false,
     data: { mobile: parentMobileNum, dialCode },
 
@@ -616,8 +611,8 @@ const otpTimer = () => {
 
 const getOtp = (callback, isResend) => {
   const url = isUserExist
-    ? `${PROD_BASE_URL}/api/V1/users/sendStudentVerificationCode?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj}&brandId=byju&timestamp=`
-    : `${PROD_BASE_URL}/api/V1/otp/generate?regionId=${country}&timezone=${timeZone}&courseType=${selectedSubj}&brandId=byju`;
+    ? `${PROD_BASE_URL}/api/V1/users/sendStudentVerificationCode?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj}&brandId=byju&timestamp=${new Date().getTime()}`
+    : `${PROD_BASE_URL}/api/V1/otp/generate?regionId=${country}&timezone=${timeZone}&courseType=${selectedSubj}&brandId=byju&timestamp=${new Date().getTime()}`;
 
   $.ajax({
     type: "POST",
@@ -672,8 +667,8 @@ $(".otp-input-box").on("input", (e) => {
     window.WHJR_ANALYTICS.trackEvent("Verification code entered", {});
 
     const url = isUserExist
-      ? `${PROD_BASE_URL}/api/V1/users/authenticateVerificationCode?timezone=${timeZone}&_vercel_no_cache=1&regionId=${country}&courseType=${selectedSubj}&brandId=byju&timestamp=`
-      : `${PROD_BASE_URL}/api/V1/otp/verify?timezone=${timeZone}&brandId=byju`;
+      ? `${PROD_BASE_URL}/api/V1/users/authenticateVerificationCode?timezone=${timeZone}&_vercel_no_cache=1&regionId=${country}&courseType=${selectedSubj}&brandId=byju&timestamp=${new Date().getTime()}`
+      : `${PROD_BASE_URL}/api/V1/otp/verify?timezone=${timeZone}&brandId=byju&timestamp=${new Date().getTime()}`;
     $.ajax({
       type: "POST",
       url: url,
@@ -699,7 +694,6 @@ $(".otp-input-box").on("input", (e) => {
         }
 
         const student = res.data;
-        handleUserPropsAnalytics(student);
 
         window.WHJR_ANALYTICS.trackEvent(
           isUserExist ? "Login success frontend" : "Signed up frontend",
@@ -744,7 +738,7 @@ const handleUserPropsAnalytics = (student) => {
 const handleRegisterUser = () => {
   $.ajax({
     type: "POST",
-    url: `${PROD_BASE_URL}/api/V1/trial/users/minimalFieldRegister?timezone=${timeZone}&isMobilePlatform=false&brandId=byju&timestamp=`,
+    url: `${PROD_BASE_URL}/api/V1/trial/users/minimalFieldRegister?timezone=${timeZone}&isMobilePlatform=false&brandId=byju&timestamp=${new Date().getTime()}`,
     cache: false,
     data: {
       mobile: parentMobileNum,
@@ -767,7 +761,6 @@ const handleRegisterUser = () => {
       });
 
       const student = res.data.students[0];
-      handleUserPropsAnalytics(student);
     },
     error: function (err) {
       Toastify({
@@ -781,7 +774,7 @@ const handleRegisterUser = () => {
 const handleMecall = () => {
   $.ajax({
     type: "GET",
-    url: `${PROD_BASE_URL}/api/V1/userDetail/me?timezone=${timeZone}&brandId=byju&timestamp=`,
+    url: `${PROD_BASE_URL}/api/V1/userDetail/me?timezone=${timeZone}&brandId=byju&timestamp=${new Date().getTime()}`,
     cache: false,
     headers: {
       authorization: `Bearer ${token}`,
@@ -789,6 +782,8 @@ const handleMecall = () => {
 
     success: function (res) {
       studentDetails = res.data;
+
+      handleUserPropsAnalytics(studentDetails.students[0]);
 
       const errStatements = {
         not_scheduled: "",
@@ -834,7 +829,6 @@ const handleMecall = () => {
         ).css("display", "flex");
         $(".subject-card-sp").removeClass("active-state");
 
-
         $(
           `${isMweb ? ".mweb-registered-user-msg" : ".registered-user-msg"}`
         ).text(errStatements[trailStatus[0].trialStatus]);
@@ -873,6 +867,7 @@ const handleMecall = () => {
 
 $(".radio-music-sc").click((e) => {
   // toggle for music sub-cat
+  e.stopPropagation();
   const musicType = e.currentTarget.children.radio.id
     .split("-")[1]
     .toUpperCase();
@@ -885,11 +880,13 @@ $(".radio-music-sc").click((e) => {
 });
 
 const handleGetSlots = () => {
+  // let loading = true
+  // if(!loading)
   $(".slot-loader").css("display", "block");
 
   $.ajax({
     type: "GET",
-    url: `${PROD_BASE_URL}/api/V1/trial/slots/get?countryCode=${country}&grade=${selectedGrade}&timezone=${timeZone}&brandId=byju&courseType=${selectedSubj.toUpperCase()}${
+    url: `${PROD_BASE_URL}/api/V1/trial/slots/get?countryCode=${country}&grade=${selectedGrade}&timezone=${timeZone}&brandId=byju&courseType=${selectedSubj.toUpperCase()}&timestamp=${new Date().getTime()}${
       selectedSubj.includes("music") ? "&courseSubType=" + courseSubType : ""
     }`,
     cache: false,
@@ -956,19 +953,16 @@ const handleDateBlockStructure = () => {
       ' " id="date-' +
       index +
       '" ><p class="day-label">' +
-      moment(date.date).format("ddd") +
+      moment.tz(date.date, timeZone).format("ddd") +
       '</p><p class="date-label">' +
-      moment(date.date).format("DD") +
+      moment.tz(date.date, timeZone).format("DD") +
       '</p><p class="month-label">' +
-      moment(date.date).format("MMM") +
+      moment.tz(date.date, timeZone).format("MMM") +
       "</p></div>";
 
     $(".date-block-container").append(dateBlock);
   });
   handleAddEventTODateBlock();
-  if (selectedSubj == "music") {
-    $(".music-sub-cat").css("display", "none");
-  }
 };
 
 const handleAddEventTODateBlock = () => {
@@ -980,7 +974,7 @@ const handleAddEventTODateBlock = () => {
     const selectedDateBlock = slotsData[id].date;
 
     window.WHJR_ANALYTICS.trackEvent("Booking Day Clicked", {
-      slot_date: moment(selectedDateBlock).format("ddd"),
+      slot_date: moment.tz(selectedDateBlock, timeZone).format("ddd"),
       day_position: id,
       timezone: timeZone,
     });
@@ -1010,7 +1004,7 @@ const getSlotsOnSelectedate = () => {
       '" class="slot-block-card slot-' +
       index +
       '"><p class="slot-time">' +
-      moment(slot.startTime).format("LT") +
+      moment.tz(slot.startTime, timeZone).format("LT") +
       "</p></div>";
 
     if (slot.teacherCount) {
@@ -1021,23 +1015,33 @@ const getSlotsOnSelectedate = () => {
         selectedTimeSlot = index;
         isSlotSelected = false;
         $(".slot-time-msg").text(
-          `${moment(
-            slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime
-          ).format("LT")} `
+          `${moment
+            .tz(
+              slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime,
+              timeZone
+            )
+            .format("LT")} `
         );
         const selectedDateBlock = slotsData[selectedDateIndex].date;
         $(".slot-date-msg").text(
-          `${moment(selectedDateBlock).format("ddd")}, ${moment(
-            selectedDateBlock
-          ).format("DD")} ${moment(selectedDateBlock).format("MMM")}`
+          `${moment.tz(selectedDateBlock, timeZone).format("ddd")}, ${moment
+            .tz(selectedDateBlock, timeZone)
+            .format("DD")} ${moment
+            .tz(selectedDateBlock, timeZone)
+            .format("MMM")}`
         );
 
         window.WHJR_ANALYTICS.trackEvent("Viewed Slot Screen", {
           is_slot_preselected: true,
-          preselected_slot_time: moment(
-            slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime
-          ).format("LT"),
-          preselected_slot_date: moment(selectedDateBlock).format("ddd"),
+          preselected_slot_time: moment
+            .tz(
+              slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime,
+              timeZone
+            )
+            .format("LT"),
+          preselected_slot_date: moment
+            .tz(selectedDateBlock, timeZone)
+            .format("ddd"),
           preselected_slot_timezone: timeZone,
         });
       }
@@ -1053,22 +1057,28 @@ const getSlotsOnSelectedate = () => {
     // $(".mweb-sp-slot-cta").removeClass("disabled");
     // $(".confirm-slot-cta").removeClass("disabled");
     $(".slot-time-msg").text(
-      `${moment(
-        slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime
-      ).format("LT")} `
+      `${moment
+        .tz(
+          slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime,
+          timeZone
+        )
+        .format("LT")} `
     );
     const selectedDateBlock = slotsData[selectedDateIndex].date;
     $(".slot-date-msg").text(
-      `${moment(selectedDateBlock).format("ddd")}, ${moment(
-        selectedDateBlock
-      ).format("DD")} ${moment(selectedDateBlock).format("MMM")}`
+      `${moment.tz(selectedDateBlock, timeZone).format("ddd")}, ${moment
+        .tz(selectedDateBlock, timeZone)
+        .format("DD")} ${moment.tz(selectedDateBlock, timeZone).format("MMM")}`
     );
 
     window.WHJR_ANALYTICS.trackEvent("Booking Time Selected", {
-      slot_time: moment(
-        slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime
-      ).format("LT"),
-      slot_date: moment(selectedDateBlock).format("ddd"),
+      slot_time: moment
+        .tz(
+          slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime,
+          timeZone
+        )
+        .format("LT"),
+      slot_date: moment.tz(selectedDateBlock, timeZone).format("ddd"),
       time_position: selectedDateIndex,
       timezone: timeZone,
     });
@@ -1091,12 +1101,12 @@ const handleBookSlot = () => {
   $(".slot-loader").css("display", "block");
 
   window.WHJR_ANALYTICS.trackEvent("Confirm class time clicked", {
-    slot_date: moment(startTime).format("ddd"),
-    slot_time: moment(startTime).format("LT"),
+    slot_date: moment.tz(startTime, timeZone).format("ddd"),
+    slot_time: moment.tz(startTime, timeZone).format("LT"),
   });
   $.ajax({
     type: "POST",
-    url: `${PROD_BASE_URL}/api/V1/trial/slots/book?timezone=${timeZone}&regionId=${country}&brandId=byju&courseType=${selectedSubj.toUpperCase()}${
+    url: `${PROD_BASE_URL}/api/V1/trial/slots/book?timezone=${timeZone}&regionId=${country}&brandId=byju&timestamp=${new Date().getTime()}&courseType=${selectedSubj.toUpperCase()}${
       selectedSubj.includes("music") ? `&courseSubType=${courseSubType}` : ""
     }`,
     cache: false,
@@ -1104,7 +1114,7 @@ const handleBookSlot = () => {
       countryCode: country,
       slot: {
         startTime: startTime,
-        endTime: moment(startTime).add(1, "hours").toISOString(),
+        endTime: moment.tz(startTime).add(1, "hours").toISOString(),
       },
       courseType: selectedSubj.toUpperCase(),
       studentId: studentDetails.students[0]?.id,
@@ -1127,8 +1137,8 @@ const handleBookSlot = () => {
       });
 
       window.WHJR_ANALYTICS.trackEvent("Trial Booking Confirmed frontend", {
-        slot_date: moment(startTime).format("ddd"),
-        slot_time: moment(startTime).format("LT"),
+        slot_date: moment.tz(startTime, timeZone).format("ddd"),
+        slot_time: moment.tz(startTime, timeZone).format("LT"),
         timezone: timeZone,
       });
     },
@@ -1146,7 +1156,9 @@ const handleBookSlot = () => {
 const handleGetDashboardLink = (bookedSlot) => {
   $.ajax({
     type: "GET",
-    url: `${PROD_BASE_URL}/api/V1/students/${studentDetails.students[0].id}/getDashbordLink?timezone=${timeZone}&brandId=byju&courseType=${selectedSubj}`,
+    url: `${PROD_BASE_URL}/api/V1/students/${
+      studentDetails.students[0].id
+    }/getDashbordLink?timezone=${timeZone}&brandId=byju&courseType=${selectedSubj}&timestamp=${new Date().getTime()}`,
     cache: false,
     headers: {
       authorization: `Bearer ${token}`,
@@ -1157,10 +1169,13 @@ const handleGetDashboardLink = (bookedSlot) => {
       $(".slot-loader").css("display", "none");
 
       if (bookedSlot) {
-        window.open(
-          `https://code.byjusfutureschool.com/s/trial/success?jwt_token=${token}`,
-          "_blank"
-        );
+        const subjects = {
+          math: "math",
+          coding: "code",
+          music: "music",
+          music_for_all: "musicplus",
+        };
+        window.location.href = `https://code.byjusfutureschool.com/s/trial/success?jwt_token=${token}`;
         handleReset();
         if (isMweb) {
           $(".mweb-slot-container").css("display", "none");
@@ -1284,35 +1299,36 @@ $(".mweb-timezone-value-container").click(() => {
 });
 
 const handleGetTimezonesList = () => {
-  $.ajax({
-    type: "GET",
-    url: `https://api.timezonedb.com/v2.1/list-time-zone?key=VOWU23FPD15G&format=json`,
-    cache: false,
-    success: function (res) {
-      timezonesList = res.zones;
-      getTimeZonesEmbedded();
-    },
-  });
+  // $.ajax({
+  //   type: "GET",
+  //   url: `https://api.timezonedb.com/v2.1/list-time-zone?key=VOWU23FPD15G&format=json`,
+  //   cache: false,
+  //   success: function (res) {
+  //     timezonesList = res.zones;
+  //     getTimeZonesEmbedded();
+  //   },
+  // });
+  timezonesList = moment.tz.names();
+  getTimeZonesEmbedded();
 };
 
 const getTimeZonesEmbedded = (TZList = timezonesList) => {
   $(`${isMweb ? ".mweb-timezones-container" : ".timezones-container"}`).empty();
   let item;
   TZList.map((zone) => {
+    // let zoneName = TIMEZONE_DATA[zone] && zone
     if (isMweb) {
-      item = `<div class="mweb-timezone-item"><p  class="tz-name events-none">${
-        zone.zoneName
-      }</p><p class="tz-gmt events-none">(${GMTOffset(
-        zone.gmtOffset
-      )})</p><div  class="mweb-checked-image events-none ${
+      item = `<div class="mweb-timezone-item"><p  class="tz-name events-none">${zone}</p><p class="tz-gmt events-none">(GMT${moment
+        .tz(zone)
+        .format("Z")})</p><div  class="mweb-checked-image events-none ${
         timeZone == zone.zoneName ? "" : "d-none"
       }"><img src="https://uploads-ssl.webflow.com/616e5b481c168d84b208db74/61889840cc7f1927bc91374a_Clickable.png" loading="lazy" alt=""></div></div>`;
     } else {
       item = `<div class="timezone-item">
-          <p class="paragraph-50 events-none ">${zone.zoneName}</p>
-          <p class="paragraph-51 events-none ">(${GMTOffset(
-            zone.gmtOffset
-          )})</p>
+          <p class="paragraph-50 events-none ">${zone}</p>
+          <p class="paragraph-51 events-none ">(GMT${moment
+            .tz(zone)
+            .format("Z")})</p>
           <div class="checked-image events-none ${
             timeZone == zone.zoneName ? "" : "d-none"
           } "><img src="https://uploads-ssl.webflow.com/616e5b481c168d84b208db74/61889840cc7f1927bc91374a_Clickable.png" loading="lazy" alt=""></div></div>`;
@@ -1358,7 +1374,7 @@ $(`${isMweb ? ".mweb-search-timezone-input" : ".search-timezone-input"}`).on(
     let tempTZList;
     if (val.length > 3) {
       tempTZList = timezonesList.filter(
-        (item) => item.zoneName.toUpperCase().indexOf(val) > -1
+        (item) => item.toUpperCase().indexOf(val) > -1
       );
     } else {
       tempTZList = timezonesList;
@@ -1457,7 +1473,7 @@ const sendEventsHOF = ({
 const sendEvents = (eventDetails) => {
   $.ajax({
     type: "POST",
-    url: `${PROD_BASE_URL}/api/V1/events/saveEvent?regionId=${country}&courseType=${selectedSubj}&brandId=byju`,
+    url: `${PROD_BASE_URL}/api/V1/events/saveEvent?regionId=${country}&courseType=${selectedSubj}&brandId=byju&timestamp=${new Date().getTime()}`,
     cache: false,
     data: { ...eventDetails },
   });

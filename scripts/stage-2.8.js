@@ -869,7 +869,7 @@ const handleMecall = () => {
 
 $(".radio-music-sc").click((e) => {
   // toggle for music sub-cat
-  e.stoppropagation();
+  e.stopPropagation();
   const musicType = e.currentTarget.children.radio.id
     .split("-")[1]
     .toUpperCase();
