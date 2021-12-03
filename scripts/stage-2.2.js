@@ -1,5 +1,5 @@
 // production code
-
+import TIMEZONE_DATA from "./timezonesList";
 var dialCodesList,
   dialCode = "+1",
   country = "US",
@@ -1298,20 +1298,17 @@ const getTimeZonesEmbedded = (TZList = timezonesList) => {
   $(`${isMweb ? ".mweb-timezones-container" : ".timezones-container"}`).empty();
   let item;
   TZList.map((zone) => {
+    // let zoneName = TIMEZONE_DATA[zone] && zone
     if (isMweb) {
       item = `<div class="mweb-timezone-item"><p  class="tz-name events-none">${
-        zone.zoneName
-      }</p><p class="tz-gmt events-none">(${GMTOffset(
-        zone.gmtOffset
-      )})</p><div  class="mweb-checked-image events-none ${
+        zone
+      }</p><p class="tz-gmt events-none">(GMT${moment.tz(zone).format('Z')})</p><div  class="mweb-checked-image events-none ${
         timeZone == zone.zoneName ? "" : "d-none"
       }"><img src="https://uploads-ssl.webflow.com/616e5b481c168d84b208db74/61889840cc7f1927bc91374a_Clickable.png" loading="lazy" alt=""></div></div>`;
     } else {
       item = `<div class="timezone-item">
-          <p class="paragraph-50 events-none ">${zone.zoneName}</p>
-          <p class="paragraph-51 events-none ">(${GMTOffset(
-            zone.gmtOffset
-          )})</p>
+          <p class="paragraph-50 events-none ">${zone}</p>
+          <p class="paragraph-51 events-none ">(GMT${moment.tz(zone).format('Z')})</p>
           <div class="checked-image events-none ${
             timeZone == zone.zoneName ? "" : "d-none"
           } "><img src="https://uploads-ssl.webflow.com/616e5b481c168d84b208db74/61889840cc7f1927bc91374a_Clickable.png" loading="lazy" alt=""></div></div>`;
