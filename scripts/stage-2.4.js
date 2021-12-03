@@ -694,7 +694,6 @@ $(".otp-input-box").on("input", (e) => {
         }
 
         const student = res.data;
-        handleUserPropsAnalytics(student);
 
         window.WHJR_ANALYTICS.trackEvent(
           isUserExist ? "Login success frontend" : "Signed up frontend",
@@ -784,6 +783,9 @@ const handleMecall = () => {
 
     success: function (res) {
       studentDetails = res.data;
+
+
+        handleUserPropsAnalytics(studentDetails.students[0]);
 
       const errStatements = {
         not_scheduled: "",
@@ -953,11 +955,11 @@ const handleDateBlockStructure = () => {
       ' " id="date-' +
       index +
       '" ><p class="day-label">' +
-      moment(date.date).format("ddd") +
+      moment.tz(date.date, timezone).format("ddd") +
       '</p><p class="date-label">' +
-      moment(date.date).format("DD") +
+      moment.tz(date.date, timezone).format("DD") +
       '</p><p class="month-label">' +
-      moment(date.date).format("MMM") +
+      moment.tz(date.date, timezone).format("MMM") +
       "</p></div>";
 
     $(".date-block-container").append(dateBlock);
@@ -1004,7 +1006,7 @@ const getSlotsOnSelectedate = () => {
       '" class="slot-block-card slot-' +
       index +
       '"><p class="slot-time">' +
-      moment(slot.startTime).format("LT") +
+      moment.tz(slot.startTime,timezone).format("LT") +
       "</p></div>";
 
     if (slot.teacherCount) {
@@ -1015,15 +1017,15 @@ const getSlotsOnSelectedate = () => {
         selectedTimeSlot = index;
         isSlotSelected = false;
         $(".slot-time-msg").text(
-          `${moment(
-            slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime
+          `${moment.tz(
+            slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime,timezone
           ).format("LT")} `
         );
         const selectedDateBlock = slotsData[selectedDateIndex].date;
         $(".slot-date-msg").text(
-          `${moment(selectedDateBlock).format("ddd")}, ${moment(
+          `${moment.tz(selectedDateBlock,timezone).format("ddd")}, ${moment(
             selectedDateBlock
-          ).format("DD")} ${moment(selectedDateBlock).format("MMM")}`
+          ).format("DD")} ${moment.tz(selectedDateBlock,timezone).format("MMM")}`
         );
 
         window.WHJR_ANALYTICS.trackEvent("Viewed Slot Screen", {
@@ -1354,7 +1356,7 @@ $(`${isMweb ? ".mweb-search-timezone-input" : ".search-timezone-input"}`).on(
     let tempTZList;
     if (val.length > 3) {
       tempTZList = timezonesList.filter(
-        (item) => item.zoneName.toUpperCase().indexOf(val) > -1
+        (item) => item.toUpperCase().indexOf(val) > -1
       );
     } else {
       tempTZList = timezonesList;
