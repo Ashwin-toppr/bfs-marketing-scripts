@@ -954,11 +954,11 @@ const handleDateBlockStructure = () => {
       ' " id="date-' +
       index +
       '" ><p class="day-label">' +
-      moment.tz(date.date, timezone).format("ddd") +
+      moment.tz(date.date, timeZone).format("ddd") +
       '</p><p class="date-label">' +
-      moment.tz(date.date, timezone).format("DD") +
+      moment.tz(date.date, timeZone).format("DD") +
       '</p><p class="month-label">' +
-      moment.tz(date.date, timezone).format("MMM") +
+      moment.tz(date.date, timeZone).format("MMM") +
       "</p></div>";
 
     $(".date-block-container").append(dateBlock);
@@ -1005,7 +1005,7 @@ const getSlotsOnSelectedate = () => {
       '" class="slot-block-card slot-' +
       index +
       '"><p class="slot-time">' +
-      moment.tz(slot.startTime,timezone).format("LT") +
+      moment.tz(slot.startTime,timeZone).format("LT") +
       "</p></div>";
 
     if (slot.teacherCount) {
@@ -1017,14 +1017,14 @@ const getSlotsOnSelectedate = () => {
         isSlotSelected = false;
         $(".slot-time-msg").text(
           `${moment.tz(
-            slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime,timezone
+            slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime,timeZone
           ).format("LT")} `
         );
         const selectedDateBlock = slotsData[selectedDateIndex].date;
         $(".slot-date-msg").text(
-          `${moment.tz(selectedDateBlock,timezone).format("ddd")}, ${moment(
+          `${moment.tz(selectedDateBlock,timeZone).format("ddd")}, ${moment(
             selectedDateBlock
-          ).format("DD")} ${moment.tz(selectedDateBlock,timezone).format("MMM")}`
+          ).format("DD")} ${moment.tz(selectedDateBlock,timeZone).format("MMM")}`
         );
 
         window.WHJR_ANALYTICS.trackEvent("Viewed Slot Screen", {
