@@ -51,7 +51,8 @@ window.addEventListener("load", () => {
   // function will auto call when whjr-analytics library loaded.
   window.onWhjrAnalyticsLoad = function () {
     window.WHJR_ANALYTICS.init({});
-    window.WHJR_ANALYTICS.load("mjUFVeDvP9JdV2Gep3ZtWgF6Vqq977AA");
+    window.WHJR_ANALYTICS.load("RBsY7ZmrjqjtUki43GC4dnz4ltgOgDii");
+    
 
     getGeoLocation(); // to set geo location props globally
   };
@@ -1022,8 +1023,8 @@ const getSlotsOnSelectedate = () => {
         );
         const selectedDateBlock = slotsData[selectedDateIndex].date;
         $(".slot-date-msg").text(
-          `${moment.tz(selectedDateBlock,timeZone).format("ddd")}, ${moment(
-            selectedDateBlock
+          `${moment.tz(selectedDateBlock,timeZone).format("ddd")}, ${moment.tz(
+            selectedDateBlock, timeZone
           ).format("DD")} ${moment.tz(selectedDateBlock,timeZone).format("MMM")}`
         );
 
@@ -1048,15 +1049,15 @@ const getSlotsOnSelectedate = () => {
     // $(".mweb-sp-slot-cta").removeClass("disabled");
     // $(".confirm-slot-cta").removeClass("disabled");
     $(".slot-time-msg").text(
-      `${moment(
-        slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime
+      `${moment.tz(
+        slotsData[selectedDateIndex].slots[selectedTimeSlot].startTime,timeZone
       ).format("LT")} `
     );
     const selectedDateBlock = slotsData[selectedDateIndex].date;
     $(".slot-date-msg").text(
-      `${moment(selectedDateBlock).format("ddd")}, ${moment(
-        selectedDateBlock
-      ).format("DD")} ${moment(selectedDateBlock).format("MMM")}`
+      `${moment.tz(selectedDateBlock,timeZone).format("ddd")}, ${moment.tz(
+        selectedDateBlock,timeZone
+      ).format("DD")} ${moment.tz(selectedDateBlock,timeZone).format("MMM")}`
     );
 
     window.WHJR_ANALYTICS.trackEvent("Booking Time Selected", {
