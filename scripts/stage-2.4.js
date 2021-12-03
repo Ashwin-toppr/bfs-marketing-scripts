@@ -1,5 +1,5 @@
 // production code
-import TIMEZONE_DATA from "./timezonesList";
+// import TIMEZONE_DATA from "./timezonesList";
 var dialCodesList,
   dialCode = "+1",
   country = "US",
