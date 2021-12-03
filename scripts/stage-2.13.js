@@ -179,7 +179,7 @@ handlePageLoadAnalytics = (page_name) => {
 
       $(".dial-code").click((e) => {
         dialCode = e.target.dataset.code;
-        dialCodeCountry = e.target.dataset.countryCode
+        dialCodeCountry = e.target.dataset.countrycode
         $(
           `${isMweb ? ".mweb-dial-codes-list" : ".dial-codes-list"}`
         ).removeClass("w--open");
