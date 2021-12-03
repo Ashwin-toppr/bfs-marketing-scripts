@@ -39,7 +39,7 @@ var parentMobileNum = "",
   isMusicKids = true,
   formatedParentNum,
   isSidePanelOpen = false,
-  dialCodeCountry,
+  dialCodeCountry="US",
   eventSource = window.location.href.includes("byjusfutureschool")
     ? "TRIAL_REGISTER_BYJUS"
     : "TRIAL_REGISTER_BYJUS_BYJUS";
