@@ -39,6 +39,7 @@ var parentMobileNum = "",
   isMusicKids = true,
   formatedParentNum,
   isSidePanelOpen = false,
+  dialCodeCountry,
   eventSource = window.location.href.includes("byjusfutureschool")
     ? "TRIAL_REGISTER_BYJUS"
     : "TRIAL_REGISTER_BYJUS_BYJUS";
@@ -167,9 +168,11 @@ handlePageLoadAnalytics = (page_name) => {
       dialCodesList.map((item) => {
         const ele = `<a href="#" class="${
           isMweb ? "mweb-dropdown-link" : "dropdown-link"
-        }   dial-code w-dropdown-link" data-code='${
-          item.dial_code
-        }' tabindex="0">${item.flag} ${item.name} ${item.dial_code}</a>`;
+        }   dial-code w-dropdown-link" data-countryCode='${
+          item.code
+        } data-code='${item.dial_code}' tabindex="0">${item.flag} ${
+          item.name
+        } ${item.dial_code}</a>`;
         $(`${isMweb ? ".mweb-dial-codes-list" : ".dial-codes-list"}`).append(
           ele
         );
@@ -177,6 +180,7 @@ handlePageLoadAnalytics = (page_name) => {
 
       $(".dial-code").click((e) => {
         dialCode = e.target.dataset.code;
+        dialCodeCountry = e.target.dataset.countryCode;
         $(
           `${isMweb ? ".mweb-dial-codes-list" : ".dial-codes-list"}`
         ).removeClass("w--open");
@@ -668,7 +672,7 @@ $(".otp-input-box").on("input", (e) => {
 
     const url = isUserExist
       ? `${PROD_BASE_URL}/api/V1/users/authenticateVerificationCode?timezone=${timeZone}&_vercel_no_cache=1&regionId=${country}&courseType=${selectedSubj}&brandId=byju&timestamp=${new Date().getTime()}`
-      : `${PROD_BASE_URL}/api/V1/otp/verify?timezone=${timeZone}&brandId=byju&timestamp=${new Date().getTime()}`;
+      : `${PROD_BASE_URL}/api/V1/otp/verify?timezone=${timeZone}&regionId=${country}&brandId=byju&timestamp=${new Date().getTime()}`;
     $.ajax({
       type: "POST",
       url: url,
@@ -745,7 +749,7 @@ const handleRegisterUser = () => {
       grade: selectedGrade,
       isLaptop: "1",
       dialCode: dialCode,
-      countryCode: country,
+      countryCode: dialCodeCountry,
       timezone: timeZone,
     },
 
@@ -886,7 +890,7 @@ const handleGetSlots = () => {
 
   $.ajax({
     type: "GET",
-    url: `${PROD_BASE_URL}/api/V1/trial/slots/get?countryCode=${country}&grade=${selectedGrade}&timezone=${timeZone}&brandId=byju&courseType=${selectedSubj.toUpperCase()}&timestamp=${new Date().getTime()}${
+    url: `${PROD_BASE_URL}/api/V1/trial/slots/get?countryCode=${dialCodeCountry}&regionId=${country}&grade=${selectedGrade}&timezone=${timeZone}&brandId=byju&courseType=${selectedSubj.toUpperCase()}&timestamp=${new Date().getTime()}${
       selectedSubj.includes("music") ? "&courseSubType=" + courseSubType : ""
     }`,
     cache: false,
@@ -1111,7 +1115,7 @@ const handleBookSlot = () => {
     }`,
     cache: false,
     data: {
-      countryCode: country,
+      countryCode: dialCodeCountry,
       slot: {
         startTime: startTime,
         endTime: moment.tz(startTime).add(1, "hours").toISOString(),
