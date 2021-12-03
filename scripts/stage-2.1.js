@@ -66,7 +66,7 @@ window.addEventListener("load", () => {
 function getGeoLocation() {
   $.ajax({
     type: "GET",
-    url: `${PROD_BASE_URL}/api/V1/geo/getInfo?brandId=byju&courseType=ALL`,
+    url: `${PROD_BASE_URL}/api/V1/geo/getInfo?brandId=byju&courseType=ALL&timestamp=${new Date().getTime()}`,
     cache: false,
 
     success: handleGeoLocationData,
@@ -141,7 +141,7 @@ handlePageLoadAnalytics = (page_name) => {
   // if(!timeZone){
   $.ajax({
     type: "GET",
-    url: `${PROD_BASE_URL}/api/V1/geo/getInfo?courseType=ALL&brandId=byju`,
+    url: `${PROD_BASE_URL}/api/V1/geo/getInfo?courseType=ALL&brandId=byju&timestamp=${new Date().getTime()}`,
     cache: false,
     success: function (res) {
       if (!timeZone) timeZone = res.data.timezone;
@@ -407,7 +407,7 @@ $(".subject-card-sp").click((e) => {
 const isExist = () => {
   $.ajax({
     type: "POST",
-    url: `${PROD_BASE_URL}/api/V1/userDetail/existByEmailOrMobile?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj}&brandId=byju`,
+    url: `${PROD_BASE_URL}/api/V1/userDetail/existByEmailOrMobile?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj}&brandId=byju&timestamp=${new Date().getTime()}`,
     cache: false,
     data: { mobile: parentMobileNum, dialCode },
 
@@ -611,8 +611,8 @@ const otpTimer = () => {
 
 const getOtp = (callback, isResend) => {
   const url = isUserExist
-    ? `${PROD_BASE_URL}/api/V1/users/sendStudentVerificationCode?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj}&brandId=byju&timestamp=`
-    : `${PROD_BASE_URL}/api/V1/otp/generate?regionId=${country}&timezone=${timeZone}&courseType=${selectedSubj}&brandId=byju`;
+    ? `${PROD_BASE_URL}/api/V1/users/sendStudentVerificationCode?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj}&brandId=byju&timestamp=${new Date().getTime()}`
+    : `${PROD_BASE_URL}/api/V1/otp/generate?regionId=${country}&timezone=${timeZone}&courseType=${selectedSubj}&brandId=byju&timestamp=${new Date().getTime()}`;
 
   $.ajax({
     type: "POST",
@@ -667,8 +667,8 @@ $(".otp-input-box").on("input", (e) => {
     window.WHJR_ANALYTICS.trackEvent("Verification code entered", {});
 
     const url = isUserExist
-      ? `${PROD_BASE_URL}/api/V1/users/authenticateVerificationCode?timezone=${timeZone}&_vercel_no_cache=1&regionId=${country}&courseType=${selectedSubj}&brandId=byju&timestamp=`
-      : `${PROD_BASE_URL}/api/V1/otp/verify?timezone=${timeZone}&brandId=byju`;
+      ? `${PROD_BASE_URL}/api/V1/users/authenticateVerificationCode?timezone=${timeZone}&_vercel_no_cache=1&regionId=${country}&courseType=${selectedSubj}&brandId=byju&timestamp=${new Date().getTime()}`
+      : `${PROD_BASE_URL}/api/V1/otp/verify?timezone=${timeZone}&brandId=byju&timestamp=${new Date().getTime()}`;
     $.ajax({
       type: "POST",
       url: url,
@@ -739,7 +739,7 @@ const handleUserPropsAnalytics = (student) => {
 const handleRegisterUser = () => {
   $.ajax({
     type: "POST",
-    url: `${PROD_BASE_URL}/api/V1/trial/users/minimalFieldRegister?timezone=${timeZone}&isMobilePlatform=false&brandId=byju&timestamp=`,
+    url: `${PROD_BASE_URL}/api/V1/trial/users/minimalFieldRegister?timezone=${timeZone}&isMobilePlatform=false&brandId=byju&timestamp=${new Date().getTime()}`,
     cache: false,
     data: {
       mobile: parentMobileNum,
@@ -776,7 +776,7 @@ const handleRegisterUser = () => {
 const handleMecall = () => {
   $.ajax({
     type: "GET",
-    url: `${PROD_BASE_URL}/api/V1/userDetail/me?timezone=${timeZone}&brandId=byju&timestamp=`,
+    url: `${PROD_BASE_URL}/api/V1/userDetail/me?timezone=${timeZone}&brandId=byju&timestamp=${new Date().getTime()}`,
     cache: false,
     headers: {
       authorization: `Bearer ${token}`,
@@ -886,7 +886,7 @@ const handleGetSlots = () => {
 
   $.ajax({
     type: "GET",
-    url: `${PROD_BASE_URL}/api/V1/trial/slots/get?countryCode=${country}&grade=${selectedGrade}&timezone=${timeZone}&brandId=byju&courseType=${selectedSubj.toUpperCase()}${
+    url: `${PROD_BASE_URL}/api/V1/trial/slots/get?countryCode=${country}&grade=${selectedGrade}&timezone=${timeZone}&brandId=byju&courseType=${selectedSubj.toUpperCase()}&timestamp=${new Date().getTime()}${
       selectedSubj.includes("music") ? "&courseSubType=" + courseSubType : ""
     }`,
     cache: false,
@@ -1090,7 +1090,7 @@ const handleBookSlot = () => {
   });
   $.ajax({
     type: "POST",
-    url: `${PROD_BASE_URL}/api/V1/trial/slots/book?timezone=${timeZone}&regionId=${country}&brandId=byju&courseType=${selectedSubj.toUpperCase()}${
+    url: `${PROD_BASE_URL}/api/V1/trial/slots/book?timezone=${timeZone}&regionId=${country}&brandId=byju&timestamp=${new Date().getTime()}&courseType=${selectedSubj.toUpperCase()}${
       selectedSubj.includes("music") ? `&courseSubType=${courseSubType}` : ""
     }`,
     cache: false,
@@ -1140,7 +1140,7 @@ const handleBookSlot = () => {
 const handleGetDashboardLink = (bookedSlot) => {
   $.ajax({
     type: "GET",
-    url: `${PROD_BASE_URL}/api/V1/students/${studentDetails.students[0].id}/getDashbordLink?timezone=${timeZone}&brandId=byju&courseType=${selectedSubj}`,
+    url: `${PROD_BASE_URL}/api/V1/students/${studentDetails.students[0].id}/getDashbordLink?timezone=${timeZone}&brandId=byju&courseType=${selectedSubj}&timestamp=${new Date().getTime()}`,
     cache: false,
     headers: {
       authorization: `Bearer ${token}`,
@@ -1157,10 +1157,7 @@ const handleGetDashboardLink = (bookedSlot) => {
           music: "music",
           music_for_all: "musicplus",
         };
-        window.open(
-          `https://${subjects[selectedSubj]}.byjusfutureschool.com/s/trial/success?jwt_token=${token}`,
-          "_blank"
-        );
+        window.location.href = `https://code.byjusfutureschool.com/s/trial/success?jwt_token=${token}`;
         handleReset();
         if (isMweb) {
           $(".mweb-slot-container").css("display", "none");
@@ -1284,15 +1281,17 @@ $(".mweb-timezone-value-container").click(() => {
 });
 
 const handleGetTimezonesList = () => {
-  $.ajax({
-    type: "GET",
-    url: `https://api.timezonedb.com/v2.1/list-time-zone?key=VOWU23FPD15G&format=json`,
-    cache: false,
-    success: function (res) {
-      timezonesList = res.zones;
-      getTimeZonesEmbedded();
-    },
-  });
+  // $.ajax({
+  //   type: "GET",
+  //   url: `https://api.timezonedb.com/v2.1/list-time-zone?key=VOWU23FPD15G&format=json`,
+  //   cache: false,
+  //   success: function (res) {
+  //     timezonesList = res.zones;
+  //     getTimeZonesEmbedded();
+  //   },
+  // });
+  timezonesList = moment.tz.names();
+  getTimeZonesEmbedded();
 };
 
 const getTimeZonesEmbedded = (TZList = timezonesList) => {
@@ -1457,7 +1456,7 @@ const sendEventsHOF = ({
 const sendEvents = (eventDetails) => {
   $.ajax({
     type: "POST",
-    url: `${PROD_BASE_URL}/api/V1/events/saveEvent?regionId=${country}&courseType=${selectedSubj}&brandId=byju`,
+    url: `${PROD_BASE_URL}/api/V1/events/saveEvent?regionId=${country}&courseType=${selectedSubj}&brandId=byju&timestamp=${new Date().getTime()}`,
     cache: false,
     data: { ...eventDetails },
   });
