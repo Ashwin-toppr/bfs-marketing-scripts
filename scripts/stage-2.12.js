@@ -169,9 +169,9 @@ handlePageLoadAnalytics = (page_name) => {
       dialCodesList.map((item) => {
         const ele = `<a href="#" class="${
           isMweb ? "mweb-dropdown-link" : "dropdown-link"
-        }   dial-code w-dropdown-link" data-countryCode='${item.code} data-code='${
+        }   dial-code w-dropdown-link" data-countryCode=${item.code} data-code=${
           item.dial_code
-        }' tabindex="0">${item.flag} ${item.name} ${item.dial_code}</a>`;
+        } tabindex="0">${item.flag} ${item.name} ${item.dial_code}</a>`;
         $(`${isMweb ? ".mweb-dial-codes-list" : ".dial-codes-list"}`).append(
           ele
         );
