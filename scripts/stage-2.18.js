@@ -782,7 +782,9 @@ const handleRegisterUser = () => {
 const handleMecall = () => {
   $.ajax({
     type: "GET",
-    url: `${PROD_BASE_URL}/api/V1/userDetail/me?timezone=${timeZone}&courseType=${selectedSubj.toUpperCase()}&brandId=byju&timestamp=${new Date().getTime()}`,
+    url: `${PROD_BASE_URL}/api/V1/userDetail/me?timezone=${timeZone}&courseType=${selectedSubj.toUpperCase()}&brandId=byju&timestamp=${new Date().getTime()}${
+      selectedSubj.includes("music") ? "&courseSubType=" + courseSubType : ""
+    }`,
     cache: false,
     headers: {
       authorization: `Bearer ${token}`,
