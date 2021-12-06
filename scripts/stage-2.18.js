@@ -411,7 +411,7 @@ $(".subject-card-sp").click((e) => {
 const isExist = () => {
   $.ajax({
     type: "POST",
-    url: `${PROD_BASE_URL}/api/V1/userDetail/existByEmailOrMobile?timezone=${timeZone}&regionId=${country}&courseType=ALL&brandId=byju&timestamp=${new Date().getTime()}`,
+    url: `${PROD_BASE_URL}/api/V1/userDetail/existByEmailOrMobile?timezone=${timeZone}&regionId=${country}&brandId=byju&timestamp=${new Date().getTime()}`,
     cache: false,
     data: { mobile: parentMobileNum, dialCode },
 
@@ -615,8 +615,8 @@ const otpTimer = () => {
 
 const getOtp = (callback, isResend) => {
   const url = isUserExist
-    ? `${PROD_BASE_URL}/api/V1/users/sendStudentVerificationCode?timezone=${timeZone}&regionId=${country}&courseType=ALL&brandId=byju&timestamp=${new Date().getTime()}`
-    : `${PROD_BASE_URL}/api/V1/otp/generate?regionId=${country}&timezone=${timeZone}&courseType=ALL&brandId=byju&timestamp=${new Date().getTime()}`;
+    ? `${PROD_BASE_URL}/api/V1/users/sendStudentVerificationCode?timezone=${timeZone}&regionId=${country}&brandId=byju&timestamp=${new Date().getTime()}`
+    : `${PROD_BASE_URL}/api/V1/otp/generate?regionId=${country}&timezone=${timeZone}&brandId=byju&timestamp=${new Date().getTime()}`;
 
   $.ajax({
     type: "POST",
@@ -671,8 +671,8 @@ $(".otp-input-box").on("input", (e) => {
     window.WHJR_ANALYTICS.trackEvent("Verification code entered", {});
 
     const url = isUserExist
-      ? `${PROD_BASE_URL}/api/V1/users/authenticateVerificationCode?timezone=${timeZone}&_vercel_no_cache=1&regionId=${country}&courseType=ALL&brandId=byju&timestamp=${new Date().getTime()}`
-      : `${PROD_BASE_URL}/api/V1/otp/verify?timezone=${timeZone}&regionId=${country}&brandId=byju&courseType=ALL&timestamp=${new Date().getTime()}`;
+      ? `${PROD_BASE_URL}/api/V1/users/authenticateVerificationCode?timezone=${timeZone}&_vercel_no_cache=1&regionId=${country}&brandId=byju&timestamp=${new Date().getTime()}`
+      : `${PROD_BASE_URL}/api/V1/otp/verify?timezone=${timeZone}&regionId=${country}&brandId=byju&timestamp=${new Date().getTime()}`;
     $.ajax({
       type: "POST",
       url: url,
@@ -742,7 +742,9 @@ const handleUserPropsAnalytics = (student) => {
 const handleRegisterUser = () => {
   $.ajax({
     type: "POST",
-    url: `${PROD_BASE_URL}/api/V1/trial/users/minimalFieldRegister?timezone=${timeZone}&courseType=ALL&isMobilePlatform=false&brandId=byju&timestamp=${new Date().getTime()}`,
+    url: `${PROD_BASE_URL}/api/V1/trial/users/minimalFieldRegister?timezone=${timeZone}&courseType=${selectedSubj.toUpperCase()}&isMobilePlatform=false&brandId=byju&timestamp=${new Date().getTime()}${
+      selectedSubj.includes("music") ? "&courseSubType=" + courseSubType : ""
+    }`,
     cache: false,
     data: {
       mobile: parentMobileNum,
@@ -767,6 +769,8 @@ const handleRegisterUser = () => {
       const student = res.data.students[0];
     },
     error: function (err) {
+      $(".otp-loader").css("display", "none");
+
       Toastify({
         text: err.responseJSON.error.message,
         duration: 5000,
@@ -778,7 +782,7 @@ const handleRegisterUser = () => {
 const handleMecall = () => {
   $.ajax({
     type: "GET",
-    url: `${PROD_BASE_URL}/api/V1/userDetail/me?timezone=${timeZone}&courseType=ALL&brandId=byju&timestamp=${new Date().getTime()}`,
+    url: `${PROD_BASE_URL}/api/V1/userDetail/me?timezone=${timeZone}&courseType=${selectedSubj.toUpperCase()}&brandId=byju&timestamp=${new Date().getTime()}`,
     cache: false,
     headers: {
       authorization: `Bearer ${token}`,
