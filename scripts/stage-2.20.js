@@ -879,12 +879,41 @@ $(".radio-music-sc").click((e) => {
     .split("-")[1]
     .toUpperCase();
   courseSubType = musicType;
+  handleUpdateCourseSubType();
   handleGetSlots();
+
 
   window.WHJR_ANALYTICS.trackEvent("Booking Instrument Selected", {
     instrument_selected: musicType,
   });
 });
+
+const handleUpdateCourseSubType = () => {
+    $.ajax({
+      type: "POST",
+      url: `${PROD_BASE_URL}/api/V1/students/updateTrialCourse?timezone=${timeZone}&regionId=${country}&courseType=${selectedSubj.toUpperCase()}&brandId=byju&timestamp=${new Date().getTime()}`,
+      cache: false,
+      data: {
+        courseType: selectedSubj.toUpperCase(),
+        studentId: studentDetails.students[0]?.id,
+        grade: selectedGrade,
+        courseSubType: courseSubType,
+      },
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+
+      success: function (res) {
+        console.log(res.data)
+      },
+      error: function (err) {
+        Toastify({
+          text: err.responseJSON.error.message,
+          duration: 5000,
+        }).showToast();
+      },
+    });
+}
 
 const handleGetSlots = () => {
   // let loading = true
