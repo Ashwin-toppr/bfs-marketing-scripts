@@ -742,9 +742,7 @@ const handleUserPropsAnalytics = (student) => {
 const handleRegisterUser = () => {
   $.ajax({
     type: "POST",
-    url: `${PROD_BASE_URL}/api/V1/trial/users/minimalFieldRegister?timezone=${timeZone}&courseType=${selectedSubj.toUpperCase()}&isMobilePlatform=false&brandId=byju&timestamp=${new Date().getTime()}${
-      selectedSubj.includes("music") ? "&courseSubType=" + courseSubType : ""
-    }`,
+    url: `${PROD_BASE_URL}/api/V1/trial/users/minimalFieldRegister?timezone=${timeZone}&courseType=${selectedSubj.toUpperCase()}&isMobilePlatform=false&brandId=byju&timestamp=${new Date().getTime()}`,
     cache: false,
     data: {
       mobile: parentMobileNum,
@@ -753,6 +751,7 @@ const handleRegisterUser = () => {
       dialCode: dialCode,
       countryCode: dialCodeCountry,
       timezone: timeZone,
+      ...(selectedSubj.includes("music") && { courseSubType: courseSubType }),
     },
 
     success: function (res) {
@@ -782,9 +781,7 @@ const handleRegisterUser = () => {
 const handleMecall = () => {
   $.ajax({
     type: "GET",
-    url: `${PROD_BASE_URL}/api/V1/userDetail/me?timezone=${timeZone}&courseType=${selectedSubj.toUpperCase()}&brandId=byju&timestamp=${new Date().getTime()}${
-      selectedSubj.includes("music") ? "&courseSubType=" + courseSubType : ""
-    }`,
+    url: `${PROD_BASE_URL}/api/V1/userDetail/me?timezone=${timeZone}&brandId=byju&timestamp=${new Date().getTime()}`,
     cache: false,
     headers: {
       authorization: `Bearer ${token}`,
