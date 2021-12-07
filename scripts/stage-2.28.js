@@ -394,12 +394,15 @@ $(".subject-card-sp").click((e) => {
       "display",
       "block"
     );
+    $(".parent-mail").text("PARENT'S MOBILE NUMBER");
   } else {
     $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css(
       "display",
       isMusicKids ? "block" : "none"
     );
     selectedGrade = isMusicKids ? "" : "8";
+    $(".parent-mail").text( isMusicKids ?  "PARENT'S MOBILE NUMBER" : "ENTER YOUR MOBILE NUMBER");
+
   }
   enableScheduleCta();
 
@@ -1264,6 +1267,8 @@ const handleReset = () => {
   parentMobileNum = "";
   formatedParentNum = "";
   isSidePanelOpen = false;
+  $(".parent-mail").text(   "PARENT'S MOBILE NUMBER" );
+
   $(".subject-card-sp").removeClass("active-state");
   $(`${isMweb ? ".grade-block-mweb" : ".grade-block-web"}`).removeClass(
     "active-state"
