@@ -36,7 +36,7 @@ var parentMobileNum = "",
   isUserAuthenticated = false,
   courseSubType = "PNO",
   timeInterval,
-  isMusicKids = true,
+  isMusicKids = !window.location.href.includes("musicplus"),
   formatedParentNum,
   isSidePanelOpen = false,
   dialCodeCountry="US",
@@ -394,14 +394,14 @@ $(".subject-card-sp").click((e) => {
       "display",
       "block"
     );
-    $(".parent-mail").text("PARENT'S MOBILE NUMBER");
+    $(".parent-mail-label").text("PARENT'S MOBILE NUMBER");
   } else {
     $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css(
       "display",
       isMusicKids ? "block" : "none"
     );
     selectedGrade = isMusicKids ? "" : "8";
-    $(".parent-mail").text( isMusicKids ?  "PARENT'S MOBILE NUMBER" : "ENTER YOUR MOBILE NUMBER");
+    $(".parent-mail-label").text( isMusicKids ?  "PARENT'S MOBILE NUMBER" : "ENTER YOUR MOBILE NUMBER");
 
   }
   enableScheduleCta();
@@ -556,7 +556,7 @@ $(".ismusicfor").click((e) => {
       "display",
       "block"
     );
-    $(".parent-mail").text("PARENT'S MOBILE NUMBER");
+    $(".parent-mail-label").text("PARENT'S MOBILE NUMBER");
     selectedGrade = "";
     $(`${isMweb ? ".grade-block-mweb" : ".grade-block-web"}`).removeClass(
       "active-state"
@@ -1267,7 +1267,7 @@ const handleReset = () => {
   parentMobileNum = "";
   formatedParentNum = "";
   isSidePanelOpen = false;
-  $(".parent-mail").text(   "PARENT'S MOBILE NUMBER" );
+  $(".parent-mail-label").text( window.location.href.includes('musicplus') ? "ENTER YOUR MOBILE NUMBER" :  "PARENT'S MOBILE NUMBER" );
 
   $(".subject-card-sp").removeClass("active-state");
   $(`${isMweb ? ".grade-block-mweb" : ".grade-block-web"}`).removeClass(
