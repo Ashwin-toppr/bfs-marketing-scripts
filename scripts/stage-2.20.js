@@ -541,19 +541,19 @@ $(".ismusicfor").click((e) => {
   isMusicKids = e.currentTarget.children[1].id.includes("kids");
   if (!isMusicKids) {
     selectedSubj = "music_for_all";
-    $(".radio-music-none").css("display", "none");
     selectedGrade = "8";
     $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css(
       "display",
       "none"
     );
+    $(".parent-mail").text("ENTER YOUR MOBILE NUMBER");
   } else {
     selectedSubj = "music";
-    $(".radio-music-none").css("display", "block");
     $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css(
       "display",
       "block"
     );
+    $(".parent-mail").text("PARENT'S MOBILE NUMBER");
     selectedGrade = "";
     $(`${isMweb ? ".grade-block-mweb" : ".grade-block-web"}`).removeClass(
       "active-state"
