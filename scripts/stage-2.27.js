@@ -559,6 +559,7 @@ $(".ismusicfor").click((e) => {
       "active-state"
     );
   }
+  musicRadioClass();
   enableScheduleCta();
 });
 
@@ -740,6 +741,22 @@ if(courseSubType == "PNO"){
   $(gtrClass).children("div").addClass("w--redirected-checked");
 }
 }
+
+const musicRadioClass = () => {
+  if(!selectedSubj.includes('music')) return;
+
+  const kidClass = isMweb ? ".music-kid-mweb" : ".music-kid-web";
+  const adultClass = isMweb ? ".music-adult-mweb" : ".music-adult-web";
+
+  if (selectedSubj == "music") {
+    $(kidClass).children("div").addClass("w--redirected-checked");
+    $(adultClass).children("div").removeClass("w--redirected-checked");
+  } else {
+    $(kidClass).children("div").removeClass("w--redirected-checked");
+    $(adultClass).children("div").addClass("w--redirected-checked");
+  }
+
+};
 
 const handleUserPropsAnalytics = (student) => {
   window.WHJR_ANALYTICS.setUserProps({
@@ -1300,6 +1317,7 @@ $(".sidepannel-close").click(() => {
 });
 
 $(".mweb-back-arrow").click(() => {
+  musicRadioClass()
   if ($(".mweb-slot-container").css("display") === "block") {
     $(".mweb-slot-container").css("display", "none");
     $(".mweb-initial-form").css("display", "block");
@@ -1312,6 +1330,7 @@ $(".mweb-back-arrow").click(() => {
 });
 
 $(".web-back-arrow").click(() => {
+  musicRadioClass()
   if ($(".side-panel-slot").css("display") === "block") {
     $(".sp-initial-form").css("display", "block");
     $(".side-panel-slot").css("display", "none");
