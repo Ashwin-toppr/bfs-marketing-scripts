@@ -703,9 +703,6 @@ $(".otp-input-box").on("input", (e) => {
           isUserExist ? "Login success frontend" : "Signed up frontend",
           {}
         );
-        $(isMweb ? ".radio-pno-mweb" : ".radio-pno-mweb")
-          .children("div")
-          .addClass("w--redirected-checked");
 
       },
       error: function (err) {
@@ -728,6 +725,21 @@ $(".otp-input-box").on("input", (e) => {
     });
   }
 });
+
+//for adding checked class to radio manually, due to webflow inconsistent behaviour
+const musicSubCatRadioClass = () => {
+  
+  const pnoClass = isMweb ? ".radio-pno-mweb" : ".radio-pno-web";
+  const gtrClass = isMweb ? ".radio-gtr-mweb" : ".radio-gtr-web";
+if(courseSubType == "PNO"){
+  $(pnoClass).children("div").addClass("w--redirected-checked");
+  $(gtrClass).children("div").removeClass("w--redirected-checked");
+}else{
+
+  $(pnoClass).children("div").removeClass("w--redirected-checked");
+  $(gtrClass).children("div").addClass("w--redirected-checked");
+}
+}
 
 const handleUserPropsAnalytics = (student) => {
   window.WHJR_ANALYTICS.setUserProps({
@@ -885,11 +897,7 @@ $(".radio-music-sc").click((e) => {
   courseSubType = musicType;
   handleUpdateCourseSubType();
   handleGetSlots();
-
-  const toClass  = isMweb ? ".radio-pno-mweb" : ".radio-pno-web";
-  const isAddClass = musicType === "PNO"
-
-  customClassMethod(toClass, isAddClass, "w--redirected-checked");
+  musicSubCatRadioClass()
 
 
 
@@ -957,7 +965,7 @@ const handleGetSlots = () => {
       $(
         `${isMweb ? ".mweb-sp-registered-user-msg" : ".sp-registered-user-msg"}`
       ).css("display", "none");
-
+      musicSubCatRadioClass();
       if (isMweb) {
         $(".mweb-otp-container").css("display", "none");
         $(".mweb-initial-form").css("display", "none");
@@ -980,6 +988,7 @@ const handleGetSlots = () => {
           selectedSubj.includes("music") ? "block" : "none"
         );
       }
+
     },
     error: function (err) {
       Toastify({
