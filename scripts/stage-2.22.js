@@ -957,6 +957,8 @@ const handleGetSlots = () => {
           "display",
           selectedSubj.includes("music") ? "block" : "none"
         );
+        $(".radio-pno-mweb").children("div").addClass("w--redirected-checked");
+
       } else {
         $(".otp-container").css("display", "none");
         $(`${isMweb ? ".mweb-initial-form" : ".sp-initial-form"}`).css(
@@ -968,7 +970,7 @@ const handleGetSlots = () => {
           "display",
           selectedSubj.includes("music") ? "block" : "none"
         );
-        // $(".confirm-slot-cta").addClass("disabled");
+        $(".radio-pno-web").children("div").addClass("w--redirected-checked");
       }
     },
     error: function (err) {
