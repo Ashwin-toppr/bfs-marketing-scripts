@@ -882,6 +882,12 @@ $(".radio-music-sc").click((e) => {
   handleUpdateCourseSubType();
   handleGetSlots();
 
+  const toClass  = isMweb ? ".radio-pno-mweb" : ".radio-pno-web";
+  const isAddClass = musicType === "PNO"
+
+  customClassMethod(toClass, isAddClass, "w--redirected-checked");
+
+
 
   window.WHJR_ANALYTICS.trackEvent("Booking Instrument Selected", {
     instrument_selected: musicType,
