@@ -549,7 +549,7 @@ $(".ismusicfor").click((e) => {
       "display",
       "none"
     );
-    $(".parent-mail").text("ENTER YOUR MOBILE NUMBER");
+    $(".parent-mail-label").text("ENTER YOUR MOBILE NUMBER");
   } else {
     selectedSubj = "music";
     $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css(
