@@ -703,6 +703,10 @@ $(".otp-input-box").on("input", (e) => {
           isUserExist ? "Login success frontend" : "Signed up frontend",
           {}
         );
+        $(isMweb ? ".radio-pno-mweb" : ".radio-pno-mweb")
+          .children("div")
+          .addClass("w--redirected-checked");
+
       },
       error: function (err) {
         $(".otp-box").addClass("isError");
@@ -963,7 +967,6 @@ const handleGetSlots = () => {
           "display",
           selectedSubj.includes("music") ? "block" : "none"
         );
-        $(".radio-pno-mweb").children("div").addClass("w--redirected-checked");
 
       } else {
         $(".otp-container").css("display", "none");
