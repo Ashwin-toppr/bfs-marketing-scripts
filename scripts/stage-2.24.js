@@ -979,7 +979,6 @@ const handleGetSlots = () => {
           "display",
           selectedSubj.includes("music") ? "block" : "none"
         );
-        $(".radio-pno-web").children("div").addClass("w--redirected-checked");
       }
     },
     error: function (err) {
