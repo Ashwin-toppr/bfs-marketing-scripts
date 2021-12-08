@@ -1,4 +1,4 @@
-// production code
+// production code, last updated on 08-12-21
 // import TIMEZONE_DATA from "./timezonesList";
 var dialCodesList,
   dialCode = "+1",
@@ -40,9 +40,11 @@ var parentMobileNum = "",
   formatedParentNum,
   isSidePanelOpen = false,
   dialCodeCountry="US",
+  otpSentCount = 0,
+  otpFailureCount = 0,
   eventSource = window.location.href.includes("byjusfutureschool")
     ? "TRIAL_REGISTER_BYJUS"
-    : "TRIAL_REGISTER_BYJUS_BYJUS";
+    : "TRIAL_REGISTER_BYJUS_V2";
 
 // Analytics
 
@@ -472,6 +474,12 @@ $(".parent-mobile-num").on("input", (e) => {
     formatedParentNum = e.target.value;
     if (e.target.value.length > 15) {
       isExist();
+      sendEventsHOF({
+        eventName: "MOBILE_ENTERED",
+        eventSource: eventSource,
+        s3SchemaName: "deviceType",
+        n1: +dialCode,
+      });
     }
   } else {
     // checkValidNum(e.target.value);
@@ -479,6 +487,12 @@ $(".parent-mobile-num").on("input", (e) => {
     formatedParentNum = e.target.value;
     if (e.target.value.length > 9) {
       isExist();
+      sendEventsHOF({
+        eventName: "MOBILE_ENTERED",
+        eventSource: eventSource,
+        s3SchemaName: "deviceType",
+        n1: +dialCode,
+      });
     }
   }
   checkValidNum(parentMobileNum);
@@ -600,6 +614,15 @@ const spInitialCtaSuccess = (res) => {
   challengeCodeForOtp = res.data.challenge;
 
   window.WHJR_ANALYTICS.trackEvent("Verification pop up viewed", {});
+
+  otpSentCount+=1
+
+  sendEventsHOF({
+    eventName: `OTP_SEND_${otpSentCount}`,
+    eventSource: eventSource,
+    s3SchemaName: "deviceType",
+    n1: +dialCode,
+  });
 };
 
 const otpTimer = () => {
@@ -708,12 +731,30 @@ $(".otp-input-box").on("input", (e) => {
           {}
         );
 
+        sendEventsHOF({
+          eventName: `OTP_VERIFICATION_SUCCESS`,
+          eventSource: eventSource,
+          s3SchemaName: "deviceType",
+          n1: +dialCode,
+        });
+
+
+
       },
       error: function (err) {
         $(".otp-box").addClass("isError");
         $(".otp-err").css("display", "block");
         $(".otp-loader").css("display", "none");
         $(".otp-input-box").val("");
+
+        otpFailureCount += 1
+
+        sendEventsHOF({
+          eventName: `OTP_FAILURE_${otpFailureCount}`,
+          eventSource: eventSource,
+          s3SchemaName: "deviceType",
+          n1: +dialCode,
+        });
 
         console.log(err);
         Toastify({
@@ -795,7 +836,7 @@ const handleRegisterUser = () => {
       handleMecall();
       handleGetSlots();
       sendEventsHOF({
-        eventName: "NEW_USER_REGISTERED",
+        eventName: "REGISTRATION_SUCCESS",
         eventSource: eventSource,
         s3SchemaName: "deviceType",
         n1: +dialCode,
@@ -1188,12 +1229,12 @@ const handleBookSlot = () => {
     success: function (res) {
       $(".slot-loader").css("display", "none");
       handleGetDashboardLink(true); // true - after booking slot
-      sendEventsHOF({
-        eventName: "TRAIL_SLOT_BOOKED",
-        eventSource: eventSource,
-        s3SchemaName: "deviceType",
-        n1: +dialCode,
-      });
+      // sendEventsHOF({
+      //   eventName: "TRAIL_SLOT_BOOKED",
+      //   eventSource: eventSource,
+      //   s3SchemaName: "deviceType",
+      //   n1: +dialCode,
+      // });
 
       window.WHJR_ANALYTICS.trackEvent("Trial Booking Confirmed frontend", {
         slot_date: moment.tz(startTime, timeZone).format("ddd"),
@@ -1475,6 +1516,7 @@ const sendEventsHOF = ({
   let eventDetails = {
     eventName: eventName,
     eventSource: eventSource,
+
     data: {
       s3: s3Val,
       s4,
@@ -1538,8 +1580,8 @@ const sendEvents = (eventDetails) => {
   });
 };
 
-sendEventsHOF({
-  eventName: "LANDED",
-  eventSource: eventSource,
-  s3SchemaName: "deviceType",
-});
+// sendEventsHOF({
+//   eventName: "LANDED",
+//   eventSource: eventSource,
+//   s3SchemaName: "deviceType",
+// });
