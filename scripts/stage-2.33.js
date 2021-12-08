@@ -43,7 +43,7 @@ var parentMobileNum = "",
   otpSentCount = 0,
   otpFailureCount = 0,
   eventSource = window.location.href.includes("byjusfutureschool")
-    ? "TRIAL_REGISTER_BYJUS"
+    ? "TRIAL_REGISTER_BFS_V2"
     : "TRIAL_REGISTER_BYJUS_V2";
 
 // Analytics
