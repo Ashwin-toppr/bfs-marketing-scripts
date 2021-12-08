@@ -479,6 +479,7 @@ $(".parent-mobile-num").on("input", (e) => {
         eventSource: eventSource,
         s3SchemaName: "deviceType",
         n1: +dialCode,
+        n2: parentMobileNum
       });
     }
   } else {
@@ -492,6 +493,7 @@ $(".parent-mobile-num").on("input", (e) => {
         eventSource: eventSource,
         s3SchemaName: "deviceType",
         n1: +dialCode,
+        n2: parentMobileNum
       });
     }
   }
