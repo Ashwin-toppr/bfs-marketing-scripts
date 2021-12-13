@@ -42,6 +42,7 @@ var parentMobileNum = "",
   dialCodeCountry = "US",
   otpSentCount = 0,
   otpFailureCount = 0,
+  pageName,
   eventSource = window.location.href.includes("byjusfutureschool")
     ? "TRIAL_REGISTER_BFS_V2"
     : "TRIAL_REGISTER_BYJUS_V2";
@@ -154,6 +155,22 @@ handlePageLoadAnalytics = (page_name) => {
   });
   // }
 })();
+
+(function(){
+    const url = window.location.href.replace(/\/$/, "");
+
+    pageName = "ALL";
+
+    if (url.indexOf("/code") !== -1) {
+      pageName = "CODING";
+    } else if (url.indexOf("/math") !== -1) {
+      pageName = "MATH";
+    } else if (url.indexOf("/musicplus") !== -1) {
+      pageName = "MUSIC_FOR_ALL";
+    } else if (url.indexOf("/music") !== -1) {
+      pageName = "MUSIC";
+    }
+})()
 
 // for dial codes
 (function () {
@@ -1609,16 +1626,22 @@ const sendEvents = (eventDetails) => {
 $(".buy-now-cta").click((e) => {
   $.ajax({
     type: "POST",
-    url: `${PROD_BASE_URL}/api/V1/orders/book?timezone=${timeZone}&brandId=byju&courseType=CODING&regionId=${country}`,
+    url: `${PROD_BASE_URL}/api/V1/orders/book?timezone=${timeZone}&brandId=byju&courseType=${pageName}&regionId=${country}`,
     cache: false,
     data: { coursePriceId: e.currentTarget.dataset.id },
 
     success: (data) => {
         window.open(
-          `https://code.byjusfutureschool.com/checkout/${data.id}`
+          `https://code.byjusfutureschool.com/checkout/${data.data.id}`
         );
     },
     error: (err) => {console.log(err)},
     async : false
   });
 });
+
+$('.schedule-redirection-cta').click(()=>{
+  window.open(
+    `https://code.byjusfutureschool.com/${pageName.toLowerCase()}/trial/register?utm_source=website&utm_content=website&utm_medium=website&grade=${selectedGrade}`
+  );
+})
