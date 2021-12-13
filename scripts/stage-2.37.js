@@ -1611,7 +1611,7 @@ $(".buy-now-cta").click((e) => {
     type: "POST",
     url: `${PROD_BASE_URL}/api/V1/orders/book?timezone=${timeZone}&brandId=byju&courseType=CODING&regionId=${country}`,
     cache: false,
-    data: JSON.stringify({ coursePriceId: e.currentTarget.dataset.id }),
+    data: { coursePriceId: e.currentTarget.dataset.id },
 
     success: (data) => {
         window.open(
