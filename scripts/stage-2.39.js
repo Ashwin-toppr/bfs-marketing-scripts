@@ -170,7 +170,7 @@ handlePageLoadAnalytics = (page_name) => {
     } else if (url.indexOf("/music") !== -1) {
       pageName = "MUSIC";
     }
-})()
+})();
 
 // for dial codes
 (function () {
