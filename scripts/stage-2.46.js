@@ -96,6 +96,8 @@ handleGeoLocationData = ({ data }) => {
     page_name = "MUSIC FOR ALL";
   } else if (url.indexOf("/music") !== -1) {
     page_name = "MUSIC";
+  } else if (url.indexOf("/arts") !== -1) {
+    page_name = "ARTS";
   }
 
   const globalObj = {
