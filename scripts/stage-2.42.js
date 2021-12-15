@@ -169,6 +169,8 @@ handlePageLoadAnalytics = (page_name) => {
       pageName = "MUSIC_FOR_ALL";
     } else if (url.indexOf("/music") !== -1) {
       pageName = "MUSIC";
+    }else if(url.indexOf('/arts') !== -1){
+      pageName = "art"
     }
 })();
 
@@ -240,6 +242,7 @@ const subjPreSelect = () => {
     music: "music",
     musicplus: "music_for_all",
     home: "coding",
+    arts:'arts'
   };
   subj = Object.keys(subjects).filter((subject) => url.includes(subject));
   if (subj.length > 1) {
@@ -1654,7 +1657,7 @@ $(".buy-now-cta").click((e) => {
 
     success: (data) => {
         window.open(
-          `https://code.byjusfutureschool.com/checkout/${data.data.id}`
+          `https://${pageName}.byjusfutureschool.com/checkout/${data.data.id}`
         );
     },
     error: (err) => {console.log(err)},
@@ -1667,3 +1670,5 @@ $('.schedule-redirection-cta').click(()=>{
     `https://code.byjusfutureschool.com/${pageName.toLowerCase()}/trial/register?utm_source=website&utm_content=website&utm_medium=website&utm_flow=v2&grade=${selectedGrade}`
   );
 })
+
+
