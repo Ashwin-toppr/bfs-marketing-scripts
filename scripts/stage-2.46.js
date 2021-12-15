@@ -380,6 +380,14 @@ const getGradeBlocks = () => {
         "active-state"
       );
     }
+    if (selectedSubj.includes("art")) {
+      const artGrade = e.target.id.split("-");
+      customClassMethod(
+        `.${isMweb ? "mweb-" : ""}grade-${artGrade[1]}-${artGrade[2]}`,
+        true,
+        "active-state"
+      );
+    }
     customClassMethod(
       `.${isMweb ? "mweb-" : ""}grade-${selectedGrade}`,
       true,
