@@ -162,13 +162,13 @@ handlePageLoadAnalytics = (page_name) => {
     pageName = "ALL";
 
     if (url.indexOf("/code") !== -1) {
-      pageName = "CODING";
+      pageName = "code";
     } else if (url.indexOf("/math") !== -1) {
-      pageName = "MATH";
+      pageName = "math";
     } else if (url.indexOf("/musicplus") !== -1) {
-      pageName = "MUSIC_FOR_ALL";
+      pageName = "musicplus";
     } else if (url.indexOf("/music") !== -1) {
-      pageName = "MUSIC";
+      pageName = "music";
     }else if(url.indexOf('/arts') !== -1){
       pageName = "art"
     }
@@ -1649,9 +1649,18 @@ const sendEvents = (eventDetails) => {
 // course plan checkout functionality
 
 $(".buy-now-cta").click((e) => {
+
+  const courses = {
+    code : 'CODING',
+    musicplus : 'MUSIC_FOR_ALL',
+    music : 'music',
+    art : 'art',
+    math : 'math'
+  }
+
   $.ajax({
     type: "POST",
-    url: `${PROD_BASE_URL}/api/V1/orders/book?timezone=${timeZone}&brandId=byju&courseType=${pageName}&regionId=${country}`,
+    url: `${PROD_BASE_URL}/api/V1/orders/book?timezone=${timeZone}&brandId=byju&courseType=${courses[pageName]}&regionId=${country}`,
     cache: false,
     data: { coursePriceId: e.currentTarget.dataset.id },
 
@@ -1667,7 +1676,7 @@ $(".buy-now-cta").click((e) => {
 
 $('.schedule-redirection-cta').click(()=>{
   window.open(
-    `https://code.byjusfutureschool.com/${pageName.toLowerCase()}/trial/register?utm_source=website&utm_content=website&utm_medium=website&utm_flow=v2&grade=${selectedGrade}`
+    `https://code.byjusfutureschool.com${pageName == 'code' ? '':`/${pageName}`}/trial/register?utm_source=website&utm_content=website&utm_medium=website&utm_flow=v2&grade=${selectedGrade}`
   );
 })
 
