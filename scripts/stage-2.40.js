@@ -324,19 +324,32 @@ const getGradeBlocks = () => {
     music: ["1", "2-3", "4-6", "7-9", "10-12"],
     math: [1, 2, 3, 4, 5, 6, 7, 8],
     coding: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    arts: ["1-2","3-7","8-12"]
   };
   $(
     `${isMweb ? ".mweb-child-grade-blk-copy" : ".child-grade-blk-copy"}`
   ).empty();
 
   subjGrades[selectedSubj.split("_")[0]]?.map((grade, index) => {
-    const element = `<div id="grade-${grade}" class="grade-block-${
+    let element = `<div id="grade-${grade}" class="grade-block-${
       isMweb ? "mweb" : "web"
     } grade-card-sp  ${isMweb ? "mweb-" : ""}grade-${
       selectedSubj.split("_")[0]
     }  ${isMweb ? "mweb-" : ""}grade-${grade}"><p class="grade-label"> ${
       selectedSubj.split("_")[0] == "music" && index > 0 ? "Grades" : "Grade"
     }</p><p class="grade-num">${grade}</p></div>`;
+
+    // for arts only 3-7 grades only available
+    if (selectedSubj.split("_")[0] == 'arts'){ 
+      element = `<div id="grade-${grade}" class="grade-block-${
+        isMweb ? "mweb" : "web"
+      } grade-card-sp  ${isMweb ? "mweb-" : ""}grade-${
+        selectedSubj.split("_")[0]
+      }  ${isMweb ? "mweb-" : ""}grade-${grade} ${+index === 1 ? 'active-state':'disabled' }  "><p class="grade-label"> ${
+        +index === 1 ? "Grades" : `Grades ${grade}`
+      }</p><p class="grade-num">${+index === 1 ? grade : 'Comming Soon'}</p></div>`;
+    }
+
 
     $(
       `${isMweb ? ".mweb-child-grade-blk-copy" : ".child-grade-blk-copy"}`
@@ -347,6 +360,7 @@ const getGradeBlocks = () => {
       "active-state"
     );
   });
+  selectedGrade = 7 // for arts case only 3-7 grades avialable and making that as default active
 
   $(`${isMweb ? ".grade-block-mweb" : ".grade-block-web"}`).click((e) => {
     // side-pannel grade block card click method
@@ -1642,6 +1656,6 @@ $(".buy-now-cta").click((e) => {
 
 $('.schedule-redirection-cta').click(()=>{
   window.open(
-    `https://code.byjusfutureschool.com/${pageName.toLowerCase()}/trial/register?utm_source=website&utm_content=website&utm_medium=website&grade=${selectedGrade}`
+    `https://code.byjusfutureschool.com/${pageName.toLowerCase()}/trial/register?utm_source=website&utm_content=website&utm_medium=website&utm_flow=v2&grade=${selectedGrade}`
   );
 })
