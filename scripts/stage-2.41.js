@@ -360,7 +360,6 @@ const getGradeBlocks = () => {
       "active-state"
     );
   });
-  selectedGrade = 7 // for arts case only 3-7 grades avialable and making that as default active
 
   $(`${isMweb ? ".grade-block-mweb" : ".grade-block-web"}`).click((e) => {
     // side-pannel grade block card click method
@@ -422,6 +421,15 @@ $(".subject-card-sp").click((e) => {
   );
 
   selectedGrade = "";
+
+  if(selectedSubj === 'arts'){
+    selectedGrade=7
+    customClassMethod(
+      `.${isMweb ? "mweb-" : ""}grade-3-7`,
+      true,
+      "active-state"
+    );
+  }
 
   if (selectedSubj != "music") {
     $(`${isMweb ? ".mweb-grade-container" : ".grade-container"}`).css(
