@@ -327,7 +327,7 @@ const getGradeBlocks = () => {
     music: ["1", "2-3", "4-6", "7-9", "10-12"],
     math: [1, 2, 3, 4, 5, 6, 7, 8],
     coding: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    arts: ["1-2","3-7","8-12"]
+    art: ["1-2","3-7","8-12"]
   };
   $(
     `${isMweb ? ".mweb-child-grade-blk-copy" : ".child-grade-blk-copy"}`
@@ -343,12 +343,12 @@ const getGradeBlocks = () => {
     }</p><p class="grade-num">${grade}</p></div>`;
 
     // for arts only 3-7 grades only available
-    if (selectedSubj.split("_")[0] == 'arts'){ 
+    if (selectedSubj.split("_")[0] == 'art'){ 
       element = `<div id="grade-${grade}" class="grade-block-${
         isMweb ? "mweb" : "web"
       } grade-card-sp  ${isMweb ? "mweb-" : ""}grade-${
         selectedSubj.split("_")[0]
-      }  ${isMweb ? "mweb-" : ""}grade-${grade} ${+index === 1 ? 'active-state':'disabled' }  "><p class="grade-label"> ${
+      }  ${isMweb ? "mweb-" : ""}grade-${grade} ${+index === 1 ? '':'disabled' }  "><p class="grade-label"> ${
         +index === 1 ? "Grades" : `Grades ${grade}`
       }</p><p class="grade-num">${+index === 1 ? grade : 'Comming Soon'}</p></div>`;
     }
@@ -425,7 +425,7 @@ $(".subject-card-sp").click((e) => {
 
   selectedGrade = "";
 
-  if(selectedSubj === 'arts'){
+  if(selectedSubj === 'art'){
     selectedGrade=7
     customClassMethod(
       `.${isMweb ? "mweb-" : ""}grade-3-7`,
