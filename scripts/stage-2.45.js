@@ -242,7 +242,7 @@ const subjPreSelect = () => {
     music: "music",
     musicplus: "music_for_all",
     home: "coding",
-    arts:'arts'
+    arts:'art'
   };
   subj = Object.keys(subjects).filter((subject) => url.includes(subject));
   if (subj.length > 1) {
