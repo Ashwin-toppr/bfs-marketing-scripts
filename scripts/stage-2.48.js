@@ -163,15 +163,15 @@ handlePageLoadAnalytics = (page_name) => {
 
     pageName = "ALL";
 
-    if (url.indexOf("/code") !== -1) {
+    if (url.indexOf("code") !== -1) {
       pageName = "code";
-    } else if (url.indexOf("/math") !== -1) {
+    } else if (url.indexOf("math") !== -1) {
       pageName = "math";
-    } else if (url.indexOf("/musicplus") !== -1) {
+    } else if (url.indexOf("musicplus") !== -1) {
       pageName = "musicplus";
-    } else if (url.indexOf("/music") !== -1) {
+    } else if (url.indexOf("music") !== -1) {
       pageName = "music";
-    }else if(url.indexOf('/arts') !== -1){
+    }else if(url.indexOf('arts') !== -1){
       pageName = "art"
     }
 })();
