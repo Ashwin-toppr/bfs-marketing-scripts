@@ -161,7 +161,7 @@ handlePageLoadAnalytics = (page_name) => {
 (function(){
     const url = window.location.href.replace(/\/$/, "");
 
-    pageName = "ALL";
+    pageName = "all";
 
     if (url.indexOf("code") !== -1) {
       pageName = "code";
