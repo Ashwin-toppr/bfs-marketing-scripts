@@ -97,7 +97,7 @@ handleGeoLocationData = ({ data }) => {
   } else if (url.indexOf("/music") !== -1) {
     page_name = "MUSIC";
   } else if (url.indexOf("/arts") !== -1) {
-    page_name = "ARTS";
+    page_name = "ART";
   }
 
   const globalObj = {
