@@ -1683,7 +1683,7 @@ $(".buy-now-cta").click((e) => {
 });
 
 $('.schedule-redirection-cta').click(()=>{
-  window.location.href = `https://code.byjusfutureschool.com${pageName == "code" ? "all" : `/${pageName}`}/trial/register?utm_source=website&utm_content=website&utm_medium=website&utm_flow=v2&grade=${selectedGrade}`
+  window.location.href = `https://code.byjusfutureschool.com${pageName == "code" ? "/all" : `/${pageName}`}/trial/register?utm_source=website&utm_content=website&utm_medium=website&utm_flow=v2&grade=${selectedGrade}`
 })
 
 // for mexico coding page apart from FORM cta rest of the "Book a Free trail ctas" will use this class
