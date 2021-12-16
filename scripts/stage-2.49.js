@@ -1675,9 +1675,7 @@ $(".buy-now-cta").click((e) => {
     data: { coursePriceId: e.currentTarget.dataset.id },
 
     success: (data) => {
-        window.open(
-          `https://${pageName}.byjusfutureschool.com/checkout/${data.data.id}`
-        );
+        window.location.href = `https://${pageName}.byjusfutureschool.com/checkout/${data.data.id}`
     },
     error: (err) => {console.log(err)},
     async : false
@@ -1685,9 +1683,14 @@ $(".buy-now-cta").click((e) => {
 });
 
 $('.schedule-redirection-cta').click(()=>{
-  window.open(
-    `https://code.byjusfutureschool.com${pageName == 'code' ? '':`/${pageName}`}/trial/register?utm_source=website&utm_content=website&utm_medium=website&utm_flow=v2&grade=${selectedGrade}`
-  );
+  window.location.href = `https://code.byjusfutureschool.com${pageName == "code" ? "all" : `/${pageName}`}/trial/register?utm_source=website&utm_content=website&utm_medium=website&utm_flow=v2&grade=${selectedGrade}`
 })
+
+// for mexico coding page apart from FORM cta rest of the "Book a Free trail ctas" will use this class
+$('.schedule-redirection-code-cta').click(()=>{
+  window.location.href = `https://code.byjusfutureschool.com/trial/register?utm_source=website&utm_content=website&utm_medium=website&utm_flow=v2`
+})
+
+
 
 
