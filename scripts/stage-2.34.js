@@ -845,14 +845,6 @@ const handleRegisterUser = () => {
       });
 
       const student = res.data.students[0];
-      student &&
-        gtmDataLayerTrack({
-          event: "signUp",
-          grade: String(student.grade),
-          subject: 'CODING',
-          country: student.countryCode,
-          studentId: student.uid
-        });
     },
     error: function (err) {
       $(".otp-loader").css("display", "none");
@@ -864,14 +856,6 @@ const handleRegisterUser = () => {
     },
   });
 };
-
-function gtmDataLayerTrack(data) {
-  if (typeof window !== "undefined") {
-    if(window.dataLayer) {
-      window.dataLayer.push(data);
-    }
-  }
-}
 
 const handleMecall = () => {
   $.ajax({
