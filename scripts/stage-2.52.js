@@ -96,7 +96,7 @@ handleGeoLocationData = ({ data }) => {
     page_name = "MUSIC FOR ALL";
   } else if (url.indexOf("/music") !== -1) {
     page_name = "MUSIC";
-  } else if (url.indexOf("/arts") !== -1) {
+  } else if (url.indexOf("/art") !== -1) {
     page_name = "ART";
   }
 
@@ -171,7 +171,7 @@ handlePageLoadAnalytics = (page_name) => {
       pageName = "musicplus";
     } else if (url.indexOf("music") !== -1) {
       pageName = "music";
-    }else if(url.indexOf('arts') !== -1){
+    }else if(url.indexOf('art') !== -1){
       pageName = "art"
     }
 })();
@@ -244,7 +244,7 @@ const subjPreSelect = () => {
     music: "music",
     musicplus: "music_for_all",
     home: "coding",
-    arts:'art'
+    art:'art'
   };
   subj = Object.keys(subjects).filter((subject) => url.includes(subject));
   if (subj.length > 1) {
@@ -893,6 +893,15 @@ const handleRegisterUser = () => {
       });
 
       const student = res.data.students[0];
+
+      student &&
+        gtmDataLayerTrack({
+          event: "signUp",
+          grade: String(selectedGrade),
+          subject: selectedSubj.toUpperCase(),
+          country: student.countryCode,
+          studentId: student.uid
+        });
     },
     error: function (err) {
       $(".otp-loader").css("display", "none");
@@ -904,6 +913,14 @@ const handleRegisterUser = () => {
     },
   });
 };
+
+function gtmDataLayerTrack(data) {
+  if (typeof window !== "undefined") {
+    if(window.dataLayer) {
+      window.dataLayer.push(data);
+    }
+  }
+}
 
 const handleMecall = () => {
   $.ajax({
