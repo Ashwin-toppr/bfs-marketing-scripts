@@ -97,6 +97,8 @@ handleGeoLocationData = ({ data }) => {
     page_name = "MUSIC";
   } else if (url.indexOf("/art") !== -1) {
     page_name = "ART";
+  } else if (url.indexOf("/minecraft") !== -1) {
+    page_name = "MINECRAFT";
   }
 
   const globalObj = {
@@ -1323,7 +1325,7 @@ const handleBookSlot = () => {
       gtmDataLayerTrack({
         event: "trialBookStatus",
         trialBookStatus: "booked",
-        bookingId: encodeURIComponent(encodeBase64(res?.id)),
+        bookingId: encodeURIComponent(btoa(res?.data?.id)),
         courseType: selectedSubj.toUpperCase()
       });
     },
