@@ -762,6 +762,7 @@ const handleRegisterUser = () => {
 
       const student = res.data.students[0];
       handleUserPropsAnalytics(student);
+      
     },
     error: function (err) {
       Toastify({
