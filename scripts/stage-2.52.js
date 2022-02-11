@@ -1,5 +1,4 @@
-// production code, last updated on 08-12-21
-// import TIMEZONE_DATA from "./timezonesList";
+// production code, last updated on 07-02-22
 var dialCodesList,
   dialCode = "+1",
   country = "US",
@@ -1319,6 +1318,13 @@ const handleBookSlot = () => {
         slot_date: moment.tz(startTime, timeZone).format("ddd"),
         slot_time: moment.tz(startTime, timeZone).format("LT"),
         timezone: timeZone,
+      });
+
+      gtmDataLayerTrack({
+        event: "trialBookStatus",
+        trialBookStatus: "booked",
+        bookingId: encodeURIComponent(encodeBase64(res?.id)),
+        courseType: selectedSubj.toUpperCase()
       });
     },
     error: function (err) {
